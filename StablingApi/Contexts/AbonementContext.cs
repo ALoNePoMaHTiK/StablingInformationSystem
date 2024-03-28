@@ -1,0 +1,27 @@
+﻿using Microsoft.EntityFrameworkCore;
+using StablingApi.Models;
+
+namespace StablingApi.Contexts
+{
+    public class AbonementContext : DbContext
+    {
+        public AbonementContext(DbContextOptions<AbonementContext> options)
+            : base(options)
+        {
+            Database.EnsureCreated();
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Abonement>(builder =>
+            {
+                builder.ToTable(tb => tb.HasTrigger("TR_Abonements_InsteadInsert"));
+            });
+            modelBuilder.Entity<AbonementWithdrawing>().HasKey(w => new { w.AbonementId, w.BalanceWithdrawingId });
+        }
+
+        public DbSet<Abonement> Abonements { get; set; }
+        public DbSet<AbonementType> AbonementTypes { get; set; }
+        public DbSet<AbonementMark> AbonementMarks { get; set; }
+        public DbSet<AbonementWithdrawing> AbonementWithdrawings { get; set; }
+    }
+}

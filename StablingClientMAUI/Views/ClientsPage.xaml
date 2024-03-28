@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:StablingClientMAUI.ViewModels"
+             xmlns:m="clr-namespace:StablingApiClient;assembly=StablingApiClient"
+             x:Class="StablingClientMAUI.Views.ClientsPage"
+             Title="ClientsPage">
+    <StackLayout>
+        <Label Text="Клиенты"/>
+        <StackLayout Orientation="Vertical" x:DataType="vm:MainViewModel">
+            <Entry Margin="5" Placeholder = "ФИО" Text="{Binding newClient.FullName}"/>
+            <Entry Margin="5" Placeholder = "Номер телефона" Text="{Binding newClient.PhoneNumber}"/>
+            <Entry Margin="5" Placeholder = "Email" Text="{Binding newClient.Email}"/>
+            <Entry Margin="5" Placeholder = "Id тренера" Text="{Binding newClient.TrainerId}"/>
+            <Button Command="{Binding AddClientCommand}" Text="Добавить" WidthRequest="100" HorizontalOptions="Start" />
+        </StackLayout>
+        <ListView ItemsSource="{Binding Clients}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="m:Client">
+                    <ViewCell>
+                        <ViewCell.View>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding ClientId}"/>
+                                <Label Text="{Binding FullName}" Margin="10"/>
+                                <Label Text="{Binding PhoneNumber}"/>
+                                <Label Text="{Binding Email}"/>
+                            </StackLayout>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>
