@@ -9,13 +9,13 @@
     Title="StablingClientMAUI">
 
     <TabBar>
-        <Tab Title="Clients"
-            Icon="/clients.svg">
+        <Tab Title="Клиенты"
+            Icon="clients.svg">
             <ShellContent ContentTemplate="{DataTemplate v:ClientsPage}"/>
         </Tab>
-        <Tab Title="Trainings"
-            Icon="/clients.svg">
-            <ShellContent ContentTemplate="{DataTemplate v:ClientsPage}"/>
+        <Tab Title="Типы тренировок"
+            Icon="money.svg">
+            <ShellContent ContentTemplate="{DataTemplate v:TrainingTypesPage}"/>
         </Tab>
     </TabBar>
     <!--<ShellContent

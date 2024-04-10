@@ -43,7 +43,11 @@ namespace StablingClientMAUI
 
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<MainPage>();
+
             builder.Services.AddSingleton<ClientsPage>();
+
+            builder.Services.AddSingleton<TrainingTypesPage>();
+            builder.Services.AddSingleton<TrainingTypesViewModel>();
             return builder.Build();
         }
     }

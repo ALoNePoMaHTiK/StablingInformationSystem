@@ -7,6 +7,7 @@
              Title="ClientsPage">
     <StackLayout>
         <Label Text="Клиенты"/>
+        <
         <StackLayout Orientation="Vertical" x:DataType="vm:MainViewModel">
             <Entry Margin="5" Placeholder = "ФИО" Text="{Binding newClient.FullName}"/>
             <Entry Margin="5" Placeholder = "Номер телефона" Text="{Binding newClient.PhoneNumber}"/>

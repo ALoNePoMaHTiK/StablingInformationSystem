@@ -40,7 +40,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
+		<MauiImage Include="Resources\AppIcon\add_client.svg" ForegroundFile="Resources\AppIcon\add_client.svg" />
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiImage Include="Resources\AppIcon\clients.svg" ForegroundFile="Resources\AppIcon\clients.svg" />
+		<MauiImage Include="Resources\AppIcon\money.svg" ForegroundFile="Resources\AppIcon\money.svg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -54,6 +57,12 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\AppIcon\add_client.svg" />
+	  <None Remove="Resources\AppIcon\clients.svg" />
+	  <None Remove="Resources\AppIcon\money.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
