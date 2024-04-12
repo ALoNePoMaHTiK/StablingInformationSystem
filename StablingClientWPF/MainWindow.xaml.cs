@@ -18,10 +18,11 @@ namespace StablingClientWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(ClientsHttpClient httpClient)
+        public MainWindow(ClientsHttpClient clientsHttpClient,
+            TrainersHttpClient trainersHttpClient)
         {
             InitializeComponent();
-            DataContext = new ClientsViewModel(httpClient);
+            DataContext = new ClientsViewModel(clientsHttpClient, trainersHttpClient);
         }
     }
 }

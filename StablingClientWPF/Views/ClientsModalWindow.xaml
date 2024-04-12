@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
         xmlns:local="clr-namespace:StablingClientWPF.Views"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:EditClientViewModel}"
         WindowStartupLocation="CenterScreen"
         SizeToContent="Height"
         ResizeMode="NoResize"
@@ -20,7 +22,7 @@
             <GroupBox.Header>
                 <TextBlock>Тренер</TextBlock>
             </GroupBox.Header>
-            <TextBox Text="{Binding CurrentClient.TrainerId}"/>
+            <ComboBox ItemsSource="{Binding Trainers}" SelectedValue="{Binding CurrentClient.TrainerId}" DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
         </GroupBox>
         <GroupBox>
             <GroupBox.Header>
@@ -40,6 +42,6 @@
             </GroupBox.Header>
             <TextBox Text="{Binding CurrentClient.Email}"/>
         </GroupBox>
-        <Button Content="Принять" Command="{Binding ProcessClientCommand}"/>
+        <Button Content="Принять" Command="{Binding ProcessClientCommand}" Height="30"/>
     </StackPanel>
 </Window>

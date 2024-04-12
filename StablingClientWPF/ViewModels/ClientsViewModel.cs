@@ -1,5 +1,6 @@
 ﻿using StablingApiClient;
 using StablingClientWPF.Views;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -8,17 +9,27 @@ namespace StablingClientWPF.ViewModels
 {
     public class ClientsViewModel : BaseViewModel
     {
-        private IEnumerable<Client> _Clients;
-        public IEnumerable<Client> Clients
+        private ObservableCollection<Client> _ActiveClients;
+        public ObservableCollection<Client> ActiveClients
         {
-            get { return _Clients; }
-            set { _Clients = value; OnPropertyChanged(); }
+            get { return _ActiveClients; }
+            set { _ActiveClients = value; OnPropertyChanged(); }
         }
 
-        private ClientsHttpClient _httpClient;
-        public ClientsViewModel(ClientsHttpClient httpClient)
+        private ObservableCollection<Client> _DisactiveClients;
+        public ObservableCollection<Client> InactiveClients
         {
-            _httpClient = httpClient;
+            get { return _DisactiveClients; }
+            set { _DisactiveClients = value; OnPropertyChanged(); }
+        }
+
+        private ClientsHttpClient _clientsHttpClient;
+        private TrainersHttpClient _trainersHttpClient;
+        public ClientsViewModel(ClientsHttpClient clientsHttpClient,
+            TrainersHttpClient trainersHttpClient)
+        {
+            _clientsHttpClient = clientsHttpClient;
+            _trainersHttpClient = trainersHttpClient;
             GetClients();
         }
 
@@ -47,13 +58,15 @@ namespace StablingClientWPF.ViewModels
         }
         private void OpenEditClient(int id)
         {
-            Client clientForEdit = Clients.ToList().Find(o => o.ClientId == id);
+            Client clientForEdit = ActiveClients.ToList().Find(o => o.ClientId == id);
+            if (clientForEdit == null)
+                clientForEdit = InactiveClients.ToList().Find(o => o.ClientId == id);
             OpenModalWindow(clientForEdit);
         }
 
         private void OpenModalWindow(Client clientForProcess)
         {
-            EditClientViewModel viewModel = new EditClientViewModel(_httpClient);
+            EditClientViewModel viewModel = new EditClientViewModel(_clientsHttpClient, _trainersHttpClient);
             viewModel.CurrentClient = clientForProcess;
             Window modalWindow = new ClientsModalWindow(viewModel);
             modalWindow.ShowDialog();
@@ -70,7 +83,49 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task GetClients()
         {
-            Clients = await _httpClient.GetAllAsync();
+            ActiveClients = new ObservableCollection<Client>(await _clientsHttpClient.GetByAvailabilityAsync(true));
+            InactiveClients = new ObservableCollection<Client>(await _clientsHttpClient.GetByAvailabilityAsync(false));
         }
+
+        public DelegateCommand DeactivateClientCommand
+        {
+            get
+            {
+                return new DelegateCommand(o => {
+                    DeactivateClient((int)o);
+                });
+            }
+        }
+        private async Task DeactivateClient(int id)
+        {
+            Client clientForEdit = ActiveClients.ToList().Find(o => o.ClientId == id);
+            if (clientForEdit != null)
+            {
+                clientForEdit.IsAvailable = false;
+                await _clientsHttpClient.UpdateClientAsync(clientForEdit);
+                await GetClients();
+            }
+        }
+
+        public DelegateCommand ActivateClientCommand
+        {
+            get
+            {
+                return new DelegateCommand(o => {
+                    ActivateClient((int)o);
+                });
+            }
+        }
+        private async Task ActivateClient(int id)
+        {
+            Client clientForEdit = InactiveClients.ToList().Find(o => o.ClientId == id);
+            if (clientForEdit != null)
+            {
+                clientForEdit.IsAvailable = true;
+                await _clientsHttpClient.UpdateClientAsync(clientForEdit);
+                await GetClients();
+            }
+        }
+
     }
 }

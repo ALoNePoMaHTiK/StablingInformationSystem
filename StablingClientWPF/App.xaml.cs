@@ -31,8 +31,15 @@ namespace StablingClientWPF
                 var httpClient = new ClientsHttpClient(ApiUrl, client);
                 return httpClient;
             });
+            services.AddSingleton<TrainersHttpClient>(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient();
+                var httpClient = new TrainersHttpClient(ApiUrl, client);
+                return httpClient;
+            });
             services.AddSingleton<MainWindow>();
-        }
+        } 
         private void OnStartup(object sender, StartupEventArgs e)
         {
             var mainWindow = serviceProvider.GetService<MainWindow>();

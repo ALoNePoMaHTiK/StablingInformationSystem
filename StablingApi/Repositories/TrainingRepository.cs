@@ -26,7 +26,7 @@ namespace StablingApi.Repositories
             context.Trainings.Remove(trainingToDelete);
             await context.SaveChangesAsync();
         }
-        public async Task<IEnumerable<Training>> Get()
+        public async Task<IEnumerable<Training>> GetAll()
         {
             TrainingsContext context = _contextFactory.CreateDbContext();
             return await context.Trainings.ToListAsync();

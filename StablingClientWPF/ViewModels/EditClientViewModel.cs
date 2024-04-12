@@ -1,6 +1,7 @@
 ﻿using StablingApiClient;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +11,27 @@ namespace StablingClientWPF.ViewModels
 {
     public class EditClientViewModel : BaseViewModel
     {
-        private ClientsHttpClient _httpClient;
-        public EditClientViewModel(ClientsHttpClient httpClient)
+        private ClientsHttpClient _clientsHttpClient;
+        private TrainersHttpClient _trainersHttpClient;
+        public EditClientViewModel(ClientsHttpClient clientsHttpClient,
+            TrainersHttpClient trainersHttpClient)
         {
-            _httpClient = httpClient;
+            _clientsHttpClient = clientsHttpClient;
+            _trainersHttpClient = trainersHttpClient;
+
+            GetTrainers();
+        }
+
+        private ObservableCollection<Trainer> _Trainers;
+        public ObservableCollection<Trainer> Trainers
+        {
+            get { return _Trainers; }
+            set { _Trainers = value; OnPropertyChanged(); }
+        }
+
+        private async Task GetTrainers()
+        {
+            Trainers = new ObservableCollection<Trainer>(await _trainersHttpClient.GetAllAsync());
         }
 
         private Client _CurrentClient;
@@ -37,9 +55,9 @@ namespace StablingClientWPF.ViewModels
             try
             {
                 if (CurrentClient.ClientId != 0)
-                    _httpClient.UpdateClientAsync(CurrentClient);
+                    _clientsHttpClient.UpdateClientAsync(CurrentClient);
                 else
-                    _httpClient.CreateClientAsync(CurrentClient);
+                    _clientsHttpClient.CreateClientAsync(CurrentClient);
             }
             catch(ApiException ex)
             {

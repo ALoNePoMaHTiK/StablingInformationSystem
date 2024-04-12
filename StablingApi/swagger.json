@@ -224,6 +224,31 @@
         }
       }
     },
+    "/api/Trainers": {
+      "get": {
+        "tags": [
+          "Trainers"
+        ],
+        "operationId": "Trainers_GetAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Trainer"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Trainings": {
       "get": {
         "tags": [
@@ -679,6 +704,35 @@
         },
         "email": {
           "type": "string"
+        },
+        "isAvailable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Trainer": {
+      "type": "object",
+      "required": [
+        "trainerId",
+        "fullName",
+        "color",
+        "salaryRate",
+        "isAvailable"
+      ],
+      "properties": {
+        "trainerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "salaryRate": {
+          "type": "integer",
+          "format": "int32"
         },
         "isAvailable": {
           "type": "boolean"

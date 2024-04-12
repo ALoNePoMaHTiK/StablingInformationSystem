@@ -4,7 +4,7 @@ namespace StablingApi.Repositories.Interfaces
 {
     public interface ITrainingRepository
     {
-        Task<IEnumerable<Training>> Get();
+        Task<IEnumerable<Training>> GetAll();
         Task<Training> Get(int id);
         Task<IEnumerable<Training>> GetByWeek(DateTime dateTime);
         Task<IEnumerable<Training>> GetByDay(DateTime dateTime);

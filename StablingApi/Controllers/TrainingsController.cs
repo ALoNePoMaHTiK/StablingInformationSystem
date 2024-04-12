@@ -21,7 +21,7 @@ namespace StablingApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<Training>> GetAll()
         {
-            return await _repository.Get();
+            return await _repository.GetAll();
         }
 
         /// <summary>
