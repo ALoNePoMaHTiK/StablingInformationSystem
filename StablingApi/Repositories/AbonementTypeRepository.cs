@@ -7,15 +7,15 @@ namespace StablingApi.Repositories
 {
     public class AbonementTypeRepository : IAbonementTypeRepository
     {
-        private readonly IDbContextFactory<AbonementContext> _contextFactory;
-        public AbonementTypeRepository(IDbContextFactory<AbonementContext> contextFactory)
+        private readonly IDbContextFactory<AbonementsContext> _contextFactory;
+        public AbonementTypeRepository(IDbContextFactory<AbonementsContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
 
         public async Task<AbonementType> Create(AbonementType type)
         {
-            AbonementContext context = _contextFactory.CreateDbContext();
+            AbonementsContext context = _contextFactory.CreateDbContext();
             context.Add(type);
             await context.SaveChangesAsync();
             return type;
@@ -23,7 +23,7 @@ namespace StablingApi.Repositories
 
         public async Task Delete(int id)
         {
-            AbonementContext context = _contextFactory.CreateDbContext();
+            AbonementsContext context = _contextFactory.CreateDbContext();
             AbonementType typeToDelete = await context.AbonementTypes.FindAsync(id);
             context.AbonementTypes.Remove(typeToDelete);
             await context.SaveChangesAsync();
@@ -31,19 +31,19 @@ namespace StablingApi.Repositories
 
         public async Task<IEnumerable<AbonementType>> GetAll()
         {
-            AbonementContext context = _contextFactory.CreateDbContext();
+            AbonementsContext context = _contextFactory.CreateDbContext();
             return await context.AbonementTypes.ToListAsync();
         }
 
         public async Task<AbonementType> Get(int id)
         {
-            AbonementContext context = _contextFactory.CreateDbContext();
+            AbonementsContext context = _contextFactory.CreateDbContext();
             return await context.AbonementTypes.FindAsync(id);
         }
 
         public async Task Update(AbonementType type)
         {
-            AbonementContext context = _contextFactory.CreateDbContext();
+            AbonementsContext context = _contextFactory.CreateDbContext();
             AbonementType typeToUpdate = await context.AbonementTypes.FindAsync(type.AbonementTypeId);
             if (typeToUpdate != null)
             {

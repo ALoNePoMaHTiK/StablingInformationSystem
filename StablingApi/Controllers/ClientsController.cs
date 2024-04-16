@@ -55,17 +55,17 @@ namespace StablingApi.Controllers
         ///     Добавление клиента
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> CreateClient([FromBody] Client client)
+        public async Task<IActionResult> Create([FromBody] Client client)
         {
             Client newClient = await _repository.Create(client);
-            return Ok();
+            return CreatedAtAction(nameof(Create),newClient);
         }
 
         /// <summary>
         ///     Изменение клиента
         /// </summary>
         [HttpPut]
-        public async Task<ActionResult<Client>> UpdateClient([FromBody] Client client)
+        public async Task<ActionResult<Client>> Update([FromBody] Client client)
         {
             if (_repository.Get(client.ClientId) == null)
             {
@@ -79,7 +79,7 @@ namespace StablingApi.Controllers
         ///     Удаление клиента
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteClient(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             Client clientToDelete = await _repository.Get(id);
             if (clientToDelete == null)

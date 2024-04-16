@@ -102,7 +102,7 @@ namespace StablingClientWPF.ViewModels
             if (clientForEdit != null)
             {
                 clientForEdit.IsAvailable = false;
-                await _clientsHttpClient.UpdateClientAsync(clientForEdit);
+                await _clientsHttpClient.UpdateAsync(clientForEdit);
                 await GetClients();
             }
         }
@@ -122,7 +122,7 @@ namespace StablingClientWPF.ViewModels
             if (clientForEdit != null)
             {
                 clientForEdit.IsAvailable = true;
-                await _clientsHttpClient.UpdateClientAsync(clientForEdit);
+                await _clientsHttpClient.UpdateAsync(clientForEdit);
                 await GetClients();
             }
         }

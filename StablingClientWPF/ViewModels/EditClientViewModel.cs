@@ -55,9 +55,9 @@ namespace StablingClientWPF.ViewModels
             try
             {
                 if (CurrentClient.ClientId != 0)
-                    _clientsHttpClient.UpdateClientAsync(CurrentClient);
+                    _clientsHttpClient.UpdateAsync(CurrentClient);
                 else
-                    _clientsHttpClient.CreateClientAsync(CurrentClient);
+                    _clientsHttpClient.CreateAsync(CurrentClient);
             }
             catch(ApiException ex)
             {

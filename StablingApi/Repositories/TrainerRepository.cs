@@ -7,15 +7,15 @@ namespace StablingApi.Repositories
 {
     public class TrainerRepository : ITrainerRepository
     {
-        private readonly IDbContextFactory<TrainerContext> _contextFactory;
-        public TrainerRepository(IDbContextFactory<TrainerContext> contextFactory)
+        private readonly IDbContextFactory<TrainersContext> _contextFactory;
+        public TrainerRepository(IDbContextFactory<TrainersContext> contextFactory)
         {
             _contextFactory = contextFactory;
         }
 
         public async Task<Trainer> Create(Trainer trainer)
         {
-            TrainerContext context = await _contextFactory.CreateDbContextAsync();
+            TrainersContext context = await _contextFactory.CreateDbContextAsync();
             context.Add(trainer);
             await context.SaveChangesAsync();
             return trainer;
@@ -23,19 +23,19 @@ namespace StablingApi.Repositories
 
         public async Task<IEnumerable<Trainer>> GetAll()
         {
-            TrainerContext context = await _contextFactory.CreateDbContextAsync();
+            TrainersContext context = await _contextFactory.CreateDbContextAsync();
             return await context.Trainers.ToListAsync();
         }
 
         public async Task<Trainer> Get(int id)
         {
-            TrainerContext context = await _contextFactory.CreateDbContextAsync();
+            TrainersContext context = await _contextFactory.CreateDbContextAsync();
             return await context.Trainers.FindAsync(id);
         }
 
         public async Task<IEnumerable<Trainer>> GetByAvailability(bool isAvailable)
         {
-            TrainerContext context = await _contextFactory.CreateDbContextAsync();
+            TrainersContext context = await _contextFactory.CreateDbContextAsync();
             return await context.Trainers.Where(t => t.IsAvailable == isAvailable).ToListAsync();
         }
     }

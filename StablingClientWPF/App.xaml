@@ -1,9 +1,10 @@
 ﻿<Application x:Class="StablingClientWPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:v="clr-namespace:StablingClientWPF.Views"
+             xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              xmlns:local="clr-namespace:StablingClientWPF"
              Startup="OnStartup">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

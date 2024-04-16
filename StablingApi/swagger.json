@@ -7,6 +7,160 @@
     "version": "v1"
   },
   "paths": {
+    "/api/Horses": {
+      "get": {
+        "tags": [
+          "Horses"
+        ],
+        "operationId": "Horses_GetAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Horse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Horses"
+        ],
+        "operationId": "Horses_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "horse",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Horse"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Horse"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Horses"
+        ],
+        "operationId": "Horses_Update",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "horse",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Horse"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Horse"
+            }
+          }
+        }
+      }
+    },
+    "/api/Horses/{id}": {
+      "get": {
+        "tags": [
+          "Horses"
+        ],
+        "operationId": "Horses_Get",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Horse"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Horses"
+        ],
+        "operationId": "Horses_Delete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": true,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      }
+    },
     "/api/Clients": {
       "get": {
         "tags": [
@@ -35,7 +189,7 @@
         "tags": [
           "Clients"
         ],
-        "operationId": "Clients_CreateClient",
+        "operationId": "Clients_Create",
         "consumes": [
           "application/json",
           "text/json",
@@ -66,7 +220,7 @@
         "tags": [
           "Clients"
         ],
-        "operationId": "Clients_UpdateClient",
+        "operationId": "Clients_Update",
         "consumes": [
           "application/json",
           "text/json",
@@ -134,7 +288,7 @@
         "tags": [
           "Clients"
         ],
-        "operationId": "Clients_DeleteClient",
+        "operationId": "Clients_Delete",
         "parameters": [
           {
             "type": "integer",
@@ -313,7 +467,7 @@
         "tags": [
           "Trainings"
         ],
-        "operationId": "Trainings_Put",
+        "operationId": "Trainings_Update",
         "consumes": [
           "application/json",
           "text/json",
@@ -569,7 +723,7 @@
         "tags": [
           "TrainingTypes"
         ],
-        "operationId": "TrainingTypes_Post",
+        "operationId": "TrainingTypes_Create",
         "consumes": [
           "application/json",
           "text/json",
@@ -605,7 +759,7 @@
         "tags": [
           "TrainingTypes"
         ],
-        "operationId": "TrainingTypes_Put",
+        "operationId": "TrainingTypes_Update",
         "consumes": [
           "application/json",
           "text/json",
@@ -672,6 +826,26 @@
     }
   },
   "definitions": {
+    "Horse": {
+      "type": "object",
+      "required": [
+        "horseId",
+        "horseName",
+        "isAvailable"
+      ],
+      "properties": {
+        "horseId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "horseName": {
+          "type": "string"
+        },
+        "isAvailable": {
+          "type": "boolean"
+        }
+      }
+    },
     "Client": {
       "type": "object",
       "required": [

@@ -3,13 +3,13 @@ using StablingApi.Models;
 
 namespace StablingApi.Contexts
 {
-    public class ClientsContext : DbContext
+    public class TrainersContext : DbContext
     {
-        public ClientsContext(DbContextOptions<ClientsContext> options)
+        public TrainersContext(DbContextOptions<TrainersContext> options)
             : base(options)
         {
             Database.EnsureCreated();
         }
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Trainer> Trainers { get; set; }
     }
 }

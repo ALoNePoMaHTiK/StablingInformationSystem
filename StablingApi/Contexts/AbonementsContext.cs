@@ -3,9 +3,9 @@ using StablingApi.Models;
 
 namespace StablingApi.Contexts
 {
-    public class AbonementContext : DbContext
+    public class AbonementsContext : DbContext
     {
-        public AbonementContext(DbContextOptions<AbonementContext> options)
+        public AbonementsContext(DbContextOptions<AbonementsContext> options)
             : base(options)
         {
             Database.EnsureCreated();

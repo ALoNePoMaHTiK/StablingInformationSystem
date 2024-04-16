@@ -23,11 +23,13 @@ builder.Services.AddScoped<IAbonementMarkRepository, AbonementMarkRepository>();
 builder.Services.AddScoped<IAbonementRepository, AbonementRepository>();
 builder.Services.AddScoped<IAbonementTypeRepository, AbonementTypeRepository>();
 builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
+builder.Services.AddScoped<IHorseRepository, HorseRepository>();
 
-builder.Services.AddDbContextFactory<ClientContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContextFactory<ClientsContext>(o => o.UseSqlServer(connectionString));
 builder.Services.AddDbContextFactory<TrainingsContext>(o => o.UseSqlServer(connectionString));
-builder.Services.AddDbContextFactory<AbonementContext>(o => o.UseSqlServer(connectionString));
-builder.Services.AddDbContextFactory<TrainerContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContextFactory<AbonementsContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContextFactory<TrainersContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddDbContextFactory<HorsesContext>(o => o.UseSqlServer(connectionString));
 
 
 var app = builder.Build();

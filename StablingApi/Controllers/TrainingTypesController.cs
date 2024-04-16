@@ -36,17 +36,17 @@ namespace StablingApi.Controllers
         ///     Добавление типа тренировки
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<TrainingType>> Post([FromBody] TrainingType type)
+        public async Task<ActionResult<TrainingType>> Create([FromBody] TrainingType type)
         {
             TrainingType newType = await _trainingTypeRepository.Create(type);
-            return CreatedAtAction(nameof(Get), new { id = newType.TrainingTypeId }, newType);
+            return CreatedAtAction(nameof(Create), newType);
         }
 
         /// <summary>
         ///     Изменение типа тренировки
         /// </summary>
         [HttpPut]
-        public async Task<ActionResult<TrainingType>> Put([FromBody] TrainingType type)
+        public async Task<ActionResult<TrainingType>> Update([FromBody] TrainingType type)
         {
             if (_trainingTypeRepository.Get(type.TrainingTypeId) == null)
             {

@@ -88,7 +88,7 @@ namespace StablingApi.Controllers
         ///     Изменение тренировки
         /// </summary>
         [HttpPut]
-        public async Task<ActionResult<Training>> Put([FromBody] Training training)
+        public async Task<ActionResult<Training>> Update([FromBody] Training training)
         {
             if (_repository.Get(training.TrainingId) == null)
             {

@@ -5,83 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StablingClientWPF"
         xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+        xmlns:v="clr-namespace:StablingClientWPF.Views"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
         SizeToContent="Width"
         ResizeMode="NoResize"
         Title="MainWindow" Height="650" Width="800">
-    <StackPanel x:Name="mainPanel">
-        <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
-            <Button Content="Добавить" Command="{Binding OpenCreateClientCommand}"/>
-            <Button Content="Обновить" Command="{Binding GetClientsCommand}"/>
-        </StackPanel>
-        <TabControl>
-            <TabItem Header="Активные">
-                <ListView ItemsSource="{Binding ActiveClients}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding ClientId}">№</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding FullName}">ФИО</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding PhoneNumber}">Номер телефона</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Balance}">Баланс</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Email}">Email</GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding ElementName=mainPanel, Path=DataContext.OpenEditClientCommand}"
-                                CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/EditIcon.png" Width="25" Height="25"/>
-                                        </Button>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding ElementName=mainPanel, Path=DataContext.DeactivateClientCommand, UpdateSourceTrigger=PropertyChanged}"
-                                CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/DeactivateIcon.png" Width="25" Height="25"/>
-                                        </Button>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-            <TabItem Header="Архивные">
-                <ListView ItemsSource="{Binding InactiveClients}" >
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding ClientId}">№</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding FullName}">ФИО</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding PhoneNumber}">Номер телефона</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Balance}">Баланс</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Email}">Email</GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding ElementName=mainPanel, Path=DataContext.OpenEditClientCommand}"
-                                                CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/EditIcon.png" Width="25" Height="25"/>
-                                        </Button>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding ElementName=mainPanel, Path=DataContext.ActivateClientCommand}"
-                                                CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/ActivateIcon.png" Width="25" Height="25"/>
-                                        </Button>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-        </TabControl>
-    </StackPanel>
+
+    <TabControl>
+        <TabItem Header="Клиенты">
+            <v:ClientsView DataContext="{Binding ClientsViewModel,Mode=OneWay}"/>
+        </TabItem>
+        <TabItem Header="Тренировки">
+            <v:TrainingsView DataContext="{Binding TrainingsViewModel,Mode=OneWay}"/>
+        </TabItem>
+    </TabControl>
 </Window>
