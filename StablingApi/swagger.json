@@ -695,6 +695,41 @@
         }
       }
     },
+    "/api/Trainings/ForShow/ByDate/{dateTime}": {
+      "get": {
+        "tags": [
+          "Trainings"
+        ],
+        "operationId": "Trainings_GetForShowByDate",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "dateTime",
+            "in": "path",
+            "required": true,
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TrainingForShow"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TrainingTypes": {
       "get": {
         "tags": [
@@ -952,6 +987,64 @@
         "duration": {
           "type": "number",
           "format": "decimal"
+        }
+      }
+    },
+    "TrainingForShow": {
+      "type": "object",
+      "required": [
+        "trainingId",
+        "trainingTypeId",
+        "typeName",
+        "trainerId",
+        "trainerName",
+        "horseId",
+        "horseName",
+        "clientId",
+        "clientName",
+        "trainingStart",
+        "trainingFinish"
+      ],
+      "properties": {
+        "trainingId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainingTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "typeName": {
+          "type": "string"
+        },
+        "trainerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainerName": {
+          "type": "string"
+        },
+        "horseId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "horseName": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "clientName": {
+          "type": "string"
+        },
+        "trainingStart": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "trainingFinish": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

@@ -55,7 +55,7 @@ namespace StablingClientMAUI.ViewModels
 
         private async Task AddClient()
         {
-            await _client.CreateClientAsync(newClient);
+            await _client.CreateAsync(newClient);
             await GetClientsAsync();
         }
     }

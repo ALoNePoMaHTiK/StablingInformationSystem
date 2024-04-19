@@ -15,18 +15,20 @@ namespace StablingClientWPF.ViewModels
         private TrainersHttpClient _trainersHttpClient;
         private TrainingsHttpClient _trainingsHttpClient;
         private TrainingTypesHttpClient _trainingTypesHttpClient;
+        private HorsesHttpClient _horsesHttpClient;
         public EditTrainingViewModel(ClientsHttpClient clientsHttpClient,
             TrainersHttpClient trainersHttpClient, TrainingsHttpClient trainingsHttpClient,
-            TrainingTypesHttpClient trainingTypesHttpClient)
+            TrainingTypesHttpClient trainingTypesHttpClient, HorsesHttpClient horsesHttpClient)
         {
             _clientsHttpClient = clientsHttpClient; //Подумать над определением списка клиентов на основании выбранного тренера
             _trainersHttpClient = trainersHttpClient;
             _trainingsHttpClient = trainingsHttpClient;
             _trainingTypesHttpClient = trainingTypesHttpClient;
-
+            _horsesHttpClient = horsesHttpClient;
             GetTrainers();
             GetClients();
             GetTrainingTypes();
+            GetHorses();
         }
 
         private ObservableCollection<Trainer> _Trainers;
@@ -50,6 +52,13 @@ namespace StablingClientWPF.ViewModels
             set { _TrainingTypes = value; OnPropertyChanged(); }
         }
 
+        private ObservableCollection<Horse> _Horses;
+        public ObservableCollection<Horse> Horses
+        {
+            get { return _Horses; }
+            set { _Horses = value; OnPropertyChanged(); }
+        }
+
         private async Task GetTrainers()
         {
             Trainers = new ObservableCollection<Trainer>(await _trainersHttpClient.GetAllAsync());
@@ -63,6 +72,11 @@ namespace StablingClientWPF.ViewModels
         private async Task GetTrainingTypes()
         {
             TrainingTypes = new ObservableCollection<TrainingType>(await _trainingTypesHttpClient.GetAllAsync());
+        }
+
+        private async Task GetHorses()
+        {
+            Horses = new ObservableCollection<Horse>(await _horsesHttpClient.GetAllAsync());
         }
 
         private Training _CurrentTraining;

@@ -18,12 +18,12 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding TrainingId}">№</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding TrainingTypeId}">Тип</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding TrainerId}">Тренер</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding ClientId}">Клиент</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding HorseId}">Лошадь</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Duration}">Длительность</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding TrainingDateTime}">Дата/время</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding TypeName}">Тип</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding TrainerName}">Тренер</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding ClientName}">Клиент</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding HorseName}">Лошадь</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding TrainingStart, StringFormat=HH-mm}">Начало</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding TrainingFinish, StringFormat=HH-mm}">Конец</GridViewColumn>
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

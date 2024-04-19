@@ -18,10 +18,16 @@ namespace StablingApi.Contexts
                 builder.ToTable(tb => tb.HasTrigger("TR_Trainings_AfterUpdate"));
             });
             modelBuilder.Entity<TrainingWithdrawing>().HasKey(w => new { w.TrainingId, w.BalanceWithdrawingId });
+            modelBuilder.Entity<TrainingForShow>(builder =>
+            {
+                builder.ToView("VW_TrainingsForShow");
+                builder.HasNoKey();
+            });
         }
 
         public DbSet<TrainingType> TrainingTypes { get; set; }
         public DbSet<Training> Trainings { get; set; }
         public DbSet<TrainingWithdrawing> TrainingWithdrawings { get; set; }
+        public DbSet<TrainingForShow> TrainingsForShow { get; set; }
     }
 }

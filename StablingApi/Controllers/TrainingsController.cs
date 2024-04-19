@@ -74,6 +74,12 @@ namespace StablingApi.Controllers
             return await _repository.Get(dateTime, horseId);
         }
 
+        [HttpGet("ForShow/ByDate/{dateTime}")]
+        public async Task<IEnumerable<TrainingForShow>> GetForShowByDate(DateTime dateTime)
+        {
+            return await _repository.GetForShowByDay(dateTime);
+        }
+
         /// <summary>
         ///     Добавление тренировки
         /// </summary>

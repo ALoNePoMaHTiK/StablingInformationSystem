@@ -81,5 +81,18 @@ namespace StablingApi.Repositories
                 context.SaveChanges();
             }
         }
+
+        public async Task<IEnumerable<TrainingForShow>> GetAllForShow()
+        {
+            TrainingsContext context = _contextFactory.CreateDbContext();
+            return await context.TrainingsForShow.ToListAsync();
+        }
+
+        public async Task<IEnumerable<TrainingForShow>> GetForShowByDay(DateTime dateTime)
+        {
+            TrainingsContext context = _contextFactory.CreateDbContext();
+            return await context.TrainingsForShow.Where
+                (training => training.TrainingStart.Date == dateTime).ToListAsync();
+        }
     }
 }

@@ -52,6 +52,13 @@ namespace StablingClientWPF
                 var httpClient = new TrainingTypesHttpClient(ApiUrl, client);
                 return httpClient;
             });
+            services.AddSingleton<HorsesHttpClient>(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient();
+                var httpClient = new HorsesHttpClient(ApiUrl, client);
+                return httpClient;
+            });
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<ClientsViewModel>();

@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         SizeToContent="Height"
         ResizeMode="NoResize"
-        Title="AddTrainingModalWindow" Height="450" Width="800">
+        Title="AddTrainingModalWindow" Width="300">
     <StackPanel>
         <GroupBox>
             <GroupBox.Header>
@@ -41,6 +41,12 @@
                 <TextBlock>Тип тренировки</TextBlock>
             </GroupBox.Header>
             <ComboBox ItemsSource="{Binding TrainingTypes}" SelectedValue="{Binding CurrentTraining.TrainingTypeId}" DisplayMemberPath="TypeName" SelectedValuePath="TrainingTypeId"/>
+        </GroupBox>
+        <GroupBox>
+            <GroupBox.Header>
+                <TextBlock>Дата/время тренировки</TextBlock>
+            </GroupBox.Header>
+            <TextBox Text="{Binding CurrentTraining.TrainingDateTime, StringFormat=yyyy-MM-ddTHH-mm}"/>
         </GroupBox>
         <Button Content="Принять" Command="{Binding ProcessTrainingCommand}" Height="30"/>
     </StackPanel>

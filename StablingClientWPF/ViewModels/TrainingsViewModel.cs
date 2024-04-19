@@ -1,11 +1,6 @@
 ﻿using StablingApiClient;
 using StablingClientWPF.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace StablingClientWPF.ViewModels
@@ -16,6 +11,7 @@ namespace StablingClientWPF.ViewModels
         private TrainersHttpClient _trainersHttpClient;
         private TrainingsHttpClient _trainingsHttpClient;
         private TrainingTypesHttpClient _trainingTypesHttpClient;
+        private HorsesHttpClient _horsesHttpClient;
 
         private DateTime _CurrentDate;
         public DateTime CurrentDate
@@ -24,8 +20,8 @@ namespace StablingClientWPF.ViewModels
             set { _CurrentDate = value; OnPropertyChanged(); GetTrainings(); }
         }
 
-        private ObservableCollection<Training> _Trainings;
-        public ObservableCollection<Training> Trainings
+        private ObservableCollection<TrainingForShow> _Trainings;
+        public ObservableCollection<TrainingForShow> Trainings
         {
             get { return _Trainings; }
             set { _Trainings = value; OnPropertyChanged(); }
@@ -33,12 +29,13 @@ namespace StablingClientWPF.ViewModels
 
         public TrainingsViewModel(ClientsHttpClient clientsHttpClient,
             TrainersHttpClient trainersHttpClient, TrainingsHttpClient trainingsHttpClient,
-            TrainingTypesHttpClient trainingTypesHttpClient)
+            TrainingTypesHttpClient trainingTypesHttpClient, HorsesHttpClient horsesHttpClient)
         {
             _clientsHttpClient = clientsHttpClient;
             _trainersHttpClient = trainersHttpClient;
             _trainingsHttpClient = trainingsHttpClient;
             _trainingTypesHttpClient = trainingTypesHttpClient;
+            _horsesHttpClient = horsesHttpClient;
 
 
 
@@ -56,7 +53,7 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task GetTrainings()
         {
-            Trainings = new ObservableCollection<Training>(await _trainingsHttpClient.GetByDayAsync(CurrentDate));
+            Trainings = new ObservableCollection<TrainingForShow>(await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
         public DelegateCommand OpenCreateTrainingCommand
@@ -70,7 +67,7 @@ namespace StablingClientWPF.ViewModels
         }
         private void OpenCreateTraining()
         {
-            OpenModalWindow(new Training());
+            OpenModalWindow(new Training() { TrainingDateTime=CurrentDate});
         }
 
         public DelegateCommand OpenEditTrainingCommand
@@ -82,16 +79,16 @@ namespace StablingClientWPF.ViewModels
                 });
             }
         }
-        private void OpenEditTraining(int id)
+        private async void OpenEditTraining(int id)
         {
-            Training trainingForEdit = Trainings.ToList().Find(o => o.TrainingId == id);
+            Training trainingForEdit = await _trainingsHttpClient.GetAsync(id);
             OpenModalWindow(trainingForEdit);
         }
 
         private void OpenModalWindow(Training trainingForProcess)
         {
             EditTrainingViewModel viewModel = new (_clientsHttpClient,
-                _trainersHttpClient,_trainingsHttpClient,_trainingTypesHttpClient);
+                _trainersHttpClient,_trainingsHttpClient,_trainingTypesHttpClient, _horsesHttpClient);
             viewModel.CurrentTraining = trainingForProcess;
             Window modalWindow = new TrainingsModalWindow(viewModel);
             modalWindow.ShowDialog();

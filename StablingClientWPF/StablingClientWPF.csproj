@@ -25,14 +25,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Icons\ActivateIcon.png" />
     <Resource Include="Icons\DeactivateIcon.png" />
     <Resource Include="Icons\EditIcon.png" />
     <Resource Include="Icons\RefreshIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
