@@ -226,11 +226,6 @@
           "text/json",
           "application/*+json"
         ],
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
         "parameters": [
           {
             "name": "client",
@@ -244,11 +239,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Client"
-            }
+            "description": ""
           }
         }
       }
@@ -378,6 +369,29 @@
         }
       }
     },
+    "/api/Clients/ChangeAvailability/{id}": {
+      "put": {
+        "tags": [
+          "Clients"
+        ],
+        "operationId": "Clients_ChangeAvailability",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Trainers": {
       "get": {
         "tags": [
@@ -454,7 +468,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "x-nullable": false,
             "description": "",
             "schema": {

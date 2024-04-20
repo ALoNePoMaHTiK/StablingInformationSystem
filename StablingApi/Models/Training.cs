@@ -9,7 +9,7 @@ namespace StablingApi.Models
         public int TrainerId { get; set; }
         public int HorseId { get; set; }
         public int ClientId { get; set; }
-        public System.DateTime TrainingDateTime { get; set; }
+        public DateTime TrainingDateTime { get; set; }
         [Column(TypeName = "decimal(2,1)")]
         public decimal Duration { get; set; }
     }

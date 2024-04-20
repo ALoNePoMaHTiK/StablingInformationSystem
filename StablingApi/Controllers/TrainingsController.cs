@@ -84,6 +84,7 @@ namespace StablingApi.Controllers
         ///     Добавление тренировки
         /// </summary>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<Training>> Create([FromBody] Training training)
         {
             Training newTraining = await _repository.Create(training);
@@ -94,6 +95,7 @@ namespace StablingApi.Controllers
         ///     Изменение тренировки
         /// </summary>
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Training>> Update([FromBody] Training training)
         {
             if (_repository.Get(training.TrainingId) == null)
@@ -101,7 +103,7 @@ namespace StablingApi.Controllers
                 return NotFound();
             }
             await _repository.Update(training);
-            return Ok();
+            return Ok(training);
         }
 
         /// <summary>

@@ -55,24 +55,42 @@ namespace StablingApi.Controllers
         ///     Добавление клиента
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Client client)
+        public async Task<ActionResult> Create([FromBody] Client client)
         {
             Client newClient = await _repository.Create(client);
             return CreatedAtAction(nameof(Create),newClient);
         }
 
         /// <summary>
+        ///     Изменение статуса клиента
+        /// </summary>
+        /// <response code="200" nullable="true"></response>
+        [HttpPut("ChangeAvailability/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> ChangeAvailability(int id)
+        {
+            if (_repository.Get(id) == null)
+            {
+                return NotFound();
+            }
+            await _repository.ChangeAvailability(id);
+            return Ok(id);
+        }
+
+        /// <summary>
         ///     Изменение клиента
         /// </summary>
+        /// <response code="200" nullable="true"></response>
         [HttpPut]
-        public async Task<ActionResult<Client>> Update([FromBody] Client client)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> Update([FromBody] Client client)
         {
             if (_repository.Get(client.ClientId) == null)
             {
                 return NotFound();
             }
             await _repository.Update(client);
-            return Ok();
+            return Ok(client);
         }
 
         /// <summary>
@@ -85,7 +103,7 @@ namespace StablingApi.Controllers
             if (clientToDelete == null)
                 return NotFound();
             await _repository.Delete(id);
-            return NoContent();
+            return Ok();
         }
     }
 }

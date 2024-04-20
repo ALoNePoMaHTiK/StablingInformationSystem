@@ -1,4 +1,5 @@
 ﻿using StablingApiClient;
+using StablingClientWPF.Commands;
 using StablingClientWPF.Views;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -42,13 +43,11 @@ namespace StablingClientWPF.ViewModels
             CurrentDate = DateTime.Now.Date;
         }
 
-        public DelegateCommand GetTrainingsCommand
+        public AsyncDelegateCommand GetTrainingsCommand
         {
             get
             {
-                return new DelegateCommand(o => {
-                    GetTrainings();
-                });
+                return new AsyncDelegateCommand(async o => { await GetTrainings(); }, ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task GetTrainings()

@@ -3,21 +3,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:StablingClientWPF"
         xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
         xmlns:v="clr-namespace:StablingClientWPF.Views"
         mc:Ignorable="d"
+        Style="{StaticResource MaterialDesignWindow}"
         d:DataContext="{d:DesignInstance vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
         SizeToContent="Width"
-        ResizeMode="NoResize"
-        Title="MainWindow" Height="650" Width="800">
+        
+        Title="MainWindow" Height="600" Width="800">
 
-    <TabControl>
-        <TabItem Header="Клиенты">
+    <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+        SnapsToDevicePixels="True"
+        Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+        TabStripPlacement="Left">
+        <TabItem  Width="100" Height="100">
+            <TabItem.Header>
+                <StackPanel Width="auto" Height="auto">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        HorizontalAlignment="Center"
+                        Kind="Account" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        Text="Клиенты" />
+                </StackPanel>
+            </TabItem.Header>
             <v:ClientsView DataContext="{Binding ClientsViewModel,Mode=OneWay}"/>
         </TabItem>
-        <TabItem Header="Тренировки">
+        <TabItem  Width="100" Height="100">
+            <TabItem.Header>
+                <StackPanel Width="Auto" Height="auto">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        HorizontalAlignment="Center"
+                        Kind="CurrencyUsd" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        Text="Тренировки" />
+                </StackPanel>
+            </TabItem.Header>
             <v:TrainingsView DataContext="{Binding TrainingsViewModel,Mode=OneWay}"/>
         </TabItem>
     </TabControl>

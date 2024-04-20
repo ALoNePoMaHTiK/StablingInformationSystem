@@ -1,4 +1,5 @@
 ﻿using StablingApiClient;
+using StablingClientWPF.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -85,24 +86,21 @@ namespace StablingClientWPF.ViewModels
             get { return _CurrentTraining; }
             set { _CurrentTraining = value; OnPropertyChanged(); }
         }
-
-        public DelegateCommand ProcessTrainingCommand
+        public AsyncDelegateCommand ProcessTrainingCommand
         {
             get
             {
-                return new DelegateCommand(o => {
-                    ProcessTraining();
-                });
+                return new AsyncDelegateCommand(async o => { await ProcessTrainingAsync(); }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-        private void ProcessTraining()
+        private async Task ProcessTrainingAsync()
         {
             try
             {
                 if (CurrentTraining.TrainingId != 0)
-                    _trainingsHttpClient.UpdateAsync(CurrentTraining);
+                    await _trainingsHttpClient.UpdateAsync(CurrentTraining);
                 else
-                    _trainingsHttpClient.CreateAsync(CurrentTraining);
+                    await _trainingsHttpClient.CreateAsync(CurrentTraining);
             }
             catch (ApiException ex)
             {

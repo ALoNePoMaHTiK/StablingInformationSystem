@@ -46,18 +46,18 @@ namespace StablingClientWPF.ViewModels
             get
             {
                 return new DelegateCommand(o => {
-                    ProcessClient();
+                    ProcessClientAsync();
                 });
             }
         }
-        private void ProcessClient()
+        private async Task ProcessClientAsync()
         {
             try
             {
                 if (CurrentClient.ClientId != 0)
-                    _clientsHttpClient.UpdateAsync(CurrentClient);
+                    await _clientsHttpClient.UpdateAsync(CurrentClient);
                 else
-                    _clientsHttpClient.CreateAsync(CurrentClient);
+                    await _clientsHttpClient.CreateAsync(CurrentClient);
             }
             catch(ApiException ex)
             {

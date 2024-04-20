@@ -4,6 +4,8 @@
 // </auto-generated>
 //----------------------
 
+#nullable enable
+
 #pragma warning disable 108 // Disable "CS0108 '{derivedDto}.ToJson()' hides inherited member '{dtoBase}.ToJson()'. Use the new keyword if hiding was intended."
 #pragma warning disable 114 // Disable "CS0114 '{derivedDto}.RaisePropertyChanged(String)' hides inherited member 'dtoBase.RaisePropertyChanged(String)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword."
 #pragma warning disable 472 // Disable "CS0472 The result of the expression is always 'false' since a value of type 'Int32' is never equal to 'null' of type 'Int32?'
@@ -482,7 +484,7 @@ namespace StablingApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -491,7 +493,7 @@ namespace StablingApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -509,7 +511,7 @@ namespace StablingApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -520,7 +522,7 @@ namespace StablingApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -776,14 +778,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Client> UpdateAsync(Client client)
+        public virtual System.Threading.Tasks.Task UpdateAsync(Client client)
         {
             return UpdateAsync(client, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Client> UpdateAsync(Client client, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task UpdateAsync(Client client, System.Threading.CancellationToken cancellationToken)
         {
             if (client == null)
                 throw new System.ArgumentNullException("client");
@@ -799,7 +801,6 @@ namespace StablingApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
@@ -831,12 +832,7 @@ namespace StablingApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<Client>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
+                            return;
                         }
                         else
                         {
@@ -1178,6 +1174,81 @@ namespace StablingApiClient
             }
         }
 
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task ChangeAvailabilityAsync(int id)
+        {
+            return ChangeAvailabilityAsync(id, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task ChangeAvailabilityAsync(int id, System.Threading.CancellationToken cancellationToken)
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/Clients/ChangeAvailability/{id}"
+                    urlBuilder_.Append("api/Clients/ChangeAvailability/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
         protected struct ObjectResponseResult<T>
         {
             public ObjectResponseResult(T responseObject, string responseText)
@@ -1197,7 +1268,7 @@ namespace StablingApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -1206,7 +1277,7 @@ namespace StablingApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -1224,7 +1295,7 @@ namespace StablingApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -1235,7 +1306,7 @@ namespace StablingApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -1428,7 +1499,7 @@ namespace StablingApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -1437,7 +1508,7 @@ namespace StablingApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -1455,7 +1526,7 @@ namespace StablingApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -1466,7 +1537,7 @@ namespace StablingApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -1694,7 +1765,7 @@ namespace StablingApiClient
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
+                        if (status_ == 201)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<Training>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
@@ -1965,14 +2036,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByDayAsync(System.DateTimeOffset dateTime)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByDayAsync(System.DateTime dateTime)
         {
             return GetByDayAsync(dateTime, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByDayAsync(System.DateTimeOffset dateTime, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByDayAsync(System.DateTime dateTime, System.Threading.CancellationToken cancellationToken)
         {
             if (dateTime == null)
                 throw new System.ArgumentNullException("dateTime");
@@ -2045,14 +2116,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByWeekAsync(System.DateTimeOffset dateTime)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByWeekAsync(System.DateTime dateTime)
         {
             return GetByWeekAsync(dateTime, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByWeekAsync(System.DateTimeOffset dateTime, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByWeekAsync(System.DateTime dateTime, System.Threading.CancellationToken cancellationToken)
         {
             if (dateTime == null)
                 throw new System.ArgumentNullException("dateTime");
@@ -2201,14 +2272,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByHorseDayAsync(System.DateTimeOffset dateTime, int horseId)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByHorseDayAsync(System.DateTime dateTime, int horseId)
         {
             return GetByHorseDayAsync(dateTime, horseId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByHorseDayAsync(System.DateTimeOffset dateTime, int horseId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Training>> GetByHorseDayAsync(System.DateTime dateTime, int horseId, System.Threading.CancellationToken cancellationToken)
         {
             if (dateTime == null)
                 throw new System.ArgumentNullException("dateTime");
@@ -2286,14 +2357,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TrainingForShow>> GetForShowByDateAsync(System.DateTimeOffset dateTime)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TrainingForShow>> GetForShowByDateAsync(System.DateTime dateTime)
         {
             return GetForShowByDateAsync(dateTime, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TrainingForShow>> GetForShowByDateAsync(System.DateTimeOffset dateTime, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<TrainingForShow>> GetForShowByDateAsync(System.DateTime dateTime, System.Threading.CancellationToken cancellationToken)
         {
             if (dateTime == null)
                 throw new System.ArgumentNullException("dateTime");
@@ -2384,7 +2455,7 @@ namespace StablingApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -2393,7 +2464,7 @@ namespace StablingApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -2411,7 +2482,7 @@ namespace StablingApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -2422,7 +2493,7 @@ namespace StablingApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -2861,7 +2932,7 @@ namespace StablingApiClient
         {
             if (response == null || response.Content == null)
             {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
+                return new ObjectResponseResult<T>(default(T)!, string.Empty);
             }
 
             if (ReadResponseAsString)
@@ -2870,7 +2941,7 @@ namespace StablingApiClient
                 try
                 {
                     var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    return new ObjectResponseResult<T>(typedBody!, responseText);
                 }
                 catch (Newtonsoft.Json.JsonException exception)
                 {
@@ -2888,7 +2959,7 @@ namespace StablingApiClient
                     {
                         var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
                         var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        return new ObjectResponseResult<T>(typedBody!, string.Empty);
                     }
                 }
                 catch (Newtonsoft.Json.JsonException exception)
@@ -2899,7 +2970,7 @@ namespace StablingApiClient
             }
         }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        private string ConvertToString(object? value, System.Globalization.CultureInfo cultureInfo)
         {
             if (value == null)
             {
@@ -2958,14 +3029,14 @@ namespace StablingApiClient
     public partial class Horse
     {
         [Newtonsoft.Json.JsonProperty("horseId", Required = Newtonsoft.Json.Required.Always)]
-        public int HorseId { get; set; }
+        public int HorseId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("horseName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string HorseName { get; set; }
+        public string HorseName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("isAvailable", Required = Newtonsoft.Json.Required.Always)]
-        public bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; } = default!;
 
     }
 
@@ -2973,28 +3044,28 @@ namespace StablingApiClient
     public partial class Client
     {
         [Newtonsoft.Json.JsonProperty("clientId", Required = Newtonsoft.Json.Required.Always)]
-        public int ClientId { get; set; }
+        public int ClientId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainerId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainerId { get; set; }
+        public int TrainerId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("fullName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("balance", Required = Newtonsoft.Json.Required.Always)]
-        public double Balance { get; set; }
+        public double Balance { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Email { get; set; }
+        public string Email { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("isAvailable", Required = Newtonsoft.Json.Required.Always)]
-        public bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; } = default!;
 
     }
 
@@ -3002,21 +3073,21 @@ namespace StablingApiClient
     public partial class Trainer
     {
         [Newtonsoft.Json.JsonProperty("trainerId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainerId { get; set; }
+        public int TrainerId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("fullName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("color", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Color { get; set; }
+        public string Color { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("salaryRate", Required = Newtonsoft.Json.Required.Always)]
-        public int SalaryRate { get; set; }
+        public int SalaryRate { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("isAvailable", Required = Newtonsoft.Json.Required.Always)]
-        public bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; } = default!;
 
     }
 
@@ -3024,26 +3095,26 @@ namespace StablingApiClient
     public partial class Training
     {
         [Newtonsoft.Json.JsonProperty("trainingId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainingId { get; set; }
+        public int TrainingId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainingTypeId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainingTypeId { get; set; }
+        public int TrainingTypeId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainerId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainerId { get; set; }
+        public int TrainerId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("horseId", Required = Newtonsoft.Json.Required.Always)]
-        public int HorseId { get; set; }
+        public int HorseId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("clientId", Required = Newtonsoft.Json.Required.Always)]
-        public int ClientId { get; set; }
+        public int ClientId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainingDateTime", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset TrainingDateTime { get; set; }
+        public System.DateTime TrainingDateTime { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("duration", Required = Newtonsoft.Json.Required.Always)]
-        public decimal Duration { get; set; }
+        public decimal Duration { get; set; } = default!;
 
     }
 
@@ -3051,43 +3122,43 @@ namespace StablingApiClient
     public partial class TrainingForShow
     {
         [Newtonsoft.Json.JsonProperty("trainingId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainingId { get; set; }
+        public int TrainingId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainingTypeId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainingTypeId { get; set; }
+        public int TrainingTypeId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("typeName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string TypeName { get; set; }
+        public string TypeName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainerId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainerId { get; set; }
+        public int TrainerId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainerName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string TrainerName { get; set; }
+        public string TrainerName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("horseId", Required = Newtonsoft.Json.Required.Always)]
-        public int HorseId { get; set; }
+        public int HorseId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("horseName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string HorseName { get; set; }
+        public string HorseName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("clientId", Required = Newtonsoft.Json.Required.Always)]
-        public int ClientId { get; set; }
+        public int ClientId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("clientName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string ClientName { get; set; }
+        public string ClientName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainingStart", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset TrainingStart { get; set; }
+        public System.DateTime TrainingStart { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("trainingFinish", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.DateTimeOffset TrainingFinish { get; set; }
+        public System.DateTime TrainingFinish { get; set; } = default!;
 
     }
 
@@ -3095,28 +3166,28 @@ namespace StablingApiClient
     public partial class TrainingType
     {
         [Newtonsoft.Json.JsonProperty("trainingTypeId", Required = Newtonsoft.Json.Required.Always)]
-        public int TrainingTypeId { get; set; }
+        public int TrainingTypeId { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("typeName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string TypeName { get; set; }
+        public string TypeName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("typePrice", Required = Newtonsoft.Json.Required.Always)]
-        public int TypePrice { get; set; }
+        public int TypePrice { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("typeDuration", Required = Newtonsoft.Json.Required.Always)]
-        public decimal TypeDuration { get; set; }
+        public decimal TypeDuration { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("isAvailable", Required = Newtonsoft.Json.Required.Always)]
-        public bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; } = default!;
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.4.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class FileResponse : System.IDisposable
     {
-        private System.IDisposable _client;
-        private System.IDisposable _response;
+        private System.IDisposable? _client;
+        private System.IDisposable? _response;
 
         public int StatusCode { get; private set; }
 
@@ -3129,7 +3200,7 @@ namespace StablingApiClient
             get { return StatusCode == 206; }
         }
 
-        public FileResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.IO.Stream stream, System.IDisposable client, System.IDisposable response)
+        public FileResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.IO.Stream stream, System.IDisposable? client, System.IDisposable? response)
         {
             StatusCode = statusCode;
             Headers = headers;
@@ -3154,11 +3225,11 @@ namespace StablingApiClient
     {
         public int StatusCode { get; private set; }
 
-        public string Response { get; private set; }
+        public string? Response { get; private set; }
 
         public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
 
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
+        public ApiException(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception? innerException)
             : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
         {
             StatusCode = statusCode;
@@ -3177,7 +3248,7 @@ namespace StablingApiClient
     {
         public TResult Result { get; private set; }
 
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
+        public ApiException(string message, int statusCode, string? response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception? innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;

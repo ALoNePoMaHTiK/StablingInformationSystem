@@ -8,15 +8,23 @@
              d:DataContext="{d:DesignInstance vm:TrainingsViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <DatePicker SelectedDate="{Binding CurrentDate}" Height="100"/>
-        <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DatePicker
+              Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+              SelectedDate="{Binding CurrentDate}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
             <Button Content="Добавить" Command="{Binding OpenCreateTrainingCommand}"/>
             <Button Content="Обновить" Command="{Binding GetTrainingsCommand}"/>
         </StackPanel>
-        <ListView x:Name="TrainingsListView" ItemsSource="{Binding Trainings}">
+
+        <ListView Grid.Row="2" x:Name="TrainingsListView" ItemsSource="{Binding Trainings, IsAsync=True}">
             <ListView.View>
-                <GridView>
+                <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <GridViewColumn DisplayMemberBinding="{Binding TrainingId}">№</GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding TypeName}">Тип</GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding TrainerName}">Тренер</GridViewColumn>
@@ -37,5 +45,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-    </StackPanel>
+    </Grid>
 </UserControl>

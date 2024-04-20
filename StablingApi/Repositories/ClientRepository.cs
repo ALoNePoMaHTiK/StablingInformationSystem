@@ -61,5 +61,14 @@ namespace StablingApi.Repositories
             }
             await context.SaveChangesAsync();
         }
+
+        public async Task ChangeAvailability(int id)
+        {
+            ClientsContext context = _contextFactory.CreateDbContext();
+            Client clientToUpdate = await context.Clients.FindAsync(id);
+            if (clientToUpdate != null)
+                clientToUpdate.IsAvailable = !clientToUpdate.IsAvailable;
+            await context.SaveChangesAsync();
+        }
     }
 }

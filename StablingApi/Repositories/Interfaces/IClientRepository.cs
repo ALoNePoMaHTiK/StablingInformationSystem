@@ -10,6 +10,7 @@ namespace StablingApi.Repositories.Interfaces
         Task<IEnumerable<Client>> GetByAvailability(bool IsAvailable);
         Task<Client> Create(Client client);
         Task Update(Client client);
+        Task ChangeAvailability(int id);
         Task Delete(int id);
     }
 }

@@ -4,20 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StablingClientWPF.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:ClientsViewModel}"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
+             mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
             <Button Content="Добавить" Command="{Binding OpenCreateClientCommand}"/>
             <Button Content="Обновить" Command="{Binding GetClientsCommand}"/>
         </StackPanel>
-        <TabControl>
-            <TabItem Header="Активные">
-                <ListView x:Name="ClientsListView" ItemsSource="{Binding ActiveClients}">
+        <TabControl Grid.Row="1">
+            <TabItem Header="Активные" Height="Auto">
+                <ListView x:Name="ClientsListView" ItemsSource="{Binding ActiveClients}" Height="Auto">
                     <ListView.View>
-                        <GridView>
+                        <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <GridViewColumn DisplayMemberBinding="{Binding ClientId}">№</GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding FullName}">ФИО</GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding PhoneNumber}">Номер телефона</GridViewColumn>
@@ -26,20 +30,20 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Command="{Binding ElementName=ClientsListView, Path=DataContext.OpenEditClientCommand}"
-                                                CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/EditIcon.png" Width="25" Height="25"/>
-                                        </Button>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding ElementName=ClientsListView, Path=DataContext.DeactivateClientCommand, UpdateSourceTrigger=PropertyChanged}"
-                                                CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/DeactivateIcon.png" Width="25" Height="25"/>
-                                        </Button>
+                                        <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                            <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                <MenuItem Command="{Binding ElementName=ClientsListView,
+                                                          Path=DataContext.OpenEditClientCommand}"
+                                                          CommandParameter="{Binding ClientId}"
+                                                          Header="Изменить"
+                                                          Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                <MenuItem Command="{Binding ElementName=ClientsListView,
+                                                          Path=DataContext.ChangeAvailabilityCommand}"
+                                                          CommandParameter="{Binding ClientId}"
+                                                          Header="Скрыть"
+                                                          Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
+                                            </MenuItem>
+                                        </Menu>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -50,7 +54,7 @@
             <TabItem Header="Архивные">
                 <ListView ItemsSource="{Binding InactiveClients}" >
                     <ListView.View>
-                        <GridView>
+                        <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <GridViewColumn DisplayMemberBinding="{Binding ClientId}">№</GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding FullName}">ФИО</GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding PhoneNumber}">Номер телефона</GridViewColumn>
@@ -59,7 +63,7 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Command="{Binding ElementName=mainPanel, Path=DataContext.OpenEditClientCommand}"
+                                        <Button Command="{Binding ElementName=ClientsListView, Path=DataContext.OpenEditClientCommand}"
                                             CommandParameter="{Binding ClientId}">
                                             <Image Source="/Icons/EditIcon.png" Width="25" Height="25"/>
                                         </Button>
@@ -69,7 +73,7 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Command="{Binding ElementName=mainPanel, Path=DataContext.ActivateClientCommand}"
+                                        <Button Command="{Binding ElementName=ClientsListView, Path=DataContext.ChangeAvailabilityCommand}"
                                             CommandParameter="{Binding ClientId}">
                                             <Image Source="/Icons/ActivateIcon.png" Width="25" Height="25"/>
                                         </Button>
@@ -81,5 +85,5 @@
                 </ListView>
             </TabItem>
         </TabControl>
-    </StackPanel>
+    </Grid>
 </UserControl>

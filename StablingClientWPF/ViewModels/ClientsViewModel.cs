@@ -1,4 +1,5 @@
 ﻿using StablingApiClient;
+using StablingClientWPF.Commands;
 using StablingClientWPF.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -16,11 +17,11 @@ namespace StablingClientWPF.ViewModels
             set { _ActiveClients = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<Client> _DisactiveClients;
+        private ObservableCollection<Client> _InactiveClients;
         public ObservableCollection<Client> InactiveClients
         {
-            get { return _DisactiveClients; }
-            set { _DisactiveClients = value; OnPropertyChanged(); }
+            get { return _InactiveClients; }
+            set { _InactiveClients = value; OnPropertyChanged(); }
         }
 
         private ClientsHttpClient _clientsHttpClient;
@@ -58,9 +59,9 @@ namespace StablingClientWPF.ViewModels
         }
         private void OpenEditClient(int id)
         {
-            Client clientForEdit = ActiveClients.ToList().Find(o => o.ClientId == id);
+            Client clientForEdit = ActiveClients.FirstOrDefault(o => o.ClientId == id);
             if (clientForEdit == null)
-                clientForEdit = InactiveClients.ToList().Find(o => o.ClientId == id);
+                clientForEdit = InactiveClients.Where(o => o.ClientId == id).First();
             OpenModalWindow(clientForEdit);
         }
 
@@ -72,13 +73,11 @@ namespace StablingClientWPF.ViewModels
             modalWindow.ShowDialog();
         }
 
-        public DelegateCommand GetClientsCommand
+        public AsyncDelegateCommand GetClientsCommand
         {
             get
             {
-                return new DelegateCommand(o => {
-                    GetClients();
-                });
+                return new AsyncDelegateCommand(async o => { await GetClients(); }, ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task GetClients()
@@ -87,45 +86,29 @@ namespace StablingClientWPF.ViewModels
             InactiveClients = new ObservableCollection<Client>(await _clientsHttpClient.GetByAvailabilityAsync(false));
         }
 
-        public DelegateCommand DeactivateClientCommand
+        public AsyncDelegateCommand ChangeAvailabilityCommand
         {
             get
             {
-                return new DelegateCommand(o => {
-                    DeactivateClient((int)o);
-                });
+                return new AsyncDelegateCommand(async o => { await ChangeAvailability((int)o); }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-        private async Task DeactivateClient(int id)
+        private async Task ChangeAvailability(int id)
         {
-            Client clientForEdit = ActiveClients.ToList().Find(o => o.ClientId == id);
-            if (clientForEdit != null)
+            Client clientForWork = ActiveClients.FirstOrDefault(o => o.ClientId == id);
+            if (clientForWork == null)
+                clientForWork = InactiveClients.Where(o => o.ClientId == id).First();
+            await _clientsHttpClient.ChangeAvailabilityAsync(id);
+            if (clientForWork.IsAvailable)
             {
-                clientForEdit.IsAvailable = false;
-                await _clientsHttpClient.UpdateAsync(clientForEdit);
-                await GetClients();
+                ActiveClients.Remove(clientForWork);
+                InactiveClients.Add(clientForWork);
+            }
+            else
+            {
+                InactiveClients.Remove(clientForWork);
+                ActiveClients.Add(clientForWork);
             }
         }
-
-        public DelegateCommand ActivateClientCommand
-        {
-            get
-            {
-                return new DelegateCommand(o => {
-                    ActivateClient((int)o);
-                });
-            }
-        }
-        private async Task ActivateClient(int id)
-        {
-            Client clientForEdit = InactiveClients.ToList().Find(o => o.ClientId == id);
-            if (clientForEdit != null)
-            {
-                clientForEdit.IsAvailable = true;
-                await _clientsHttpClient.UpdateAsync(clientForEdit);
-                await GetClients();
-            }
-        }
-
     }
 }

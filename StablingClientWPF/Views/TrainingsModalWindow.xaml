@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StablingClientWPF.Views"
         xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:EditTrainingViewModel}"
         WindowStartupLocation="CenterScreen"
         SizeToContent="Height"
         ResizeMode="NoResize"
-        Title="AddTrainingModalWindow" Width="300">
+        Title="AddTrainingModalWindow" Width="400">
     <StackPanel>
-        <GroupBox>
+        <GroupBox Visibility="Collapsed">
             <GroupBox.Header>
                 <TextBlock>#</TextBlock>
             </GroupBox.Header>
@@ -22,32 +23,68 @@
             <GroupBox.Header>
                 <TextBlock>Тренер</TextBlock>
             </GroupBox.Header>
-            <ComboBox ItemsSource="{Binding Trainers}" SelectedValue="{Binding CurrentTraining.TrainerId}" DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+            <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+                      materialDesign:HintAssist.Hint="Введите ФИО тренера"
+                      materialDesign:HintAssist.HintOpacity=".26"
+                      IsEditable="True"
+                      ItemsSource="{Binding Trainers}" 
+                      SelectedValue="{Binding CurrentTraining.TrainerId}" 
+                      DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
         </GroupBox>
         <GroupBox>
             <GroupBox.Header>
                 <TextBlock>Клиент</TextBlock>
             </GroupBox.Header>
-            <ComboBox ItemsSource="{Binding Clients}" SelectedValue="{Binding CurrentTraining.ClientId}" DisplayMemberPath="FullName" SelectedValuePath="ClientId"/>
+            <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+                      materialDesign:HintAssist.Hint="Введите ФИО клиента"
+                      materialDesign:HintAssist.HintOpacity=".26"
+                      IsEditable="True"
+                      ItemsSource="{Binding Clients}" 
+                      SelectedValue="{Binding CurrentTraining.ClientId}" 
+                      DisplayMemberPath="FullName" 
+                      SelectedValuePath="ClientId"/>
         </GroupBox>
         <GroupBox>
             <GroupBox.Header>
                 <TextBlock>Лошадь</TextBlock>
             </GroupBox.Header>
-            <ComboBox ItemsSource="{Binding Horses}" SelectedValue="{Binding CurrentTraining.HorseId}" DisplayMemberPath="HorseName" SelectedValuePath="HorseId"/>
+            <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                      materialDesign:HintAssist.Hint="Введите кличку лошади"
+                      materialDesign:HintAssist.HintOpacity=".26"
+                      ItemsSource="{Binding Horses}" 
+                      SelectedValue="{Binding CurrentTraining.HorseId}" 
+                      DisplayMemberPath="HorseName" 
+                      SelectedValuePath="HorseId"/>
         </GroupBox>
         <GroupBox>
             <GroupBox.Header>
                 <TextBlock>Тип тренировки</TextBlock>
             </GroupBox.Header>
-            <ComboBox ItemsSource="{Binding TrainingTypes}" SelectedValue="{Binding CurrentTraining.TrainingTypeId}" DisplayMemberPath="TypeName" SelectedValuePath="TrainingTypeId"/>
+            <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                      materialDesign:HintAssist.Hint="Введите ФИО клиента"
+                      materialDesign:HintAssist.HintOpacity=".26"
+                      ItemsSource="{Binding TrainingTypes}" 
+                      SelectedValue="{Binding CurrentTraining.TrainingTypeId}" 
+                      DisplayMemberPath="TypeName" 
+                      SelectedValuePath="TrainingTypeId"/>
         </GroupBox>
         <GroupBox>
             <GroupBox.Header>
                 <TextBlock>Дата/время тренировки</TextBlock>
             </GroupBox.Header>
-            <TextBox Text="{Binding CurrentTraining.TrainingDateTime, StringFormat=yyyy-MM-ddTHH-mm}"/>
+            <StackPanel Orientation="Horizontal">
+                <DatePicker
+                      Width="200"
+                      materialDesign:HintAssist.Hint="Дата тренировки"
+                      Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                      SelectedDate="{Binding CurrentTraining.TrainingDateTime}"/>
+                <materialDesign:TimePicker
+                      materialDesign:HintAssist.Hint="Время тренировки"
+                      Is24Hours="True"
+                      Style="{StaticResource MaterialDesignOutlinedTimePicker}"
+                      SelectedTime="{Binding CurrentTraining.TrainingDateTime}"/>
+            </StackPanel>
         </GroupBox>
-        <Button Content="Принять" Command="{Binding ProcessTrainingCommand}" Height="30"/>
+        <Button Content="Принять" Command="{Binding ProcessTrainingCommand}" Height="50"/>
     </StackPanel>
 </Window>
