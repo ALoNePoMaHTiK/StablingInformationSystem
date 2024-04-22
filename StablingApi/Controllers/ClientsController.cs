@@ -55,6 +55,7 @@ namespace StablingApi.Controllers
         ///     Добавление клиента
         /// </summary>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult> Create([FromBody] Client client)
         {
             Client newClient = await _repository.Create(client);

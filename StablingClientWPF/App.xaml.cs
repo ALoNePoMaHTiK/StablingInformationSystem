@@ -63,6 +63,9 @@ namespace StablingClientWPF
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<ClientsViewModel>();
             services.AddSingleton<TrainingsViewModel>();
+            services.AddSingleton<TrainingTypesViewModel>();
+            services.AddSingleton<AdministrationViewModel>();
+            services.AddSingleton<MoneyTransactionsViewModel>();
         } 
         private void OnStartup(object sender, StartupEventArgs e)
         {

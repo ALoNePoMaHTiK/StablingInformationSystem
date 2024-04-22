@@ -16,7 +16,7 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
-        ///     Получение списка всех тренировок
+        ///     Получение списка всех тренеров
         /// </summary>
         [HttpGet]
         public async Task<IEnumerable<Trainer>> GetAll()

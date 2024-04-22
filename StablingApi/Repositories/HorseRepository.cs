@@ -16,7 +16,7 @@ namespace StablingApi.Repositories
         public async Task<Horse> Create(Horse horse)
         {
             HorsesContext context = _contextFactory.CreateDbContext();
-            context.Add(horse);
+            await context.Horses.AddAsync(horse);
             await context.SaveChangesAsync();
             return horse;
         }

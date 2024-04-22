@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StablingClientWPF.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:TrainingsViewModel}"
              mc:Ignorable="d"
@@ -35,10 +36,26 @@
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Command="{Binding ElementName=TrainingsListView, Path=DataContext.OpenEditTrainingCommand}"
-                                        CommandParameter="{Binding TrainingId}">
-                                    <Image Source="/Icons/EditIcon.png" Width="25" Height="25"/>
-                                </Button>
+                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                        <MenuItem Command="{Binding ElementName=TrainingsListView,
+                                              Path=DataContext.OpenEditTrainingCommand}"
+                                              CommandParameter="{Binding TrainingId}"
+                                              Header="Изменить"
+                                              Icon="{materialDesign:PackIcon Kind=Edit}"/>
+                                        <MenuItem Command="{Binding ElementName=TrainingsListView,
+                                              Path=DataContext.OpenCopyTrainingCommand}"
+                                              CommandParameter="{Binding TrainingId}"
+                                              Header="Копировать"
+                                              Icon="{materialDesign:PackIcon Kind=ContentCopy}"/>
+                                        <MenuItem Command="{Binding ElementName=TrainingsListView,
+                                              Path=DataContext.DeleteTrainingCommand}"
+                                              CommandParameter="{Binding TrainingId}"
+                                              Header="Удалить"
+                                              Foreground="Crimson"
+                                              Icon="{materialDesign:PackIcon Kind=Delete}"/>
+                                    </MenuItem>
+                                </Menu>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

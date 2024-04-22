@@ -16,7 +16,7 @@ namespace StablingApi.Repositories
         public async Task<AbonementType> Create(AbonementType type)
         {
             AbonementsContext context = _contextFactory.CreateDbContext();
-            context.Add(type);
+            await context.AbonementTypes.AddAsync(type);
             await context.SaveChangesAsync();
             return type;
         }

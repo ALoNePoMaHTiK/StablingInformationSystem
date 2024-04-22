@@ -15,7 +15,7 @@ namespace StablingApi.Repositories
         public async Task<TrainingType> Create(TrainingType type)
         {
             TrainingsContext context = _contextFactory.CreateDbContext();
-            context.Add(type);
+            await context.TrainingTypes.AddAsync(type);
             await context.SaveChangesAsync();
             return type;
         }

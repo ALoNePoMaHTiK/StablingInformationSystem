@@ -16,7 +16,7 @@ namespace StablingApi.Repositories
         public async Task<Client> Create(Client client)
         {
             ClientsContext context = _contextFactory.CreateDbContext();
-            context.Clients.Add(client);
+            await context.Clients.AddAsync(client);
             await context.SaveChangesAsync();
             return client;
         }

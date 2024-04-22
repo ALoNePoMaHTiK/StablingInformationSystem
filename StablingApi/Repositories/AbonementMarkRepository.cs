@@ -16,7 +16,7 @@ namespace StablingApi.Repositories
         public async Task<AbonementMark> Create(AbonementMark mark)
         {
             AbonementsContext context = _contextFactory.CreateDbContext();
-            context.Add(mark);
+            await context.AbonementMarks.AddAsync(mark);
             await context.SaveChangesAsync();
             return mark;
         }

@@ -14,6 +14,7 @@ namespace StablingApi.Repositories.Interfaces
         Task<IEnumerable<TrainingForShow>> GetForShowByDay(DateTime dateTime);
         Task<Training> Create(Training training);
         Task Update(Training training);
+        Task Transfer(int id, DateTime dateTime);
         Task Delete(int id);
     }
 }

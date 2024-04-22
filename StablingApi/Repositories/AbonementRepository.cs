@@ -17,7 +17,7 @@ namespace StablingApi.Repositories
         public async Task<Abonement> Create(Abonement abonement)
         {
             AbonementsContext context = _contextFactory.CreateDbContext();
-            context.Add(abonement);
+            await context.Abonements.AddAsync(abonement);
             await context.SaveChangesAsync();
             return abonement;
         }

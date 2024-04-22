@@ -8,12 +8,13 @@
         xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
         xmlns:v="clr-namespace:StablingClientWPF.Views"
         mc:Ignorable="d"
+        ResizeMode="NoResize"
         Style="{StaticResource MaterialDesignWindow}"
         d:DataContext="{d:DesignInstance vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
-        SizeToContent="Width"
         
-        Title="MainWindow" Height="600" Width="800">
+        
+        Title="MainWindow" Height="600" Width="1200">
 
     <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
         SnapsToDevicePixels="True"
@@ -48,6 +49,21 @@
                 </StackPanel>
             </TabItem.Header>
             <v:TrainingsView DataContext="{Binding TrainingsViewModel,Mode=OneWay}"/>
+        </TabItem>
+        <TabItem  Width="100" Height="100">
+            <TabItem.Header>
+                <StackPanel Width="Auto" Height="auto">
+                    <materialDesign:PackIcon
+                Width="24"
+                Height="24"
+                HorizontalAlignment="Center"
+                Kind="Administrator" />
+                    <TextBlock
+                HorizontalAlignment="Center"
+                Text="Справочники" />
+                </StackPanel>
+            </TabItem.Header>
+            <v:AdministrationView DataContext="{Binding AdministrationViewModel,Mode=OneWay}"/>
         </TabItem>
     </TabControl>
 </Window>

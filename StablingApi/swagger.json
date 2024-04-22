@@ -207,12 +207,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
+          "201": {
+            "description": ""
           }
         }
       },
@@ -392,6 +388,182 @@
         }
       }
     },
+    "/api/MoneyAccounts": {
+      "get": {
+        "tags": [
+          "MoneyAccounts"
+        ],
+        "operationId": "MoneyAccounts_GetAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MoneyAccount"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/MoneyAccounts/{id}": {
+      "get": {
+        "tags": [
+          "MoneyAccounts"
+        ],
+        "operationId": "MoneyAccounts_Get",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "byte",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MoneyAccount"
+            }
+          }
+        }
+      }
+    },
+    "/api/MoneyTransactions": {
+      "get": {
+        "tags": [
+          "MoneyTransactions"
+        ],
+        "operationId": "MoneyTransactions_GetAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MoneyTransaction"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MoneyTransactions"
+        ],
+        "operationId": "MoneyTransactions_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "transaction",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MoneyTransaction"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/MoneyTransactions/{id}": {
+      "get": {
+        "tags": [
+          "MoneyTransactions"
+        ],
+        "operationId": "MoneyTransactions_Get",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MoneyTransaction"
+            }
+          }
+        }
+      }
+    },
+    "/api/MoneyTransactions/ByDate/{date}": {
+      "get": {
+        "tags": [
+          "MoneyTransactions"
+        ],
+        "operationId": "MoneyTransactions_GetByDate",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MoneyTransaction"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Trainers": {
       "get": {
         "tags": [
@@ -562,11 +734,7 @@
         ],
         "responses": {
           "200": {
-            "x-nullable": true,
-            "description": "",
-            "schema": {
-              "type": "file"
-            }
+            "description": ""
           }
         }
       }
@@ -739,6 +907,53 @@
               "items": {
                 "$ref": "#/definitions/TrainingForShow"
               }
+            }
+          }
+        }
+      }
+    },
+    "/api/Trainings/Transfer/{id}": {
+      "put": {
+        "tags": [
+          "Trainings"
+        ],
+        "operationId": "Trainings_Transfer",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "name": "dateTime",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Training"
             }
           }
         }
@@ -930,6 +1145,59 @@
         },
         "isAvailable": {
           "type": "boolean"
+        }
+      }
+    },
+    "MoneyAccount": {
+      "type": "object",
+      "required": [
+        "moneyAccountId",
+        "accountName",
+        "balance"
+      ],
+      "properties": {
+        "moneyAccountId": {
+          "type": "integer",
+          "format": "byte"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "balance": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "MoneyTransaction": {
+      "type": "object",
+      "required": [
+        "moneyTransactionId",
+        "trainerId",
+        "moneyAccountId",
+        "transactionDate",
+        "amount"
+      ],
+      "properties": {
+        "moneyTransactionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "moneyAccountId": {
+          "type": "integer",
+          "format": "byte"
+        },
+        "transactionDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
         }
       }
     },

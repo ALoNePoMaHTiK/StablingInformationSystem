@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="StablingClientWPF.Views.TrainingTypesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:StablingClientWPF.Views"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance vm:TrainingTypesViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel>
+        <Button Command="{Binding GetTrainingTypesCommand}"/>
+        <WrapPanel Margin="40">
+            <ItemsControl ItemsSource="{Binding TrainingTypes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Card Width="200" Margin="20">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" FontWeight="Bold" Text="{Binding TypeName}"/>
+                                <TextBlock Text="{Binding TypePrice}"/>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </WrapPanel>
+    </StackPanel>
+</UserControl>

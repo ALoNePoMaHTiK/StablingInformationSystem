@@ -1,4 +1,5 @@
 ﻿using StablingApiClient;
+using StablingClientWPF.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,18 @@ namespace StablingClientWPF.ViewModels
     {
         public ClientsViewModel ClientsViewModel { get; }
         public TrainingsViewModel TrainingsViewModel { get; }
+        public AdministrationViewModel AdministrationViewModel { get; }
+        public MoneyTransactionsViewModel MoneyTrainsactionsViewModel { get; }
 
         public MainViewModel(ClientsViewModel _clientsViewModel,
-                    TrainingsViewModel _trainingsViewModel)
+                    TrainingsViewModel _trainingsViewModel,
+                    AdministrationViewModel _administrationViewModel,
+                    MoneyTransactionsViewModel _moneyTrainsactionsViewModel)
         {
             ClientsViewModel = _clientsViewModel;
             TrainingsViewModel = _trainingsViewModel;
+            AdministrationViewModel = _administrationViewModel;
+            MoneyTrainsactionsViewModel = _moneyTrainsactionsViewModel;
         }
 
     }

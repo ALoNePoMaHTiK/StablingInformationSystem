@@ -74,6 +74,9 @@ namespace StablingApi.Controllers
             return await _repository.Get(dateTime, horseId);
         }
 
+        /// <summary>
+        ///     Получение списка тренировок для отображения списка в клиентском приложении
+        /// </summary>
         [HttpGet("ForShow/ByDate/{dateTime}")]
         public async Task<IEnumerable<TrainingForShow>> GetForShowByDate(DateTime dateTime)
         {
@@ -107,17 +110,35 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
+        ///     Перенос тренировки на новую дату+время
+        /// </summary>
+        /// <param name="id">Идентификатор тренировки</param>
+        /// <param name="dateTime">Новые дата+время</param>
+        [HttpPut("Transfer/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Training>> Transfer(int id,[FromBody] DateTime dateTime)
+        {
+            if (_repository.Get(id) == null)
+            {
+                return NotFound();
+            }
+            await _repository.Transfer(id,dateTime);
+            return Ok(id);
+        }
+
+        /// <summary>
         ///     Удаление тренировки
         /// </summary>
         /// <param name="id">Идентификатор тренировки</param>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Delete(int id)
         {
             Training trainingToDelete = await _repository.Get(id);
             if (trainingToDelete == null)
                 return NotFound();
             await _repository.Delete(id);
-            return NoContent();
+            return Ok(id);
         }
     }
 }

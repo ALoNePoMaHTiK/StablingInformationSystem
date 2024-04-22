@@ -70,14 +70,14 @@ namespace StablingApi.Repositories
         public async Task Update(Training training)
         {
             TrainingsContext context = _contextFactory.CreateDbContext();
-            Training trainingToUpdate = await context.Trainings.SingleOrDefaultAsync(t => t.TrainingId == training.TrainingId);
-            if (trainingToUpdate != null)
+            Training trainingForUpdate = await context.Trainings.SingleOrDefaultAsync(t => t.TrainingId == training.TrainingId);
+            if (trainingForUpdate != null)
             {
-                trainingToUpdate.TrainingTypeId = training.TrainingTypeId;
-                trainingToUpdate.TrainerId = training.TrainerId;
-                trainingToUpdate.HorseId = training.HorseId;
-                trainingToUpdate.ClientId = training.ClientId;
-                trainingToUpdate.TrainingDateTime = training.TrainingDateTime;
+                trainingForUpdate.TrainingTypeId = training.TrainingTypeId;
+                trainingForUpdate.TrainerId = training.TrainerId;
+                trainingForUpdate.HorseId = training.HorseId;
+                trainingForUpdate.ClientId = training.ClientId;
+                trainingForUpdate.TrainingDateTime = training.TrainingDateTime;
                 context.SaveChanges();
             }
         }
@@ -93,6 +93,16 @@ namespace StablingApi.Repositories
             TrainingsContext context = _contextFactory.CreateDbContext();
             return await context.TrainingsForShow.Where
                 (training => training.TrainingStart.Date == dateTime).ToListAsync();
+        }
+
+        public async Task Transfer(int id, DateTime dateTime)
+        {
+            TrainingsContext context = _contextFactory.CreateDbContext();
+            Training trainingForUpdate = await context.Trainings.SingleOrDefaultAsync(t => t.TrainingId == id);
+            if (trainingForUpdate != null)
+            {
+                trainingForUpdate.TrainingDateTime = dateTime;
+            }
         }
     }
 }
