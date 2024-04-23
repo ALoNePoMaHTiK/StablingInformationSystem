@@ -42,13 +42,27 @@
                         Width="24"
                         Height="24"
                         HorizontalAlignment="Center"
-                        Kind="CurrencyUsd" />
+                        Kind="Horse" />
                     <TextBlock
                         HorizontalAlignment="Center"
                         Text="Тренировки" />
                 </StackPanel>
             </TabItem.Header>
             <v:TrainingsView DataContext="{Binding TrainingsViewModel,Mode=OneWay}"/>
+        </TabItem>
+        <TabItem  Width="100" Height="100">
+            <TabItem.Header>
+                <StackPanel Width="Auto" Height="auto">
+                    <materialDesign:PackIcon
+                        Width="24"
+                        Height="24"
+                        HorizontalAlignment="Center"
+                        Kind="Money100" />
+                    <TextBlock HorizontalAlignment="Center" Text="Денежные" />
+                    <TextBlock HorizontalAlignment="Center" Text="операции" />
+                </StackPanel>
+            </TabItem.Header>
+            <v:MoneyView DataContext="{Binding MoneyViewModel,Mode=OneWay}"/>
         </TabItem>
         <TabItem  Width="100" Height="100">
             <TabItem.Header>

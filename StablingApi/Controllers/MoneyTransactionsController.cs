@@ -52,5 +52,20 @@ namespace StablingApi.Controllers
             MoneyTransaction newTransaction = await _repository.Create(transaction);
             return CreatedAtAction(nameof(Create), newTransaction);
         }
+
+        /// <summary>
+        ///     Изменение транзакции
+        /// </summary>
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<MoneyTransaction>> Update([FromBody] MoneyTransaction transaction)
+        {
+            if (_repository.Get(transaction.MoneyTransactionId) == null)
+            {
+                return NotFound();
+            }
+            await _repository.Update(transaction);
+            return Ok(transaction);
+        }
     }
 }

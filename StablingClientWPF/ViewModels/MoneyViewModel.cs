@@ -2,19 +2,37 @@
 using StablingClientWPF.Commands;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Input;
 
 namespace StablingClientWPF.ViewModels
 {
-    public class MoneyTransactionsViewModel : BaseViewModel
+    public class MoneyViewModel : BaseViewModel
     {
-        private MoneyTransactionsHttpClient _moneyTrainsactionsHttpClient;
-        public MoneyTransactionsViewModel(MoneyTransactionsHttpClient moneyTrainsactionsHttpClient)
+        public MoneyTransactionsViewModel MoneyTransactionsViewModel { get; }
+        public BusinessOperationsViewModel BusinessOperationsViewModel { get; }
+        public MoneyTransactionsHttpClient _moneyTransactionsHttpClient { get; }
+
+        private DateTime _CurrentDate;
+        public DateTime CurrentDate
         {
-            _moneyTrainsactionsHttpClient = moneyTrainsactionsHttpClient;
+            get { return _CurrentDate; }
+            set { _CurrentDate = value; OnPropertyChanged(); MoneyTransactionsViewModel.CurrentDate = value; }
+        }
+
+        public MoneyViewModel(MoneyTransactionsViewModel _MoneyTransactionsViewModel,
+            BusinessOperationsViewModel businessOperationsViewModel,
+            MoneyTransactionsHttpClient moneyTrainsactionsHttpClient)
+        {
+            MoneyTransactionsViewModel = _MoneyTransactionsViewModel;
+            BusinessOperationsViewModel = businessOperationsViewModel;
+
+            _moneyTransactionsHttpClient = moneyTrainsactionsHttpClient;
+
+            CurrentDate = DateTime.Now;
             GetMoneyTransactions();
             CurrentTransaction = new MoneyTransaction() { TransactionDate = CurrentDate };
         }
+
+        #region MoneyTransactions
 
         private ObservableCollection<MoneyTransaction> _MoneyTransactions;
         public ObservableCollection<MoneyTransaction> MoneyTransactions
@@ -22,34 +40,19 @@ namespace StablingClientWPF.ViewModels
             get { return _MoneyTransactions; }
             set { _MoneyTransactions = value; OnPropertyChanged(); }
         }
-
-        private DateTime _CurrentDate;
-        public DateTime CurrentDate
-        {
-            get { return _CurrentDate; }
-            set { 
-                _CurrentDate = value; 
-                OnPropertyChanged(); 
-                GetMoneyTransactions();
-                if (CurrentTransaction.MoneyTransactionId == 0)
-                {
-                    CurrentTransaction.TransactionDate = value.Date;
-                } 
-            }
-        }
-
         public AsyncDelegateCommand GetMoneyTransactionsCommand
         {
             get
             {
-                return new AsyncDelegateCommand(async o => { 
-                    await GetMoneyTransactions(); }, ex => MessageBox.Show(ex.ToString()));
+                return new AsyncDelegateCommand(async o => {
+                    await GetMoneyTransactions();
+                }, ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task GetMoneyTransactions()
         {
             MoneyTransactions = new ObservableCollection<MoneyTransaction>(
-                await _moneyTrainsactionsHttpClient.GetByDateAsync(CurrentDate));
+                await _moneyTransactionsHttpClient.GetByDateAsync(CurrentDate));
         }
 
         private MoneyTransaction _CurrentTransaction;
@@ -59,16 +62,17 @@ namespace StablingClientWPF.ViewModels
             set { _CurrentTransaction = value; OnPropertyChanged(); }
         }
 
-        private bool _IsDialogOpen;
-        public bool IsDialogOpen
+        private bool _IsMoneyTransactionsDialogOpen;
+        public bool IsMoneyTransactionsDialogOpen
         {
-            get => _IsDialogOpen;
-            set { _IsDialogOpen = value; OnPropertyChanged(); }
+            get => _IsMoneyTransactionsDialogOpen;
+            set { _IsMoneyTransactionsDialogOpen = value; OnPropertyChanged(); }
         }
 
         public DelegateCommand ShowDialogCommand
         {
-            get {
+            get
+            {
                 return new DelegateCommand(o =>
                 {
                     ShowDialog();
@@ -77,7 +81,7 @@ namespace StablingClientWPF.ViewModels
         }
         private void ShowDialog()
         {
-            IsDialogOpen = true;
+            IsMoneyTransactionsDialogOpen = true;
         }
 
         public DelegateCommand CloseDialogCommand
@@ -92,7 +96,7 @@ namespace StablingClientWPF.ViewModels
         }
         private void CloseDialog()
         {
-            IsDialogOpen = false;
+            IsMoneyTransactionsDialogOpen = false;
         }
 
         public AsyncDelegateCommand ProcessTransactionCommand
@@ -105,14 +109,14 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task ProcessTransaction()
         {
-            if(CurrentTransaction.MoneyTransactionId == 0)
+            if (CurrentTransaction.MoneyTransactionId == 0)
             {
-                await _moneyTrainsactionsHttpClient.CreateAsync(CurrentTransaction);
+                await _moneyTransactionsHttpClient.CreateAsync(CurrentTransaction);
                 MoneyTransactions.Add(CurrentTransaction);
             }
             else
             {
-                await _moneyTrainsactionsHttpClient.UpdateAsync(CurrentTransaction);
+                await _moneyTransactionsHttpClient.UpdateAsync(CurrentTransaction);
                 MoneyTransaction oldTransaction = MoneyTransactions.Where(t =>
                 t.MoneyTransactionId == CurrentTransaction.MoneyTransactionId).FirstOrDefault();
                 MoneyTransactions.Remove(oldTransaction);
@@ -121,5 +125,7 @@ namespace StablingClientWPF.ViewModels
             CurrentTransaction = new MoneyTransaction() { TransactionDate = CurrentDate };
             CloseDialog();
         }
+        #endregion
+
     }
 }

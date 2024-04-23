@@ -1,4 +1,5 @@
-﻿using StablingApiClient;
+﻿using MaterialDesignThemes.Wpf;
+using StablingApiClient;
 using StablingClientWPF.Views;
 using System;
 using System.Collections.Generic;
@@ -13,17 +14,16 @@ namespace StablingClientWPF.ViewModels
         public ClientsViewModel ClientsViewModel { get; }
         public TrainingsViewModel TrainingsViewModel { get; }
         public AdministrationViewModel AdministrationViewModel { get; }
-        public MoneyTransactionsViewModel MoneyTrainsactionsViewModel { get; }
-
-        public MainViewModel(ClientsViewModel _clientsViewModel,
-                    TrainingsViewModel _trainingsViewModel,
-                    AdministrationViewModel _administrationViewModel,
-                    MoneyTransactionsViewModel _moneyTrainsactionsViewModel)
+        public MoneyViewModel MoneyViewModel { get; }
+        public MainViewModel(ClientsViewModel _ClientsViewModel,
+                    TrainingsViewModel _TrainingsViewModel,
+                    AdministrationViewModel _AdministrationViewModel,
+                    MoneyViewModel _MoneyViewModel)
         {
-            ClientsViewModel = _clientsViewModel;
-            TrainingsViewModel = _trainingsViewModel;
-            AdministrationViewModel = _administrationViewModel;
-            MoneyTrainsactionsViewModel = _moneyTrainsactionsViewModel;
+            ClientsViewModel = _ClientsViewModel;
+            TrainingsViewModel = _TrainingsViewModel;
+            AdministrationViewModel = _AdministrationViewModel;
+            MoneyViewModel = _MoneyViewModel;
         }
 
     }

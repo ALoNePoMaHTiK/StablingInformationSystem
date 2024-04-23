@@ -23,11 +23,6 @@ namespace StablingApi.Contexts
                 builder.ToTable(tb => tb.HasTrigger("TR_MoneyTransactions_AfterInsert"));
             });
 
-            modelBuilder.Entity<BusinessOperationGroupView>((pc =>
-            {
-                pc.ToView("VW_BusinessOperationsByIncome");
-            }));
-
             modelBuilder.Entity<BusinessOperation>(builder =>
             {
                 builder.ToTable(tb => tb.HasTrigger("TR_BalanceWithdrawings_AfterInsert"));
