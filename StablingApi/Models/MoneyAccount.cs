@@ -4,6 +4,6 @@
     {
         public byte MoneyAccountId { get; set; }
         public string AccountName { get; set; }
-        public double Balance { get; set; }
+        public Decimal Balance { get; set; }
     }
 }

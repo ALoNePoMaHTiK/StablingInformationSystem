@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StablingApi.Models
 {
@@ -10,6 +11,6 @@ namespace StablingApi.Models
         [Column(TypeName = "SMALLMONEY")]
         public decimal Amount { get; set; }
         public DateTime OperationDateTime { get; set; }
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
     }
 }

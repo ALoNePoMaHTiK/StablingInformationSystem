@@ -48,17 +48,17 @@ namespace StablingApi.Repositories
                 => operation.OperationDateTime.Date == dateTime.Date).ToListAsync();
         }
 
-        public async Task<IEnumerable<BusinessOperation>> GetByIncome(DateTime dateTime)
+        public async Task<IEnumerable<BusinessOperationForShow>> GetByIncome(DateTime dateTime)
         {
             var context = _contextFactory.CreateDbContext();
-            return await context.BusinessOperationViews.Where(op =>
+            return await context.BusinessOperationsForShow.Where(op =>
             op.OperationDateTime.Date == dateTime.Date && op.IsIncome == true).ToListAsync();
         }
 
-        public async Task<IEnumerable<BusinessOperation>> GetByConsumption(DateTime dateTime)
+        public async Task<IEnumerable<BusinessOperationForShow>> GetByConsumption(DateTime dateTime)
         {
             var context = _contextFactory.CreateDbContext();
-            return await context.BusinessOperationViews.Where(op =>
+            return await context.BusinessOperationsForShow.Where(op =>
             op.OperationDateTime.Date == dateTime.Date && op.IsIncome == false).ToListAsync();
         }
         public async Task Update(BusinessOperation operation)

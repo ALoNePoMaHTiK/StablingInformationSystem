@@ -22,6 +22,6 @@ namespace StablingClientWPF
         {
             InitializeComponent();
             DataContext = viewModel;
-        }
+        }   
     }
 }

@@ -26,6 +26,8 @@ builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
 builder.Services.AddScoped<IHorseRepository, HorseRepository>();
 builder.Services.AddScoped<IMoneyAccountRepository, MoneyAccountRepository>();
 builder.Services.AddScoped<IMoneyTransactionRepository, MoneyTransactionRepository>();
+builder.Services.AddScoped<IBusinessOperationRepository,BusinessOperationRepository>();
+builder.Services.AddScoped<IBusinessOperationTypeRepository, BusinessOperationTypeRepository>();
 
 builder.Services.AddDbContextFactory<ClientsContext>(o => o.UseSqlServer(connectionString));
 builder.Services.AddDbContextFactory<TrainingsContext>(o => o.UseSqlServer(connectionString));

@@ -9,7 +9,7 @@ namespace StablingApi.Contexts
         public DbSet<MoneyTransaction> MoneyTransactions { get; set; }
         public DbSet<BusinessOperation> BusinessOperations { get; set; }
         public DbSet<BusinessOperationType> BusinessOperationTypes { get; set; }
-        public DbSet<BusinessOperationView> BusinessOperationViews { get; set; }
+        public DbSet<BusinessOperationForShow> BusinessOperationsForShow { get; set; }
         public MoneyContext(DbContextOptions<MoneyContext> options)
             : base(options)
         {
@@ -27,6 +27,11 @@ namespace StablingApi.Contexts
             {
                 builder.ToTable(tb => tb.HasTrigger("TR_BalanceWithdrawings_AfterInsert"));
             });
+            modelBuilder.Entity<BusinessOperationForShow>((table =>
+            {
+                table.HasNoKey();
+                table.ToView("VW_BusinessOperationsForShow");
+            }));
         }
     }
 }

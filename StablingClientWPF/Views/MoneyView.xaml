@@ -5,74 +5,225 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
-             xmlns:v="clr-namespace:StablingClientWPF.Views"
              d:DataContext="{d:DesignInstance vm:MoneyViewModel}"
-             xmlns:local="clr-namespace:StablingClientWPF.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <materialDesign:DialogHost IsOpen="{Binding IsMoneyTransactionsDialogOpen}">
-        <materialDesign:DialogHost.DialogContent>
-            <StackPanel Margin="20" Width="250">
-                <GroupBox Header="Счёт">
-                    <TextBox Text="{Binding CurrentTransaction.MoneyAccountId}"/>
-                </GroupBox>
-                <GroupBox Header="Тренер">
-                    <TextBox Text="{Binding CurrentTransaction.TrainerId}"/>
-                </GroupBox>
-                <GroupBox Header="Сумма">
-                    <TextBox Text="{Binding CurrentTransaction.Amount}"/>
-                </GroupBox>
-                <GroupBox Header="Дата">
-                    <TextBox Text="{Binding CurrentTransaction.TransactionDate, StringFormat=dd.MM.yyyy}"/>
-                </GroupBox>
-                <StackPanel Orientation="Horizontal">
-                    <Button IsDefault="True" Command="{Binding ProcessTransactionCommand}" Margin="5">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Check"/>
-                            <TextBlock Text="Принять"/>
+             d:DesignHeight="450" d:DesignWidth="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+        SelectedDate="{Binding CurrentDate}"/>
+        <TabControl Grid.Row="1"
+                    materialDesign:ColorZoneAssist.Mode="SecondaryDark"
+                    Style="{StaticResource MaterialDesignFilledTabControl}">
+            <TabItem Header="Транзакции">
+                <materialDesign:DialogHost Grid.Column="0" Grid.Row="1" IsOpen="{Binding IsMoneyTransactionsDialogOpen}">
+                    <materialDesign:DialogHost.DialogContent>
+                        <StackPanel Margin="20" Width="250">
+                            <GroupBox Header="Счёт">
+                                <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                                   materialDesign:HintAssist.Hint="Введите название счёта"
+                                   materialDesign:HintAssist.HintOpacity=".26"
+                                   IsEditable="True"
+                                   ItemsSource="{Binding MoneyAccounts}" 
+                                   SelectedValue="{Binding CurrentTransaction.MoneyAccountId}" 
+                                   DisplayMemberPath="AccountName" SelectedValuePath="MoneyAccountId"/>
+                            </GroupBox>
+                            <GroupBox Header="Тренер">
+                                <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                                    materialDesign:HintAssist.Hint="Введите ФИО тренера"
+                                    materialDesign:HintAssist.HintOpacity=".26"
+                                    IsEditable="True"
+                                    ItemsSource="{Binding Trainers}" 
+                                    SelectedValue="{Binding CurrentTransaction.TrainerId}" 
+                                    DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+                            </GroupBox>
+                            <GroupBox Header="Сумма">
+                                <TextBox Text="{Binding CurrentTransaction.Amount}" 
+                                         materialDesign:HintAssist.Hint="Введите сумму"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                            </GroupBox>
+                            <GroupBox Header="Дата">
+                                <TextBox IsEnabled="False" 
+                                         Text="{Binding CurrentTransaction.TransactionDate, StringFormat=dd.MM.yyyy}"/>
+                            </GroupBox>
+                            <StackPanel Orientation="Horizontal">
+                                <Button IsDefault="True" Command="{Binding ProcessTransactionCommand}" Margin="5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Check"/>
+                                        <TextBlock Text="Принять"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button IsCancel="True" Command="{Binding CloseDialogCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Close"/>
+                                        <TextBlock Text="Отмена"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
-                    </Button>
-                    <Button IsCancel="True" Command="{Binding CloseDialogCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Close"/>
-                            <TextBlock Text="Отмена"/>
+                    </materialDesign:DialogHost.DialogContent>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Button Command="{Binding ShowDialogCommand}" Content="Добавить"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0"/>
+                        <ListView Grid.Row="1" x:Name="TransactionsListView" ItemsSource="{Binding MoneyTransactions}" Height="Auto">
+                            <ListView.View>
+                                <GridView materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <GridViewColumn DisplayMemberBinding="{Binding TrainerId}" Header="Ответственный"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding MoneyAccountId}" Header="Счёт"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Amount}" Header="Сумма"/>
+                                    <GridViewColumn>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                        <MenuItem Command="{Binding ElementName=TransactionsListView,
+                         Path=DataContext.OpenEditTransactionCommand}"
+                         CommandParameter="{Binding MoneyTransactionId}"
+                         Header="Изменить"
+                         Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                    </MenuItem>
+                                                </Menu>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </materialDesign:DialogHost>
+            </TabItem>
+            <TabItem Header="Бизнес-операции">
+                <materialDesign:DialogHost Grid.Column="1" Grid.Row="1" IsOpen="{Binding IsBusinessOperationsDialogOpen}">
+                    <materialDesign:DialogHost.DialogContent>
+                        <StackPanel Margin="20" Width="250">
+                            <GroupBox Header="Счёт">
+                                <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                                  materialDesign:HintAssist.Hint="Введите название счёта"
+                                  materialDesign:HintAssist.HintOpacity=".26"
+                                  IsEditable="True"
+                                  ItemsSource="{Binding MoneyAccounts}" 
+                                  SelectedValue="{Binding CurrentBusinessOperation.MoneyAccountId}" 
+                                  DisplayMemberPath="AccountName" SelectedValuePath="MoneyAccountId"/>
+                            </GroupBox>
+                            <GroupBox>
+                                <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                                  materialDesign:HintAssist.Hint="Доходный тип"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  materialDesign:HintAssist.HintOpacity=".26"
+                                  IsEditable="True"
+                                  ItemsSource="{Binding IncomeBusinessOperationTypes}" 
+                                  SelectedValue="{Binding CurrentBusinessOperation.OperationTypeId}" 
+                                  DisplayMemberPath="TypeName" SelectedValuePath="BusinessOperationTypeId"/>
+                            </GroupBox>
+                            <GroupBox>
+                                <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                                  materialDesign:HintAssist.Hint="Расходный тип"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  materialDesign:HintAssist.HintOpacity=".26"
+                                  IsEditable="True"
+                                  ItemsSource="{Binding ConsumptionBusinessOperationTypes}" 
+                                  SelectedValue="{Binding CurrentBusinessOperation.OperationTypeId}" 
+                                  DisplayMemberPath="TypeName" SelectedValuePath="BusinessOperationTypeId"/>
+                            </GroupBox>
+                            <GroupBox Header="Дата">
+                                <TextBox IsEnabled="False" Text="{Binding CurrentBusinessOperation.OperationDateTime}"/>
+                            </GroupBox>
+                            <GroupBox Header="Сумма">
+                                <TextBox Text="{Binding CurrentBusinessOperation.Amount}"/>
+                            </GroupBox>
+                            <GroupBox Header="Примечание">
+                                <TextBox Text="{Binding CurrentBusinessOperation.Comment}"/>
+                            </GroupBox>
+                            <StackPanel Orientation="Horizontal">
+                                <Button IsDefault="True" Command="{Binding ProcessBusinessOperationCommand}" Margin="5">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Check"/>
+                                        <TextBlock Text="Принять"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button IsCancel="True" Command="{Binding CloseBusinessOperationsDialogCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Close"/>
+                                        <TextBlock Text="Отмена"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
-                    </Button>
-                </StackPanel>
-            </StackPanel>
-        </materialDesign:DialogHost.DialogContent>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Command="{Binding ShowDialogCommand}" Content="Добавить"
-                HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0"/>
-            <ListView Grid.Row="1" x:Name="TransactionsListView" ItemsSource="{Binding MoneyTransactions}" Height="Auto">
-                <ListView.View>
-                    <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <GridViewColumn DisplayMemberBinding="{Binding TrainerId}" Header="Ответственный"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding MoneyAccountId}" Header="Счёт"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Amount}" Header="Сумма"/>
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
-                                        <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                            <MenuItem Command="{Binding ElementName=TransactionsListView,
-                                                Path=DataContext.OpenEditTransactionCommand}"
-                                                CommandParameter="{Binding MoneyTransactionId}"
-                                                Header="Изменить"
-                                                Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
-                                        </MenuItem>
-                                    </Menu>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Grid>
-    </materialDesign:DialogHost>
-    
+                    </materialDesign:DialogHost.DialogContent>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button HorizontalAlignment="Center" Grid.ColumnSpan="2" Command="{Binding OpenBusinessOperationsDialogCommand}" Content="Добавить"
+                             VerticalAlignment="Center" Margin="50,0,0,0"/>
+                        <ListView Grid.Row="1" x:Name="IncomeOperationsListView" ItemsSource="{Binding IncomeBusinessOperations}" Height="Auto">
+                            <ListView.View>
+                                <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <GridViewColumn DisplayMemberBinding="{Binding TypeName}" Header="Тип"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AccountName}" Header="Счёт"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Amount}" Header="Сумма"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Comment}" Header="Примечание"/>
+                                    <GridViewColumn>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                        <MenuItem Command="{Binding ElementName=IncomeOperationsListView,
+                                                            Path=DataContext.OpenEditOperationsDialogCommand}"
+                                                            CommandParameter="{Binding BusinessOperationId}"
+                                                            Header="Изменить"
+                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                    </MenuItem>
+                                                </Menu>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <ListView Grid.Row="1" Grid.Column="2" x:Name="ConsumptionOperationsListView" 
+                                  ItemsSource="{Binding ConsumptionBusinessOperations}" Height="Auto">
+                            <ListView.View>
+                                <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <GridViewColumn DisplayMemberBinding="{Binding TypeName}" Header="Тип"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AccountName}" Header="Счёт"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Amount}" Header="Сумма"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Comment}" Header="Примечание"/>
+                                    <GridViewColumn>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                        <MenuItem Command="{Binding ElementName=ConsumptionOperationsListView,
+                                                             Path=DataContext.OpenEditOperationsDialogCommand}"
+                                                             CommandParameter="{Binding BusinessOperationId}"
+                                                             Header="Изменить"
+                                                             Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                    </MenuItem>
+                                                </Menu>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </materialDesign:DialogHost>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>

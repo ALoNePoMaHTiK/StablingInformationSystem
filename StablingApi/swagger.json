@@ -161,6 +161,260 @@
         }
       }
     },
+    "/api/BusinessOperations": {
+      "get": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_GetAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BusinessOperation"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "operation",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BusinessOperation"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_Update",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "operation",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BusinessOperation"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/BusinessOperations/{id}": {
+      "get": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_Get",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/BusinessOperation"
+            }
+          }
+        }
+      }
+    },
+    "/api/BusinessOperations/ByIncome": {
+      "get": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_GetByIncome",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "date",
+            "in": "query",
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BusinessOperationForShow"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BusinessOperations/ByConsumption": {
+      "get": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_GetByConsumption",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "date",
+            "in": "query",
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BusinessOperationForShow"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BusinessOperationTypes": {
+      "get": {
+        "tags": [
+          "BusinessOperationTypes"
+        ],
+        "operationId": "BusinessOperationTypes_GetAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BusinessOperationType"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BusinessOperationTypes/ByIncome": {
+      "get": {
+        "tags": [
+          "BusinessOperationTypes"
+        ],
+        "operationId": "BusinessOperationTypes_GetIncomeTypes",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BusinessOperationType"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BusinessOperationTypes/ByConsumption": {
+      "get": {
+        "tags": [
+          "BusinessOperationTypes"
+        ],
+        "operationId": "BusinessOperationTypes_GetConsumptionTypes",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BusinessOperationType"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Clients": {
       "get": {
         "tags": [
@@ -1146,6 +1400,103 @@
         }
       }
     },
+    "BusinessOperation": {
+      "type": "object",
+      "required": [
+        "businessOperationId",
+        "operationTypeId",
+        "moneyAccountId",
+        "amount",
+        "operationDateTime"
+      ],
+      "properties": {
+        "businessOperationId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "operationTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "moneyAccountId": {
+          "type": "integer",
+          "format": "byte"
+        },
+        "amount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "operationDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "BusinessOperationForShow": {
+      "type": "object",
+      "required": [
+        "businessOperationId",
+        "accountName",
+        "typeName",
+        "operationDateTime",
+        "amount",
+        "isIncome"
+      ],
+      "properties": {
+        "businessOperationId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        },
+        "operationDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "isIncome": {
+          "type": "boolean"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "BusinessOperationType": {
+      "type": "object",
+      "required": [
+        "businessOperationTypeId",
+        "typeName",
+        "typeAmount",
+        "isIncome"
+      ],
+      "properties": {
+        "businessOperationTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "typeName": {
+          "type": "string"
+        },
+        "typeAmount": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "isIncome": {
+          "type": "boolean"
+        }
+      }
+    },
     "Client": {
       "type": "object",
       "required": [
@@ -1201,7 +1552,7 @@
         },
         "balance": {
           "type": "number",
-          "format": "double"
+          "format": "decimal"
         }
       }
     },

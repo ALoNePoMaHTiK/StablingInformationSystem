@@ -90,7 +90,8 @@ namespace StablingClientWPF.ViewModels
         {
             get
             {
-                return new AsyncDelegateCommand(async o => { await ChangeAvailability((int)o); }, ex => MessageBox.Show(ex.ToString()));
+                return new AsyncDelegateCommand(async o => { await ChangeAvailability((int)o); },
+                    ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task ChangeAvailability(int id)

@@ -59,11 +59,32 @@ namespace StablingClientWPF
                 var httpClient = new HorsesHttpClient(ApiUrl, client);
                 return httpClient;
             });
+            services.AddSingleton<MoneyAccountsHttpClient>(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient();
+                var httpClient = new MoneyAccountsHttpClient(ApiUrl, client);
+                return httpClient;
+            });
             services.AddSingleton<MoneyTransactionsHttpClient>(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new MoneyTransactionsHttpClient(ApiUrl, client);
+                return httpClient;
+            });
+            services.AddSingleton<BusinessOperationsHttpClient>(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient();
+                var httpClient = new BusinessOperationsHttpClient(ApiUrl, client);
+                return httpClient;
+            });
+            services.AddSingleton<BusinessOperationTypesHttpClient>(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient();
+                var httpClient = new BusinessOperationTypesHttpClient(ApiUrl, client);
                 return httpClient;
             });
             services.AddSingleton<MainWindow>();
@@ -73,8 +94,6 @@ namespace StablingClientWPF
             services.AddSingleton<TrainingTypesViewModel>();
             services.AddSingleton<AdministrationViewModel>();
             services.AddSingleton<MoneyViewModel>();
-            services.AddSingleton<MoneyTransactionsViewModel>();
-            services.AddSingleton<BusinessOperationsViewModel>();
         } 
         private void OnStartup(object sender, StartupEventArgs e)
         {
