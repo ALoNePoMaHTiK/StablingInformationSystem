@@ -202,6 +202,21 @@ namespace StablingClientWPF.ViewModels
             {
                 await _businessOperationsHttpClient.UpdateAsync(CurrentBusinessOperation);
                 //ДОБАВИТЬ МЕТОД В API для получение BusinessOperationForShow по первичному ключу
+                BusinessOperationForShow oldOperation = IncomeBusinessOperations.Where(op => op.BusinessOperationId ==  CurrentBusinessOperation.BusinessOperationId).FirstOrDefault();
+                if (oldOperation != null)
+                {
+                    IncomeBusinessOperations.Remove(oldOperation);
+                }
+                else
+                {
+                    oldOperation = ConsumptionBusinessOperations.Where(op => op.BusinessOperationId == CurrentBusinessOperation.BusinessOperationId).FirstOrDefault();
+                    ConsumptionBusinessOperations.Remove(oldOperation);
+                }
+                BusinessOperationForShow newOperation = await _businessOperationsHttpClient.GetForShowAsync(CurrentBusinessOperation.BusinessOperationId);
+                if (newOperation.IsIncome)
+                    IncomeBusinessOperations.Add(newOperation);
+                else
+                    ConsumptionBusinessOperations.Add(newOperation);
                 await GetBusinessOperations();
             }
             CloseBusinessOperationsDialog();

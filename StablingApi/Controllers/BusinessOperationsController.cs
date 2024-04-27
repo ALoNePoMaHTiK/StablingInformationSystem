@@ -33,9 +33,18 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
+        ///     Получение бизнес-операции для отображения по идентификатору
+        /// </summary>
+        [HttpGet("ForShow/{id}")]
+        public async Task<ActionResult<BusinessOperationForShow>> GetForShow(int id)
+        {
+            return await _repository.GetForShow(id);
+        }
+
+        /// <summary>
         ///     Получение списка доходных бизнес-операций за конкретные сутки
         /// </summary>
-        [HttpGet("ByIncome")]
+        [HttpGet("ByIncome/{date}")]
         public async Task<ActionResult<IEnumerable<BusinessOperationForShow>>> GetByIncome(DateTime date)
         {
             return Ok(await _repository.GetByIncome(date));
@@ -44,7 +53,7 @@ namespace StablingApi.Controllers
         /// <summary>
         ///     Получение списка расходных бизнес-операций за конкретные сутки
         /// </summary>
-        [HttpGet("ByConsumption")]
+        [HttpGet("ByConsumption/{date}")]
         public async Task<ActionResult<IEnumerable<BusinessOperationForShow>>> GetByConsumption(DateTime date)
         {
             return Ok(await _repository.GetByConsumption(date));

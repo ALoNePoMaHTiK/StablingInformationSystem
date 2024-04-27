@@ -41,6 +41,12 @@ namespace StablingApi.Repositories
             return await context.BusinessOperations.FindAsync(id);
         }
 
+        public async Task<BusinessOperationForShow> GetForShow(int id)
+        {
+            var context = _contextFactory.CreateDbContext();
+            return await context.BusinessOperationsForShow.Where(op => op.BusinessOperationId == id).FirstAsync();
+        }
+
         public async Task<IEnumerable<BusinessOperation>> GetByDay(DateTime dateTime)
         {
             var context = _contextFactory.CreateDbContext();

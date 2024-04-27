@@ -6,6 +6,7 @@ namespace StablingApi.Repositories.Interfaces
     {
         Task<IEnumerable<BusinessOperation>> GetAll();
         Task<BusinessOperation> Get(int id);
+        Task<BusinessOperationForShow> GetForShow(int id);
         Task<IEnumerable<BusinessOperation>> GetByDay(DateTime dateTime);
         Task<IEnumerable<BusinessOperationForShow>> GetByIncome(DateTime dateTime);
         Task<IEnumerable<BusinessOperationForShow>> GetByConsumption(DateTime dateTime);

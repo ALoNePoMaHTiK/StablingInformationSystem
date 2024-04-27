@@ -272,7 +272,39 @@
         }
       }
     },
-    "/api/BusinessOperations/ByIncome": {
+    "/api/BusinessOperations/ForShow/{id}": {
+      "get": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_GetForShow",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/BusinessOperationForShow"
+            }
+          }
+        }
+      }
+    },
+    "/api/BusinessOperations/ByIncome/{date}": {
       "get": {
         "tags": [
           "BusinessOperations"
@@ -287,7 +319,8 @@
           {
             "type": "string",
             "name": "date",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "format": "date-time",
             "x-nullable": false
           }
@@ -306,7 +339,7 @@
         }
       }
     },
-    "/api/BusinessOperations/ByConsumption": {
+    "/api/BusinessOperations/ByConsumption/{date}": {
       "get": {
         "tags": [
           "BusinessOperations"
@@ -321,7 +354,8 @@
           {
             "type": "string",
             "name": "date",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "format": "date-time",
             "x-nullable": false
           }
