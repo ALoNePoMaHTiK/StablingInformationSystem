@@ -17,7 +17,7 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
-        ///     Получение списка пополнений баланса клиента
+        ///     Получение списка пополнений баланса клиентов
         /// </summary>
         [HttpGet]
         public async Task<IEnumerable<BalanceReplenishment>> GetAll()
@@ -26,7 +26,7 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
-        ///     Получение пополнения баланса клиента по идентификатору
+        ///     Получение пополнения баланса клиентов по идентификатору
         /// </summary>
         [HttpGet("{id}")]
         public async Task<BalanceReplenishment> Get(int id)
@@ -34,6 +34,32 @@ namespace StablingApi.Controllers
             return await _repository.Get(id);
         }
 
+        /// <summary>
+        ///     Получение списка пополнений баланса клиентов на определенную дату
+        /// </summary>
+        [HttpGet("ByDate/{date}")]
+        public async Task<IEnumerable<BalanceReplenishment>> GetByDate(DateTime date)
+        {
+            return await _repository.GetByDate(date);
+        }
+
+        /// <summary>
+        ///     Получение списка представлений пополнений баланса клиентов на определенную дату
+        /// </summary>
+        [HttpGet("ByDateForShow/{date}")]
+        public async Task<IEnumerable<BalanceReplenishmentForShow>> GetByDateForShow(DateTime date)
+        {
+            return await _repository.GetByDateForShow(date);
+        }
+
+        /// <summary>
+        ///     Получение списка представлений пополнений баланса клиентов на определенную дату
+        /// </summary>
+        [HttpGet("ForShow/{id}")]
+        public async Task<BalanceReplenishmentForShow> GetForShow(int id)
+        {
+            return await _repository.GetForShow(id);
+        }
 
         /// <summary>
         ///     Добавление пополнения баланса клиента

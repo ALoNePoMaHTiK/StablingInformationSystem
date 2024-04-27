@@ -56,7 +56,7 @@
                                         <TextBlock Text="Принять"/>
                                     </StackPanel>
                                 </Button>
-                                <Button IsCancel="True" Command="{Binding CloseDialogCommand}">
+                                <Button IsCancel="True" Command="{Binding CloseMoneyTransactionsDialogCommand}">
                                     <StackPanel Orientation="Horizontal">
                                         <materialDesign:PackIcon Kind="Close"/>
                                         <TextBlock Text="Отмена"/>
@@ -70,7 +70,7 @@
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Button Command="{Binding ShowDialogCommand}" Content="Добавить"
+                        <Button Command="{Binding OpenMoneyTransactionsDialogCommand}" Content="Добавить"
                             HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0"/>
                         <ListView Grid.Row="1" x:Name="TransactionsListView" ItemsSource="{Binding MoneyTransactions}" Height="Auto">
                             <ListView.View>
@@ -85,10 +85,10 @@
                                                 <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                                     <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                         <MenuItem Command="{Binding ElementName=TransactionsListView,
-                         Path=DataContext.OpenEditTransactionCommand}"
-                         CommandParameter="{Binding MoneyTransactionId}"
-                         Header="Изменить"
-                         Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                             Path=DataContext.OpenEditTransactionCommand}"
+                                                             CommandParameter="{Binding MoneyTransactionId}"
+                                                             Header="Изменить"
+                                                             Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
                                                     </MenuItem>
                                                 </Menu>
                                             </DataTemplate>
@@ -134,7 +134,8 @@
                                   DisplayMemberPath="TypeName" SelectedValuePath="BusinessOperationTypeId"/>
                             </GroupBox>
                             <GroupBox Header="Дата">
-                                <TextBox IsEnabled="False" Text="{Binding CurrentBusinessOperation.OperationDateTime}"/>
+                                <TextBox IsEnabled="False" Text="{Binding CurrentBusinessOperation.OperationDateTime,
+                                StringFormat=dd.MM.yyyy}"/>
                             </GroupBox>
                             <GroupBox Header="Сумма">
                                 <TextBox Text="{Binding CurrentBusinessOperation.Amount}"/>
@@ -183,7 +184,7 @@
                                                 <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                                     <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                         <MenuItem Command="{Binding ElementName=IncomeOperationsListView,
-                                                            Path=DataContext.OpenEditOperationsDialogCommand}"
+                                                            Path=DataContext.OpenEditBusinessOperationsDialogCommand}"
                                                             CommandParameter="{Binding BusinessOperationId}"
                                                             Header="Изменить"
                                                             Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
@@ -221,6 +222,69 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
+                    </Grid>
+                </materialDesign:DialogHost>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Cash"/>
+                        <TextBlock Text="Пополнения"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <materialDesign:DialogHost IsOpen="{Binding IsBalanceReplenishmentDialogOpen}">
+                    <materialDesign:DialogHost.DialogContent>
+                        <StackPanel Margin="20" Width="250">
+                            <ComboBox materialDesign:ComboBoxAssist.MaxLength="6" Margin="5"
+                                materialDesign:HintAssist.Hint="Клиент"
+                                materialDesign:HintAssist.HintOpacity=".26"
+                                IsEditable="True"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                ItemsSource="{Binding Clients}" 
+                                SelectedValue="{Binding CurrentReplenishment.ClientId}" 
+                                DisplayMemberPath="FullName" SelectedValuePath="ClientId"/>
+                            <ComboBox materialDesign:ComboBoxAssist.MaxLength="6" Margin="5"
+                                materialDesign:HintAssist.Hint="Тренер"
+                                materialDesign:HintAssist.HintOpacity=".26"
+                                IsEditable="True"
+                                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                ItemsSource="{Binding Trainers}" 
+                                SelectedValue="{Binding CurrentReplenishment.TrainerId}" 
+                                DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+                            <TextBox Text="{Binding CurrentReplenishment.Amount}" Margin="5"
+                                materialDesign:HintAssist.Hint="Сумма"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                            <TextBox IsEnabled="False" Text="{Binding CurrentReplenishment.ReplenishmentDate,
+                                StringFormat=dd.MM.yyyy}" Margin="5"
+                                materialDesign:HintAssist.Hint="Дата"
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <Button IsDefault="True">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Check"/>
+                                        <TextBlock Text="Принять"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button IsCancel="True" Command="{Binding CloseBalanceReplenishmentDialogCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Close"/>
+                                        <TextBlock Text="Отмена"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </materialDesign:DialogHost.DialogContent>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Button Command="{Binding OpenBalanceReplenishmentDialogCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Add"/>
+                                <TextBlock Text="Добавить"/>
+                            </StackPanel>
+                        </Button>
                     </Grid>
                 </materialDesign:DialogHost>
             </TabItem>

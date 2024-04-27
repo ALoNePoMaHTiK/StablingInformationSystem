@@ -11,6 +11,7 @@ namespace StablingApi.Contexts
         public DbSet<BusinessOperationType> BusinessOperationTypes { get; set; }
         public DbSet<BusinessOperationForShow> BusinessOperationsForShow { get; set; }
         public DbSet<BalanceReplenishment> BalanceReplenishments { get; set; }
+        public DbSet<BalanceReplenishmentForShow> BalanceReplenishmentsForShow { get; set; }
 
         public MoneyContext(DbContextOptions<MoneyContext> options)
             : base(options)
@@ -34,6 +35,17 @@ namespace StablingApi.Contexts
                 table.HasNoKey();
                 table.ToView("VW_BusinessOperationsForShow");
             }));
+            modelBuilder.Entity<BalanceReplenishmentForShow>(table =>
+            {
+                table.HasNoKey();
+                table.ToView("VW_BalanceReplenishmentsForShow");
+            });
+
+            modelBuilder.Entity<BalanceReplenishment>(builder =>
+            {
+                builder.ToTable(tb => tb.HasTrigger("TR_BalanceReplenishments_AfterInsert"));
+            });
+            
         }
     }
 }

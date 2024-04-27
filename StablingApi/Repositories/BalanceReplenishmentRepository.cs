@@ -2,6 +2,7 @@
 using StablingApi.Contexts;
 using StablingApi.Repositories.Interfaces;
 using StablingApi.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StablingApi.Repositories
 {
@@ -45,6 +46,20 @@ namespace StablingApi.Repositories
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             return await context.BalanceReplenishments.Where(r => r.ReplenishmentDate == date).ToListAsync();
+        }
+
+        public async Task<IEnumerable<BalanceReplenishmentForShow>> GetByDateForShow(DateTime date)
+        {
+            MoneyContext context = _contextFactory.CreateDbContext();
+            return await context.BalanceReplenishmentsForShow.Where(br =>
+            br.ReplenishmentDate.Date == date.Date).ToListAsync();
+        }
+
+        public async Task<BalanceReplenishmentForShow> GetForShow(int id)
+        {
+            MoneyContext context = _contextFactory.CreateDbContext();
+            return await context.BalanceReplenishmentsForShow.Where(br =>
+            br.BalanceReplenishmentId == id).FirstAsync();
         }
 
         public async Task Update(BalanceReplenishment replenishment)

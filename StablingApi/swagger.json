@@ -161,6 +161,244 @@
         }
       }
     },
+    "/api/BalanceReplenishments": {
+      "get": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_GetAll",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BalanceReplenishment"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "replenishment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BalanceReplenishment"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_Update",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "replenishment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BalanceReplenishment"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/BalanceReplenishments/{id}": {
+      "get": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_Get",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/BalanceReplenishment"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_Delete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": true,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      }
+    },
+    "/api/BalanceReplenishments/ByDate/{date}": {
+      "get": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_GetByDate",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BalanceReplenishment"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BalanceReplenishments/ByDateForShow/{date}": {
+      "get": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_GetByDateForShow",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BalanceReplenishmentForShow"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BalanceReplenishments/ForShow/{id}": {
+      "get": {
+        "tags": [
+          "BalanceReplenishments"
+        ],
+        "operationId": "BalanceReplenishments_GetForShow",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/BalanceReplenishmentForShow"
+            }
+          }
+        }
+      }
+    },
     "/api/BusinessOperations": {
       "get": {
         "tags": [
@@ -1431,6 +1669,68 @@
         },
         "isAvailable": {
           "type": "boolean"
+        }
+      }
+    },
+    "BalanceReplenishment": {
+      "type": "object",
+      "required": [
+        "balanceReplenishmentId",
+        "clientId",
+        "trainerId",
+        "replenishmentDate",
+        "amount"
+      ],
+      "properties": {
+        "balanceReplenishmentId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "clientId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "replenishmentDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "BalanceReplenishmentForShow": {
+      "type": "object",
+      "required": [
+        "balanceReplenishmentId",
+        "trainerName",
+        "clientName",
+        "amount",
+        "replenishmentDate"
+      ],
+      "properties": {
+        "balanceReplenishmentId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainerName": {
+          "type": "string"
+        },
+        "clientName": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "replenishmentDate": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

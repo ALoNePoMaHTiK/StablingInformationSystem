@@ -12,16 +12,17 @@ namespace StablingClientWPF.ViewModels
         public BusinessOperationsHttpClient _businessOperationsHttpClient { get; }
         public BusinessOperationTypesHttpClient _businessOperationTypesHttpClient { get; }
         public TrainersHttpClient _trainersHttpClient { get; }
+        public ClientsHttpClient _clientsHttpClient { get; }
+        public BalanceReplenishmentsHttpClient _balanceReplenishmentsHttpClient { get; }
 
         private DateTime _CurrentDate;
         public DateTime CurrentDate
         {
             get { return _CurrentDate; }
             set { _CurrentDate = value; OnPropertyChanged();
-                GetMoneyTransactions();
-                GetBusinessOperations();
-                ClearCurrentBusinessOperation();
-                ClearCurrentMoneyTransaction();
+                GetDataByDate();
+                ClearCurrentData();
+                CloseAllDialogs();
             }
         }
 
@@ -29,20 +30,46 @@ namespace StablingClientWPF.ViewModels
             MoneyAccountsHttpClient moneyAccountsHttpClient,
             TrainersHttpClient trainersHttpClient,
             BusinessOperationsHttpClient businessOperationsHttpClient,
-            BusinessOperationTypesHttpClient businessOperationTypesHttpClient)
+            BusinessOperationTypesHttpClient businessOperationTypesHttpClient,
+            ClientsHttpClient clientsHttpClient,
+            BalanceReplenishmentsHttpClient balanceReplenishmentsHttpClient)
         {
             _moneyTransactionsHttpClient = moneyTrainsactionsHttpClient;
             _moneyAccountsHttpClient = moneyAccountsHttpClient;
             _trainersHttpClient = trainersHttpClient;
             _businessOperationsHttpClient = businessOperationsHttpClient;
             _businessOperationTypesHttpClient = businessOperationTypesHttpClient;
+            _clientsHttpClient = clientsHttpClient;
+            _balanceReplenishmentsHttpClient = balanceReplenishmentsHttpClient;
 
-            CurrentDate = DateTime.Now;
+            CurrentDate = DateTime.Now.Date;
             GetMoneyAccounts();
             GetTrainers();
+            GetClients();
             GetBusinessOperationTypes();
+            GetDataByDate();
+            ClearCurrentData();
+        }
+
+        private void GetDataByDate()
+        {
+            GetMoneyTransactions();
+            GetBusinessOperations();
+            GetBalanceReplenishments();
+        }
+
+        private void ClearCurrentData()
+        {
             ClearCurrentMoneyTransaction();
             ClearCurrentBusinessOperation();
+            ClearCurrentReplenishment();
+        }
+
+        private void CloseAllDialogs()
+        {
+            CloseMoneyTransactionsDialog();
+            CloseBusinessOperationsDialog();
+            CloseBalanceReplenishmentDialog();
         }
 
         private ObservableCollection<MoneyAccount> _MoneyAccounts;
@@ -68,6 +95,98 @@ namespace StablingClientWPF.ViewModels
             Trainers = new ObservableCollection<Trainer>(
                 await _trainersHttpClient.GetAllAsync());
         }
+
+        private ObservableCollection<Client> _Clients;
+        public ObservableCollection<Client> Clients
+        {
+            get { return _Clients; }
+            set { _Clients = value; OnPropertyChanged(); }
+        }
+        private async void GetClients()
+        {
+            Clients = new ObservableCollection<Client>(
+                await _clientsHttpClient.GetAllAsync());
+        }
+
+        #region BalanceReplenishments
+
+        private ObservableCollection<BalanceReplenishmentForShow> _BalanceReplenishments;
+        public ObservableCollection<BalanceReplenishmentForShow> BalanceReplenishments
+        {
+            get { return _BalanceReplenishments; }
+            set { _BalanceReplenishments = value; OnPropertyChanged(); }
+        }
+        private async Task GetBalanceReplenishments()
+        {
+            BalanceReplenishments = new ObservableCollection<BalanceReplenishmentForShow>(
+                await _balanceReplenishmentsHttpClient.GetByDateForShowAsync(CurrentDate));
+        }
+
+        private BalanceReplenishment _CurrentReplenishment;
+        public BalanceReplenishment CurrentReplenishment
+        {
+            get => _CurrentReplenishment;
+            set { _CurrentReplenishment = value; OnPropertyChanged(); }
+        }
+        private void ClearCurrentReplenishment()
+        {
+            CurrentReplenishment = new BalanceReplenishment() { ReplenishmentDate = CurrentDate };
+        }
+
+        private bool _IsBalanceReplenishmentDialogOpen;
+        public bool IsBalanceReplenishmentDialogOpen
+        {
+            get => _IsBalanceReplenishmentDialogOpen;
+            set { _IsBalanceReplenishmentDialogOpen = value; OnPropertyChanged(); }
+        }
+
+        public DelegateCommand OpenBalanceReplenishmentDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenBalanceReplenishmentDialog();
+                });
+            }
+        }
+        private void OpenBalanceReplenishmentDialog()
+        {
+            IsBalanceReplenishmentDialogOpen = true;
+        }
+
+        public DelegateCommand CloseBalanceReplenishmentDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    CloseBalanceReplenishmentDialog();
+                });
+            }
+        }
+        private void CloseBalanceReplenishmentDialog()
+        {
+            IsBalanceReplenishmentDialogOpen = false;
+        }
+
+        public DelegateCommand OpenEditBalanceReplenishmentDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenEditBalanceReplenishmentDialog((int)o);
+                });
+            }
+        }
+        private async void OpenEditBalanceReplenishmentDialog(int id)
+        {
+            CurrentReplenishment = await _balanceReplenishmentsHttpClient.GetAsync(id);
+            OpenBalanceReplenishmentDialog();
+        }
+
+        #endregion
 
         #region BusinessOperations
 
@@ -153,17 +272,17 @@ namespace StablingClientWPF.ViewModels
             IsBusinessOperationsDialogOpen = true;
         }
 
-        public DelegateCommand OpenEditOperationsDialogCommand
+        public DelegateCommand OpenEditBusinessOperationsDialogCommand
         {
             get
             {
                 return new DelegateCommand(o =>
                 {
-                    OpenEditOperationsDialog((int)o);
+                    OpenEditBusinessOperationsDialog((int)o);
                 });
             }
         }
-        private async void OpenEditOperationsDialog(int id)
+        private async void OpenEditBusinessOperationsDialog(int id)
         {
             CurrentBusinessOperation = await _businessOperationsHttpClient.GetAsync(id);
             OpenBusinessOperationsDialog();
@@ -268,32 +387,32 @@ namespace StablingClientWPF.ViewModels
             set { _IsMoneyTransactionsDialogOpen = value; OnPropertyChanged(); }
         }
 
-        public DelegateCommand ShowDialogCommand
+        public DelegateCommand OpenMoneyTransactionsDialogCommand
         {
             get
             {
                 return new DelegateCommand(o =>
                 {
-                    ShowDialog();
+                    OpenMoneyTransactionsDialog();
                 });
             }
         }
-        private void ShowDialog()
+        private void OpenMoneyTransactionsDialog()
         {
             IsMoneyTransactionsDialogOpen = true;
         }
 
-        public DelegateCommand CloseDialogCommand
+        public DelegateCommand CloseMoneyTransactionsDialogCommand
         {
             get
             {
                 return new DelegateCommand(o =>
                 {
-                    CloseDialog();
+                    CloseMoneyTransactionsDialog();
                 });
             }
         }
-        private void CloseDialog()
+        private void CloseMoneyTransactionsDialog()
         {
             IsMoneyTransactionsDialogOpen = false;
         }
@@ -322,7 +441,7 @@ namespace StablingClientWPF.ViewModels
                 MoneyTransactions.Add(CurrentTransaction);
             }
             ClearCurrentMoneyTransaction();
-            CloseDialog();
+            CloseMoneyTransactionsDialog();
         }
 
         private void ClearCurrentMoneyTransaction()
