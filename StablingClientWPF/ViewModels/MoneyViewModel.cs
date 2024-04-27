@@ -20,6 +20,8 @@ namespace StablingClientWPF.ViewModels
             set { _CurrentDate = value; OnPropertyChanged();
                 GetMoneyTransactions();
                 GetBusinessOperations();
+                ClearCurrentBusinessOperation();
+                ClearCurrentMoneyTransaction();
             }
         }
 
@@ -39,7 +41,7 @@ namespace StablingClientWPF.ViewModels
             GetMoneyAccounts();
             GetTrainers();
             GetBusinessOperationTypes();
-            CurrentTransaction = new MoneyTransaction() { TransactionDate = CurrentDate };
+            ClearCurrentMoneyTransaction();
             ClearCurrentBusinessOperation();
         }
 
@@ -319,8 +321,13 @@ namespace StablingClientWPF.ViewModels
                 MoneyTransactions.Remove(oldTransaction);
                 MoneyTransactions.Add(CurrentTransaction);
             }
-            CurrentTransaction = new MoneyTransaction() { TransactionDate = CurrentDate };
+            ClearCurrentMoneyTransaction();
             CloseDialog();
+        }
+
+        private void ClearCurrentMoneyTransaction()
+        {
+            CurrentTransaction = new MoneyTransaction() { TransactionDate = CurrentDate };
         }
         #endregion
 

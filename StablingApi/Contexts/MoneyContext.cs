@@ -10,6 +10,8 @@ namespace StablingApi.Contexts
         public DbSet<BusinessOperation> BusinessOperations { get; set; }
         public DbSet<BusinessOperationType> BusinessOperationTypes { get; set; }
         public DbSet<BusinessOperationForShow> BusinessOperationsForShow { get; set; }
+        public DbSet<BalanceReplenishment> BalanceReplenishments { get; set; }
+
         public MoneyContext(DbContextOptions<MoneyContext> options)
             : base(options)
         {
