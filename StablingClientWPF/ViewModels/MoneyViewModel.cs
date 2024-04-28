@@ -186,6 +186,36 @@ namespace StablingClientWPF.ViewModels
             OpenBalanceReplenishmentDialog();
         }
 
+        public AsyncDelegateCommand ProcessBalanceReplenishmentCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await ProcessBalanceReplenishment();
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task ProcessBalanceReplenishment()
+        {
+            if (CurrentReplenishment.BalanceReplenishmentId == 0)
+            {
+                await _balanceReplenishmentsHttpClient.CreateAsync(CurrentReplenishment);
+                await GetBalanceReplenishments();
+            }
+            else
+            {
+                await _balanceReplenishmentsHttpClient.UpdateAsync(CurrentReplenishment);
+                BalanceReplenishmentForShow oldReplenishment = BalanceReplenishments.Where(
+                    rep => rep.BalanceReplenishmentId != CurrentReplenishment.BalanceReplenishmentId).First();
+                BalanceReplenishments.Remove(oldReplenishment);
+                BalanceReplenishments.Add(
+                    await _balanceReplenishmentsHttpClient.GetForShowAsync(
+                        CurrentReplenishment.BalanceReplenishmentId));
+            }
+            CloseBalanceReplenishmentDialog();
+            ClearCurrentReplenishment();
+        }
+
         #endregion
 
         #region BusinessOperations
@@ -272,17 +302,17 @@ namespace StablingClientWPF.ViewModels
             IsBusinessOperationsDialogOpen = true;
         }
 
-        public DelegateCommand OpenEditBusinessOperationsDialogCommand
+        public DelegateCommand OpenEditBusinessOperationDialogCommand
         {
             get
             {
                 return new DelegateCommand(o =>
                 {
-                    OpenEditBusinessOperationsDialog((int)o);
+                    OpenEditBusinessOperationDialog((int)o);
                 });
             }
         }
-        private async void OpenEditBusinessOperationsDialog(int id)
+        private async void OpenEditBusinessOperationDialog(int id)
         {
             CurrentBusinessOperation = await _businessOperationsHttpClient.GetAsync(id);
             OpenBusinessOperationsDialog();
@@ -322,7 +352,6 @@ namespace StablingClientWPF.ViewModels
             else
             {
                 await _businessOperationsHttpClient.UpdateAsync(CurrentBusinessOperation);
-                //ДОБАВИТЬ МЕТОД В API для получение BusinessOperationForShow по первичному ключу
                 BusinessOperationForShow oldOperation = IncomeBusinessOperations.Where(op => op.BusinessOperationId ==  CurrentBusinessOperation.BusinessOperationId).FirstOrDefault();
                 if (oldOperation != null)
                 {
@@ -343,6 +372,40 @@ namespace StablingClientWPF.ViewModels
             CloseBusinessOperationsDialog();
             ClearCurrentBusinessOperation();
         }
+
+        public AsyncDelegateCommand DeleteBusinessOperationCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await DeleteBusinessOperation((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+
+        private async Task DeleteBusinessOperation(int id)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNoCancel);
+            if (result == MessageBoxResult.Yes)
+            {
+                await _businessOperationsHttpClient.DeleteAsync(id);
+                BusinessOperationForShow oldOperation = IncomeBusinessOperations.Where(op => op.BusinessOperationId == id).FirstOrDefault();
+                if (oldOperation != null)
+                {
+                    IncomeBusinessOperations.Remove(oldOperation);
+                }
+                else
+                {
+                    oldOperation = ConsumptionBusinessOperations.Where(op => op.BusinessOperationId == id).FirstOrDefault();
+                    ConsumptionBusinessOperations.Remove(oldOperation);
+                }
+            }
+            else
+            {
+                //...
+            }
+        }
+
         private void ClearCurrentBusinessOperation()
         {
             CurrentBusinessOperation = new BusinessOperation() { OperationDateTime = CurrentDate };
