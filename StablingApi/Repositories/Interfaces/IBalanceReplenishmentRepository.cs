@@ -8,7 +8,7 @@ namespace StablingApi.Repositories.Interfaces
         Task<BalanceReplenishment> Get(int id);
         Task<BalanceReplenishmentForShow> GetForShow(int id);
         Task<IEnumerable<BalanceReplenishment>> GetByDate(DateTime date);
-        Task<IEnumerable<BalanceReplenishmentForShow>> GetByDateForShow(DateTime date);
+        Task<IEnumerable<BalanceReplenishmentForShow>> GetForShowByDate(DateTime date);
         Task<BalanceReplenishment> Create(BalanceReplenishment replenishment);
         Task Update(BalanceReplenishment replenishment);
         Task Delete(int id);

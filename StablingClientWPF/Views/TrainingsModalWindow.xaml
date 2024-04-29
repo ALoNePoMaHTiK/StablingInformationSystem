@@ -11,65 +11,57 @@
         WindowStartupLocation="CenterScreen"
         SizeToContent="Height"
         ResizeMode="NoResize"
-        Title="AddTrainingModalWindow" Width="400">
-    <StackPanel>
+        Title="AddTrainingModalWindow">
+    <StackPanel Margin="20" Width="250">
+        <StackPanel.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="{StaticResource Margin}"/>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="{StaticResource Margin}"/>
+            </Style>
+        </StackPanel.Resources>
         <GroupBox Visibility="Collapsed">
             <GroupBox.Header>
                 <TextBlock>#</TextBlock>
             </GroupBox.Header>
             <TextBox IsEnabled="False" Text="{Binding CurrentTraining.TrainingId}"/>
         </GroupBox>
-        <GroupBox>
-            <GroupBox.Header>
-                <TextBlock>Тренер</TextBlock>
-            </GroupBox.Header>
-            <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
-                      materialDesign:HintAssist.Hint="Введите ФИО тренера"
-                      materialDesign:HintAssist.HintOpacity=".26"
-                      IsEditable="True"
-                      ItemsSource="{Binding Trainers}" 
-                      SelectedValue="{Binding CurrentTraining.TrainerId}" 
-                      DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
-        </GroupBox>
-        <GroupBox>
-            <GroupBox.Header>
-                <TextBlock>Клиент</TextBlock>
-            </GroupBox.Header>
-            <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
-                      materialDesign:HintAssist.Hint="Введите ФИО клиента"
-                      materialDesign:HintAssist.HintOpacity=".26"
-                      IsEditable="True"
-                      ItemsSource="{Binding Clients}" 
-                      SelectedValue="{Binding CurrentTraining.ClientId}" 
-                      DisplayMemberPath="FullName" 
-                      SelectedValuePath="ClientId"/>
-        </GroupBox>
-        <GroupBox>
-            <GroupBox.Header>
-                <TextBlock>Лошадь</TextBlock>
-            </GroupBox.Header>
-            <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
-                      materialDesign:HintAssist.Hint="Введите кличку лошади"
-                      materialDesign:HintAssist.HintOpacity=".26"
-                      IsEditable="True"
-                      ItemsSource="{Binding Horses}" 
-                      SelectedValue="{Binding CurrentTraining.HorseId}" 
-                      DisplayMemberPath="HorseName" 
-                      SelectedValuePath="HorseId"/>
-        </GroupBox>
-        <GroupBox>
-            <GroupBox.Header>
-                <TextBlock>Тип тренировки</TextBlock>
-            </GroupBox.Header>
-            <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
-                      materialDesign:HintAssist.Hint="Введите ФИО клиента"
-                      materialDesign:HintAssist.HintOpacity=".26"
-                      IsEditable="True"
-                      ItemsSource="{Binding TrainingTypes}" 
-                      SelectedValue="{Binding CurrentTraining.TrainingTypeId}" 
-                      DisplayMemberPath="TypeName" 
-                      SelectedValuePath="TrainingTypeId"/>
-        </GroupBox>
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+            materialDesign:HintAssist.Hint="Тренер"
+            materialDesign:HintAssist.HintOpacity=".26"
+            IsEditable="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ItemsSource="{Binding Trainers}" 
+            SelectedValue="{Binding CurrentTraining.TrainerId}" 
+            DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+            materialDesign:HintAssist.Hint="Клиент"
+            materialDesign:HintAssist.HintOpacity=".26"
+            IsEditable="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ItemsSource="{Binding Clients}" 
+            SelectedValue="{Binding CurrentTraining.ClientId}" 
+            DisplayMemberPath="FullName" 
+            SelectedValuePath="ClientId"/>
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+            materialDesign:HintAssist.Hint="Лошадь"
+            materialDesign:HintAssist.HintOpacity=".26"
+            IsEditable="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ItemsSource="{Binding Horses}" 
+            SelectedValue="{Binding CurrentTraining.HorseId}" 
+            DisplayMemberPath="HorseName" 
+            SelectedValuePath="HorseId"/>
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+            materialDesign:HintAssist.Hint="Тип тренировки"
+            materialDesign:HintAssist.HintOpacity=".26"
+            IsEditable="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ItemsSource="{Binding TrainingTypes}" 
+            SelectedValue="{Binding CurrentTraining.TrainingTypeId}" 
+            DisplayMemberPath="TypeName" 
+            SelectedValuePath="TrainingTypeId"/>
         <GroupBox>
             <GroupBox.Header>
                 <TextBlock>Дата/время тренировки</TextBlock>
@@ -87,6 +79,19 @@
                       SelectedTime="{Binding CurrentTraining.TrainingDateTime}"/>
             </StackPanel>
         </GroupBox>
-        <Button Content="Принять" Command="{Binding ProcessTrainingCommand}" Height="50"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button IsDefault="True" Command="{Binding ProcessTrainingCommand}" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Check"/>
+                    <TextBlock Text="Принять"/>
+                </StackPanel>
+            </Button>
+            <Button IsCancel="True" Command="{Binding CloseTrainingsDialogCommand}" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Close"/>
+                    <TextBlock Text="Отмена"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
     </StackPanel>
 </Window>

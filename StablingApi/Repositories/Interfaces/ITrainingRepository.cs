@@ -6,6 +6,7 @@ namespace StablingApi.Repositories.Interfaces
     {
         Task<IEnumerable<Training>> GetAll();
         Task<Training> Get(int id);
+        Task<TrainingForShow> GetForShow(int id);
         Task<IEnumerable<Training>> GetByWeek(DateTime dateTime);
         Task<IEnumerable<Training>> GetByDay(DateTime dateTime);
         Task<IEnumerable<Training>> GetAllNotPaid();

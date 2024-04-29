@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using StablingApi.Models;
 
 namespace StablingApi.Contexts
@@ -7,6 +8,7 @@ namespace StablingApi.Contexts
     {
         public DbSet<MoneyAccount> MoneyAccounts { get; set; }
         public DbSet<MoneyTransaction> MoneyTransactions { get; set; }
+        public DbSet<MoneyTransactionForShow> MoneyTransactionsForShow { get; set; }
         public DbSet<BusinessOperation> BusinessOperations { get; set; }
         public DbSet<BusinessOperationType> BusinessOperationTypes { get; set; }
         public DbSet<BusinessOperationForShow> BusinessOperationsForShow { get; set; }
@@ -24,6 +26,11 @@ namespace StablingApi.Contexts
             modelBuilder.Entity<MoneyTransaction>(builder =>
             {
                 builder.ToTable(tb => tb.HasTrigger("TR_MoneyTransactions_AfterInsert"));
+            });
+            modelBuilder.Entity<MoneyTransactionForShow>(table =>
+            {
+                table.HasNoKey();
+                table.ToView("VW_MoneyTransactionsForShow");
             });
 
             modelBuilder.Entity<BusinessOperation>(builder =>

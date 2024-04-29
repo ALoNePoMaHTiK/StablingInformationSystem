@@ -26,10 +26,24 @@ namespace StablingApi.Repositories
             return await context.MoneyTransactions.FindAsync(id);
         }
 
+        public async Task<MoneyTransactionForShow> GetForShow(int id)
+        {
+            MoneyContext context = _contextFactory.CreateDbContext();
+            return await context.MoneyTransactionsForShow.Where(
+                transaction => transaction.MoneyTransactionId == id).FirstAsync();
+        }
+
         public async Task<IEnumerable<MoneyTransaction>> GetAll()
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             return await context.MoneyTransactions.ToListAsync();
+        }
+        
+        public async Task<IEnumerable<MoneyTransactionForShow>> GetForShowByDate(DateTime date)
+        {
+            MoneyContext context = _contextFactory.CreateDbContext();
+            return await context.MoneyTransactionsForShow.Where(
+                transaction => transaction.TransactionDate.Date == date.Date).ToListAsync();
         }
 
         public async Task<IEnumerable<MoneyTransaction>> GetByDay(DateTime date)
@@ -54,6 +68,14 @@ namespace StablingApi.Repositories
                 transactionToUpdate.TransactionDate = transaction.TransactionDate;
                 transactionToUpdate.Amount = transaction.Amount;
             }
+            await context.SaveChangesAsync();
+        }
+
+        public async Task Delete(int id)
+        {
+            MoneyContext context = _contextFactory.CreateDbContext();
+            MoneyTransaction transactionForDelete = await context.MoneyTransactions.FindAsync(id);
+            context.MoneyTransactions.Remove(transactionForDelete);
             await context.SaveChangesAsync();
         }
     }

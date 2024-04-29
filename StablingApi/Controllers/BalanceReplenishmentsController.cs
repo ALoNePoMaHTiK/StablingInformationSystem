@@ -46,10 +46,10 @@ namespace StablingApi.Controllers
         /// <summary>
         ///     Получение списка представлений пополнений баланса клиентов на определенную дату
         /// </summary>
-        [HttpGet("ByDateForShow/{date}")]
-        public async Task<IEnumerable<BalanceReplenishmentForShow>> GetByDateForShow(DateTime date)
+        [HttpGet("ForShow/ByDate/{date}")]
+        public async Task<IEnumerable<BalanceReplenishmentForShow>> GetForShowByDate(DateTime date)
         {
-            return await _repository.GetByDateForShow(date);
+            return await _repository.GetForShowByDate(date);
         }
 
         /// <summary>

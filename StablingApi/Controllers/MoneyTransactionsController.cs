@@ -25,12 +25,30 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
+        ///     Получение списка представлений всех транзакций
+        /// </summary>
+        [HttpGet("ByDate/ForShow/{date}")]
+        public async Task<IEnumerable<MoneyTransactionForShow>> GetForShowByDate(DateTime date)
+        {
+            return await _repository.GetForShowByDate(date);
+        }
+
+        /// <summary>
         ///     Получение транзакции по первичному ключу
         /// </summary>
         [HttpGet("{id}")]
         public async Task<MoneyTransaction> Get(int id)
         {
             return await _repository.Get(id);
+        }
+
+        /// <summary>
+        ///     Получение списка представлений всех транзакций
+        /// </summary>
+        [HttpGet("ForShow/{id}")]
+        public async Task<MoneyTransactionForShow> GetForShow(int id)
+        {
+            return await _repository.GetForShow(id);
         }
 
         /// <summary>
@@ -66,6 +84,21 @@ namespace StablingApi.Controllers
             }
             await _repository.Update(transaction);
             return Ok(transaction);
+        }
+
+        /// <summary>
+        ///     Удаление транзакции
+        /// </summary>
+        /// <param name="id">Идентификатор транзакции</param>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            MoneyTransaction transactionForDelete = await _repository.Get(id);
+            if (transactionForDelete == null)
+                return NotFound();
+            await _repository.Delete(id);
+            return Ok(id);
         }
     }
 }

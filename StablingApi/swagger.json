@@ -332,12 +332,12 @@
         }
       }
     },
-    "/api/BalanceReplenishments/ByDateForShow/{date}": {
+    "/api/BalanceReplenishments/ForShow/ByDate/{date}": {
       "get": {
         "tags": [
           "BalanceReplenishments"
         ],
-        "operationId": "BalanceReplenishments_GetByDateForShow",
+        "operationId": "BalanceReplenishments_GetForShowByDate",
         "produces": [
           "text/plain",
           "application/json",
@@ -506,6 +506,27 @@
             "schema": {
               "$ref": "#/definitions/BusinessOperation"
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "BusinessOperations"
+        ],
+        "operationId": "BusinessOperations_Delete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -1059,6 +1080,41 @@
         }
       }
     },
+    "/api/MoneyTransactions/ByDate/ForShow/{date}": {
+      "get": {
+        "tags": [
+          "MoneyTransactions"
+        ],
+        "operationId": "MoneyTransactions_GetForShowByDate",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "format": "date-time",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/MoneyTransactionForShow"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/MoneyTransactions/{id}": {
       "get": {
         "tags": [
@@ -1086,6 +1142,59 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/MoneyTransaction"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MoneyTransactions"
+        ],
+        "operationId": "MoneyTransactions_Delete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/MoneyTransactions/ForShow/{id}": {
+      "get": {
+        "tags": [
+          "MoneyTransactions"
+        ],
+        "operationId": "MoneyTransactions_GetForShow",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MoneyTransactionForShow"
             }
           }
         }
@@ -1297,6 +1406,38 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/Trainings/ForShow/{id}": {
+      "get": {
+        "tags": [
+          "Trainings"
+        ],
+        "operationId": "Trainings_GetForShow",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TrainingForShow"
+            }
           }
         }
       }
@@ -1919,6 +2060,36 @@
         "amount": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "MoneyTransactionForShow": {
+      "type": "object",
+      "required": [
+        "moneyTransactionId",
+        "trainerName",
+        "accountName",
+        "amount",
+        "transactionDate"
+      ],
+      "properties": {
+        "moneyTransactionId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainerName": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "transactionDate": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },

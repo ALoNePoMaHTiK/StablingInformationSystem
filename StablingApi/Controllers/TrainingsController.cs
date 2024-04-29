@@ -39,6 +39,20 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
+        ///     Получение представления тренировки по идентификатору
+        /// </summary>
+        [HttpGet("ForShow/{id}")]
+        public async Task<ActionResult<TrainingForShow>> GetForShow(int id)
+        {
+            var training = await _repository.GetForShow(id);
+            if (training == null)
+            {
+                return NotFound();
+            }
+            return Ok(training);
+        }
+
+        /// <summary>
         ///     Получение списка тренировок за день по дате/времени
         /// </summary>
         [HttpGet("ByDay/{dateTime:datetime}")]

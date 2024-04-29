@@ -8,59 +8,137 @@
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:TrainingsViewModel}"
              mc:Ignorable="d"
+             x:Name="TrainingsUserControl"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <DatePicker
+    <UserControl.Resources>
+        <Thickness x:Key="Margin">10</Thickness>
+    </UserControl.Resources>
+    <materialDesign:DialogHost IsOpen="{Binding IsTrainingsDialogOpen}">
+        <materialDesign:DialogHost.DialogContent>
+            <StackPanel Margin="20" Width="250">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Margin" Value="{StaticResource Margin}"/>
+                    </Style>
+                    <Style TargetType="{x:Type ComboBox}">
+                        <Setter Property="Margin" Value="{StaticResource Margin}"/>
+                    </Style>
+                </StackPanel.Resources>
+                <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+                    materialDesign:HintAssist.Hint="Тренер"
+                    materialDesign:HintAssist.HintOpacity=".26"
+                    IsEditable="True"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    ItemsSource="{Binding Trainers}" 
+                    SelectedValue="{Binding CurrentTraining.TrainerId}" 
+                    DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+                <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+                    materialDesign:HintAssist.Hint="Клиент"
+                    materialDesign:HintAssist.HintOpacity=".26"
+                    IsEditable="True"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    ItemsSource="{Binding Clients}" 
+                    SelectedValue="{Binding CurrentTraining.ClientId}" 
+                    DisplayMemberPath="FullName" 
+                    SelectedValuePath="ClientId"/>
+                <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                    materialDesign:HintAssist.Hint="Лошадь"
+                    materialDesign:HintAssist.HintOpacity=".26"
+                    IsEditable="True"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    ItemsSource="{Binding Horses}" 
+                    SelectedValue="{Binding CurrentTraining.HorseId}" 
+                    DisplayMemberPath="HorseName" 
+                    SelectedValuePath="HorseId"/>
+                <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                    materialDesign:HintAssist.Hint="Тип тренировки"
+                    materialDesign:HintAssist.HintOpacity=".26"
+                    IsEditable="True"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    ItemsSource="{Binding TrainingTypes}" 
+                    SelectedValue="{Binding CurrentTraining.TrainingTypeId}" 
+                    DisplayMemberPath="TypeName" 
+                    SelectedValuePath="TrainingTypeId"/>
+                <DatePicker Margin="10" IsEnabled="False"
+                    materialDesign:HintAssist.Hint="Дата тренировки"
+                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                    SelectedDate="{Binding CurrentTraining.TrainingDateTime}"/>
+                <materialDesign:TimePicker Margin="10 10 10 0"
+                    materialDesign:HintAssist.Hint="Время тренировки"
+                    Is24Hours="True"
+                    Style="{StaticResource MaterialDesignOutlinedTimePicker}"
+                    SelectedTime="{Binding CurrentTraining.TrainingDateTime}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button IsDefault="True" Command="{Binding ProcessTrainingCommand}" Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check"/>
+                            <TextBlock Text="Принять"/>
+                        </StackPanel>
+                    </Button>
+                    <Button IsCancel="True" Command="{Binding CloseTrainingDialogCommand}" Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close"/>
+                            <TextBlock Text="Отмена"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <DatePicker
               Style="{StaticResource MaterialDesignOutlinedDatePicker}"
               SelectedDate="{Binding CurrentDate}"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
-            <Button Content="Добавить" Command="{Binding OpenCreateTrainingCommand}"/>
-            <Button Content="Обновить" Command="{Binding GetTrainingsCommand}"/>
-        </StackPanel>
-
-        <ListView Grid.Row="2" x:Name="TrainingsListView" ItemsSource="{Binding Trainings, IsAsync=True}">
-            <ListView.View>
-                <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <GridViewColumn DisplayMemberBinding="{Binding TrainingId}">№</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding TypeName}">Тип</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding TrainerName}">Тренер</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding ClientName}">Клиент</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding HorseName}">Лошадь</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding TrainingStart, StringFormat=HH-mm}">Начало</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding TrainingFinish, StringFormat=HH-mm}">Конец</GridViewColumn>
-                    <GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
-                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                        <MenuItem Command="{Binding ElementName=TrainingsListView,
-                                              Path=DataContext.OpenEditTrainingCommand}"
-                                              CommandParameter="{Binding TrainingId}"
-                                              Header="Изменить"
-                                              Icon="{materialDesign:PackIcon Kind=Edit}"/>
-                                        <MenuItem Command="{Binding ElementName=TrainingsListView,
-                                              Path=DataContext.OpenCopyTrainingCommand}"
-                                              CommandParameter="{Binding TrainingId}"
-                                              Header="Копировать"
-                                              Icon="{materialDesign:PackIcon Kind=ContentCopy}"/>
-                                        <MenuItem Command="{Binding ElementName=TrainingsListView,
-                                              Path=DataContext.DeleteTrainingCommand}"
-                                              CommandParameter="{Binding TrainingId}"
-                                              Header="Удалить"
-                                              Foreground="Crimson"
-                                              Icon="{materialDesign:PackIcon Kind=Delete}"/>
-                                    </MenuItem>
-                                </Menu>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </Grid>
+            <Button Grid.Row="1" Command="{Binding OpenTrainingDialogCommand}"
+                VerticalAlignment="Center" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Add"/>
+                    <TextBlock Text="Добавить"/>
+                </StackPanel>
+            </Button>
+            <ListView Grid.Row="2" ItemsSource="{Binding Trainings, IsAsync=True}">
+                <ListView.View>
+                    <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <GridViewColumn DisplayMemberBinding="{Binding TrainingId}">№</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding TypeName}">Тип</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding TrainerName}">Тренер</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding ClientName}">Клиент</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding HorseName}">Лошадь</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding TrainingStart, StringFormat=HH-mm}">Начало</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding TrainingFinish, StringFormat=HH-mm}">Конец</GridViewColumn>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                        <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
+                                          Path=DataContext.OpenEditTrainingDialogCommand}"
+                                          CommandParameter="{Binding TrainingId}"
+                                          Header="Изменить"
+                                          Icon="{materialDesign:PackIcon Kind=Edit}"/>
+                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
+                                          Path=DataContext.OpenCopyTrainingDialogCommand}"
+                                          CommandParameter="{Binding TrainingId}"
+                                          Header="Копировать"
+                                          Icon="{materialDesign:PackIcon Kind=ContentCopy}"/>
+                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
+                                          Path=DataContext.DeleteTrainingCommand}"
+                                          CommandParameter="{Binding TrainingId}"
+                                          Header="Удалить"
+                                          Foreground="Crimson"
+                                          Icon="{materialDesign:PackIcon Kind=Delete}"/>
+                                        </MenuItem>
+                                    </Menu>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </materialDesign:DialogHost>
 </UserControl>

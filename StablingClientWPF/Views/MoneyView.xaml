@@ -88,8 +88,8 @@
                             <ListView.View>
                                 <GridView materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2"
                                           ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                    <GridViewColumn DisplayMemberBinding="{Binding TrainerId}" Header="Ответственный"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding MoneyAccountId}" Header="Счёт"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding TrainerName}" Header="Ответственный"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AccountName}" Header="Счёт"/>
                                     <GridViewColumn DisplayMemberBinding="{Binding Amount}" Header="Сумма"/>
                                     <GridViewColumn>
                                         <GridViewColumn.CellTemplate>
@@ -97,10 +97,15 @@
                                                 <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                                     <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                         <MenuItem Command="{Binding ElementName=MoneyUserControl,
-                                                             Path=DataContext.OpenEditTransactionCommand}"
-                                                             CommandParameter="{Binding MoneyTransactionId}"
-                                                             Header="Изменить"
-                                                             Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                            Path=DataContext.OpenEditMoneyTransactionDialogCommand}"
+                                                            CommandParameter="{Binding MoneyTransactionId}"
+                                                            Header="Изменить"
+                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                        <MenuItem Command="{Binding ElementName=MoneyUserControl,
+                                                            Path=DataContext.DeleteMoneyTransactionCommand}"
+                                                            CommandParameter="{Binding MoneyTransactionId}"
+                                                            Header="Удалить" Foreground="Crimson"
+                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
                                                     </MenuItem>
                                                 </Menu>
                                             </DataTemplate>
@@ -210,6 +215,11 @@
                                                             CommandParameter="{Binding BusinessOperationId}"
                                                             Header="Изменить"
                                                             Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                        <MenuItem Command="{Binding ElementName=MoneyUserControl,
+                                                            Path=DataContext.DeleteBusinessOperationCommand}"
+                                                            CommandParameter="{Binding BusinessOperationId}"
+                                                            Header="Удалить" Foreground="Crimson"
+                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
                                                     </MenuItem>
                                                 </Menu>
                                             </DataTemplate>
@@ -232,10 +242,15 @@
                                                 <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                                     <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                         <MenuItem Command="{Binding ElementName=MoneyUserControl,
-                                                             Path=DataContext.OpenEditOperationsDialogCommand}"
-                                                             CommandParameter="{Binding BusinessOperationId}"
-                                                             Header="Изменить"
-                                                             Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                            Path=DataContext.OpenEditOperationsDialogCommand}"
+                                                            CommandParameter="{Binding BusinessOperationId}"
+                                                            Header="Изменить"
+                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                        <MenuItem Command="{Binding ElementName=MoneyUserControl,
+                                                            Path=DataContext.DeleteBusinessOperationCommand}"
+                                                            CommandParameter="{Binding BusinessOperationId}"
+                                                            Header="Удалить" Foreground="Crimson"
+                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
                                                     </MenuItem>
                                                 </Menu>
                                             </DataTemplate>
@@ -320,8 +335,13 @@
                                                     <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                         <MenuItem Command="{Binding ElementName=MoneyUserControl,
                                                             Path=DataContext.OpenEditBalanceReplenishmentDialogCommand}"
-                                                            CommandParameter="{Binding BusinessOperationId}"
+                                                            CommandParameter="{Binding BalanceReplenishmentId}"
                                                             Header="Изменить"
+                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                        <MenuItem Command="{Binding ElementName=MoneyUserControl,
+                                                            Path=DataContext.DeleteBalanceReplenishmentCommand}"
+                                                            CommandParameter="{Binding BalanceReplenishmentId}"
+                                                            Header="Удалить" Foreground="Crimson"
                                                             Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
                                                     </MenuItem>
                                                 </Menu>

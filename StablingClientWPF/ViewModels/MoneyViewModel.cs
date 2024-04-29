@@ -119,7 +119,7 @@ namespace StablingClientWPF.ViewModels
         private async Task GetBalanceReplenishments()
         {
             BalanceReplenishments = new ObservableCollection<BalanceReplenishmentForShow>(
-                await _balanceReplenishmentsHttpClient.GetByDateForShowAsync(CurrentDate));
+                await _balanceReplenishmentsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
         private BalanceReplenishment _CurrentReplenishment;
@@ -214,6 +214,26 @@ namespace StablingClientWPF.ViewModels
             }
             CloseBalanceReplenishmentDialog();
             ClearCurrentReplenishment();
+        }
+
+        public AsyncDelegateCommand DeleteBalanceReplenishmentCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await DeleteBalanceReplenishment((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task DeleteBalanceReplenishment(int id)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                await _balanceReplenishmentsHttpClient.DeleteAsync(id);
+                BalanceReplenishmentForShow oldReplenishment = BalanceReplenishments.Where(op => op.BalanceReplenishmentId == id).FirstOrDefault();
+                BalanceReplenishments.Remove(oldReplenishment);
+            }
         }
 
         #endregion
@@ -382,10 +402,9 @@ namespace StablingClientWPF.ViewModels
                 }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-
         private async Task DeleteBusinessOperation(int id)
         {
-            MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNoCancel);
+            MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 await _businessOperationsHttpClient.DeleteAsync(id);
@@ -400,10 +419,6 @@ namespace StablingClientWPF.ViewModels
                     ConsumptionBusinessOperations.Remove(oldOperation);
                 }
             }
-            else
-            {
-                //...
-            }
         }
 
         private void ClearCurrentBusinessOperation()
@@ -415,8 +430,8 @@ namespace StablingClientWPF.ViewModels
 
         #region MoneyTransactions
 
-        private ObservableCollection<MoneyTransaction> _MoneyTransactions;
-        public ObservableCollection<MoneyTransaction> MoneyTransactions
+        private ObservableCollection<MoneyTransactionForShow> _MoneyTransactions;
+        public ObservableCollection<MoneyTransactionForShow> MoneyTransactions
         {
             get { return _MoneyTransactions; }
             set { _MoneyTransactions = value; OnPropertyChanged(); }
@@ -432,8 +447,8 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task GetMoneyTransactions()
         {
-            MoneyTransactions = new ObservableCollection<MoneyTransaction>(
-                await _moneyTransactionsHttpClient.GetByDateAsync(CurrentDate));
+            MoneyTransactions = new ObservableCollection<MoneyTransactionForShow>(
+                await _moneyTransactionsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
         private MoneyTransaction _CurrentTransaction;
@@ -480,6 +495,23 @@ namespace StablingClientWPF.ViewModels
             IsMoneyTransactionsDialogOpen = false;
         }
 
+        public DelegateCommand OpenEditMoneyTransactionDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenEditMoneyTransactionDialog((int)o);
+                });
+            }
+        }
+        private async void OpenEditMoneyTransactionDialog(int id)
+        {
+            CurrentTransaction = await _moneyTransactionsHttpClient.GetAsync(id);
+            OpenMoneyTransactionsDialog();
+        }
+
+
         public AsyncDelegateCommand ProcessTransactionCommand
         {
             get
@@ -493,15 +525,15 @@ namespace StablingClientWPF.ViewModels
             if (CurrentTransaction.MoneyTransactionId == 0)
             {
                 await _moneyTransactionsHttpClient.CreateAsync(CurrentTransaction);
-                MoneyTransactions.Add(CurrentTransaction);
+                await GetMoneyTransactions();
             }
             else
             {
                 await _moneyTransactionsHttpClient.UpdateAsync(CurrentTransaction);
-                MoneyTransaction oldTransaction = MoneyTransactions.Where(t =>
+                MoneyTransactionForShow oldTransaction = MoneyTransactions.Where(t =>
                 t.MoneyTransactionId == CurrentTransaction.MoneyTransactionId).FirstOrDefault();
                 MoneyTransactions.Remove(oldTransaction);
-                MoneyTransactions.Add(CurrentTransaction);
+                MoneyTransactions.Add(await _moneyTransactionsHttpClient.GetForShowAsync(CurrentTransaction.MoneyTransactionId));
             }
             ClearCurrentMoneyTransaction();
             CloseMoneyTransactionsDialog();
@@ -510,6 +542,26 @@ namespace StablingClientWPF.ViewModels
         private void ClearCurrentMoneyTransaction()
         {
             CurrentTransaction = new MoneyTransaction() { TransactionDate = CurrentDate };
+        }
+
+        public AsyncDelegateCommand DeleteMoneyTransactionCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await DeleteMoneyTransaction((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task DeleteMoneyTransaction(int id)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                await _moneyTransactionsHttpClient.DeleteAsync(id);
+                MoneyTransactionForShow oldTransaction = MoneyTransactions.Where(op => op.MoneyTransactionId == id).FirstOrDefault();
+                MoneyTransactions.Remove(oldTransaction);
+            }
         }
         #endregion
 

@@ -104,5 +104,11 @@ namespace StablingApi.Repositories
                 trainingForUpdate.TrainingDateTime = dateTime;
             }
         }
+
+        public async Task<TrainingForShow> GetForShow(int id)
+        {
+            TrainingsContext context = _contextFactory.CreateDbContext();
+            return await context.TrainingsForShow.Where(tr => tr.TrainingId == id).FirstAsync();
+        }
     }
 }

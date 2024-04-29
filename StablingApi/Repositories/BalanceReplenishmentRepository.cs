@@ -48,7 +48,7 @@ namespace StablingApi.Repositories
             return await context.BalanceReplenishments.Where(r => r.ReplenishmentDate == date).ToListAsync();
         }
 
-        public async Task<IEnumerable<BalanceReplenishmentForShow>> GetByDateForShow(DateTime date)
+        public async Task<IEnumerable<BalanceReplenishmentForShow>> GetForShowByDate(DateTime date)
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             return await context.BalanceReplenishmentsForShow.Where(br =>

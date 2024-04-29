@@ -85,5 +85,19 @@ namespace StablingApi.Controllers
             await _repository.Update(operation);
             return Ok(operation);
         }
+
+        /// <summary>
+        ///     Удаление бизнес-операции
+        /// </summary>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            BusinessOperation operationForDelete = await _repository.Get(id);
+            if (operationForDelete == null)
+                return NotFound();
+            await _repository.Delete(id);
+            return Ok(id);
+        }
     }
 }

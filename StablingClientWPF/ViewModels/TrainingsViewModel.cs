@@ -18,7 +18,11 @@ namespace StablingClientWPF.ViewModels
         public DateTime CurrentDate
         {
             get { return _CurrentDate; }
-            set { _CurrentDate = value; OnPropertyChanged(); GetTrainings(); }
+            set { _CurrentDate = value; OnPropertyChanged(); 
+                GetTrainings();
+                ClearCurrentTraining();
+                CloseTrainingDialog();
+            }
         }
 
         private ObservableCollection<TrainingForShow> _Trainings;
@@ -40,9 +44,83 @@ namespace StablingClientWPF.ViewModels
             _trainingTypesHttpClient = trainingTypesHttpClient;
             _horsesHttpClient = horsesHttpClient;
 
-
-
             CurrentDate = DateTime.Now.Date;
+
+            GetTrainers();
+            GetClients();
+            GetTrainingTypes();
+            GetHorses();
+        }
+
+        #region Справочники
+
+        private ObservableCollection<Trainer> _Trainers;
+        public ObservableCollection<Trainer> Trainers
+        {
+            get { return _Trainers; }
+            set { _Trainers = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<Client> _Clients;
+        public ObservableCollection<Client> Clients
+        {
+            get { return _Clients; }
+            set { _Clients = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<TrainingType> _TrainingTypes;
+        public ObservableCollection<TrainingType> TrainingTypes
+        {
+            get { return _TrainingTypes; }
+            set { _TrainingTypes = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<Horse> _Horses;
+        public ObservableCollection<Horse> Horses
+        {
+            get { return _Horses; }
+            set { _Horses = value; OnPropertyChanged(); }
+        }
+
+        private async Task GetTrainers()
+        {
+            Trainers = new ObservableCollection<Trainer>(await _trainersHttpClient.GetAllAsync());
+        }
+
+        private async Task GetClients()
+        {
+            Clients = new ObservableCollection<Client>(await _clientsHttpClient.GetAllAsync());
+        }
+
+        private async Task GetTrainingTypes()
+        {
+            TrainingTypes = new ObservableCollection<TrainingType>(await _trainingTypesHttpClient.GetAllAsync());
+        }
+
+        private async Task GetHorses()
+        {
+            Horses = new ObservableCollection<Horse>(await _horsesHttpClient.GetAllAsync());
+        }
+
+        #endregion
+
+        private bool _IsTrainingsDialogOpen = false;
+        public bool IsTrainingsDialogOpen
+        {
+            get { return _IsTrainingsDialogOpen; }
+            set { _IsTrainingsDialogOpen = value; OnPropertyChanged(); }
+        }
+
+        private Training _CurrentTraining;
+        public Training CurrentTraining
+        {
+            get { return _CurrentTraining; }
+            set { _CurrentTraining = value; OnPropertyChanged(); }
+        }
+
+        private void ClearCurrentTraining()
+        {
+            CurrentTraining = new Training() { TrainingDateTime = CurrentDate.Date };
         }
 
         public AsyncDelegateCommand GetTrainingsCommand
@@ -57,72 +135,187 @@ namespace StablingClientWPF.ViewModels
             Trainings = new ObservableCollection<TrainingForShow>(await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
+        public DelegateCommand OpenTrainingDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenTrainingDialog();
+                });
+            }
+        }
+        private void OpenTrainingDialog()
+        {
+            IsTrainingsDialogOpen = true;
+        }
+
+        public DelegateCommand CloseTrainingDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    CloseTrainingDialog();
+                });
+            }
+        }
+        private void CloseTrainingDialog()
+        {
+            IsTrainingsDialogOpen = false;
+        }
+
+        public DelegateCommand OpenEditTrainingDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenEditTrainingDialog((int)o);
+                });
+            }
+        }
+        private async void OpenEditTrainingDialog(int id)
+        {
+            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
+            OpenTrainingDialog();
+        }
+
+        public DelegateCommand OpenCopyTrainingDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenCopyTrainingDialog((int)o);
+                });
+            }
+        }
+        private async void OpenCopyTrainingDialog(int id)
+        {
+            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
+            CurrentTraining.TrainingId = 0;
+            OpenTrainingDialog();
+        }
+
+        public AsyncDelegateCommand ProcessTrainingCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await ProcessTraining();
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task ProcessTraining()
+        {
+            if (CurrentTraining.TrainingId == 0)
+            {
+                await _trainingsHttpClient.CreateAsync(CurrentTraining);
+                await GetTrainings();
+            }
+            else
+            {
+                await _trainingsHttpClient.UpdateAsync(CurrentTraining);
+                TrainingForShow oldTraining = Trainings.Where(
+                    tr => tr.TrainingId != CurrentTraining.TrainingId).First();
+                Trainings.Remove(oldTraining);
+                Trainings.Add(
+                    await _trainingsHttpClient.GetForShowAsync(
+                        CurrentTraining.TrainingId));
+            }
+            CloseTrainingDialog();
+            ClearCurrentTraining();
+        }
+
         public AsyncDelegateCommand DeleteTrainingCommand
         {
             get
             {
-                return new AsyncDelegateCommand(async o => { await DeleteTraining((int)o); }, ex => MessageBox.Show(ex.ToString()));
+                return new AsyncDelegateCommand(async o => {
+                    await DeleteTraining((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task DeleteTraining(int id)
         {
-            await _trainingsHttpClient.DeleteAsync(id);
-            Trainings.Remove(Trainings.Where(t => t.TrainingId == id).First());
-        }
-
-        public DelegateCommand OpenCopyTrainingCommand
-        {
-            get
+            MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
-                return new DelegateCommand(o => {
-                    OpenCopyTraining((int)o);
-                });
+                await _trainingsHttpClient.DeleteAsync(id);
+                TrainingForShow oldTraining = Trainings.Where(tr => tr.TrainingId == id).FirstOrDefault();
+                Trainings.Remove(oldTraining);
             }
         }
-        private async Task OpenCopyTraining(int id)
-        {
-            Training trainingForCopy = await _trainingsHttpClient.GetAsync(id);
-            trainingForCopy.TrainingId = 0;
-            OpenModalWindow(trainingForCopy);
-        }
 
-        public DelegateCommand OpenCreateTrainingCommand
-        {
-            get
-            {
-                return new DelegateCommand(o => {
-                    OpenCreateTraining();
-                });
-            }
-        }
-        private void OpenCreateTraining()
-        {
-            OpenModalWindow(new Training() { TrainingDateTime=CurrentDate});
-        }
 
-        public DelegateCommand OpenEditTrainingCommand
-        {
-            get
-            {
-                return new DelegateCommand(o => {
-                    OpenEditTraining((int)o);
-                });
-            }
-        }
-        private async void OpenEditTraining(int id)
-        {
-            Training trainingForEdit = await _trainingsHttpClient.GetAsync(id);
-            OpenModalWindow(trainingForEdit);
-        }
 
-        private void OpenModalWindow(Training trainingForProcess)
-        {
-            EditTrainingViewModel viewModel = new (_clientsHttpClient,
-                _trainersHttpClient,_trainingsHttpClient,_trainingTypesHttpClient, _horsesHttpClient);
-            viewModel.CurrentTraining = trainingForProcess;
-            Window modalWindow = new TrainingsModalWindow(viewModel);
-            modalWindow.ShowDialog();
-        }
+        //public AsyncDelegateCommand DeleteTrainingCommand
+        //{
+        //    get
+        //    {
+        //        return new AsyncDelegateCommand(async o => { await DeleteTraining((int)o); }, ex => MessageBox.Show(ex.ToString()));
+        //    }
+        //}
+        //private async Task DeleteTraining(int id)
+        //{
+        //    await _trainingsHttpClient.DeleteAsync(id);
+        //    Trainings.Remove(Trainings.Where(t => t.TrainingId == id).First());
+        //}
+
+        //public DelegateCommand OpenCopyTrainingCommand
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand(o => {
+        //            OpenCopyTraining((int)o);
+        //        });
+        //    }
+        //}
+        //private async Task OpenCopyTraining(int id)
+        //{
+        //    Training trainingForCopy = await _trainingsHttpClient.GetAsync(id);
+        //    trainingForCopy.TrainingId = 0;
+        //    OpenModalWindow(trainingForCopy);
+        //}
+
+        //public DelegateCommand OpenCreateTrainingCommand
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand(o => {
+        //            OpenCreateTraining();
+        //        });
+        //    }
+        //}
+        //private void OpenCreateTraining()
+        //{
+        //    OpenModalWindow(new Training() { TrainingDateTime=CurrentDate});
+        //}
+
+        //public DelegateCommand OpenEditTrainingCommand
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand(o => {
+        //            OpenEditTraining((int)o);
+        //        });
+        //    }
+        //}
+        //private async void OpenEditTraining(int id)
+        //{
+        //    Training trainingForEdit = await _trainingsHttpClient.GetAsync(id);
+        //    OpenModalWindow(trainingForEdit);
+        //}
+
+        //private void OpenModalWindow(Training trainingForProcess)
+        //{
+        //    EditTrainingViewModel viewModel = new (_clientsHttpClient,
+        //        _trainersHttpClient,_trainingsHttpClient,_trainingTypesHttpClient, _horsesHttpClient);
+        //    viewModel.CurrentTraining = trainingForProcess;
+        //    Window modalWindow = new TrainingsModalWindow(viewModel);
+        //    modalWindow.ShowDialog();
+        //}
 
     }
 }
