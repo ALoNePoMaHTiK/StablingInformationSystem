@@ -105,7 +105,7 @@ namespace StablingClientWPF.ViewModels
         private async void GetClients()
         {
             Clients = new ObservableCollection<Client>(
-                await _clientsHttpClient.GetAllAsync());
+                await _clientsHttpClient.GetByAvailabilityAsync(true));
         }
 
         #region BalanceReplenishments

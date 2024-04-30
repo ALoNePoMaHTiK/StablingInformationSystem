@@ -62,20 +62,20 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Command="{Binding ElementName=ClientsListView, Path=DataContext.OpenEditClientCommand}"
-                                            CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/EditIcon.png" Width="25" Height="25"/>
-                                        </Button>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Command="{Binding ElementName=ClientsListView, Path=DataContext.ChangeAvailabilityCommand}"
-                                            CommandParameter="{Binding ClientId}">
-                                            <Image Source="/Icons/ActivateIcon.png" Width="25" Height="25"/>
-                                        </Button>
+                                        <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                            <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                <MenuItem Command="{Binding ElementName=ClientsListView,
+                                                  Path=DataContext.OpenEditClientCommand}"
+                                                  CommandParameter="{Binding ClientId}"
+                                                  Header="Изменить"
+                                                  Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                <MenuItem Command="{Binding ElementName=ClientsListView,
+                                                  Path=DataContext.ChangeAvailabilityCommand}"
+                                                  CommandParameter="{Binding ClientId}"
+                                                  Header="Скрыть"
+                                                  Icon="{materialDesign:PackIcon Kind=AccountCheckOutline}"/>
+                                            </MenuItem>
+                                        </Menu>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

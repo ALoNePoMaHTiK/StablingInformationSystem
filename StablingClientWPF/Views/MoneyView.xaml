@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+             xmlns:valid="clr-namespace:StablingClientWPF.Validation"
              d:DataContext="{d:DesignInstance vm:MoneyViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1000" x:Name="MoneyUserControl">
@@ -21,7 +22,13 @@
         <TabControl Grid.Row="1"
                     materialDesign:ColorZoneAssist.Mode="SecondaryDark"
                     Style="{StaticResource MaterialDesignFilledTabControl}">
-            <TabItem Header="Транзакции">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CashPlus"/>
+                        <TextBlock Text="Транзакции"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <materialDesign:DialogHost Grid.Column="0" Grid.Row="1" IsOpen="{Binding IsMoneyTransactionsDialogOpen}">
                     <materialDesign:DialogHost.DialogContent>
                         <StackPanel Margin="20" Width="250">
@@ -49,9 +56,20 @@
                                 ItemsSource="{Binding Trainers}" 
                                 SelectedValue="{Binding CurrentTransaction.TrainerId}" 
                                 DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
-                            <TextBox Text="{Binding CurrentTransaction.Amount}" 
+                            <TextBox
                                 materialDesign:HintAssist.Hint="Сумма"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                <TextBox.Text>
+                                    <Binding
+                                        Path="CurrentTransaction.Amount"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <valid:NotEmptyValidationRule
+                                              ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                             <TextBox IsEnabled="False" Text="{Binding CurrentTransaction.TransactionDate,
                                 StringFormat=dd.MM.yyyy}"
                                 materialDesign:HintAssist.Hint="Дата"
@@ -117,7 +135,13 @@
                     </Grid>
                 </materialDesign:DialogHost>
             </TabItem>
-            <TabItem Header="Бизнес-операции">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CashClock"/>
+                        <TextBlock Text="Бизнес-операции"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <materialDesign:DialogHost Grid.Column="1" Grid.Row="1" IsOpen="{Binding IsBusinessOperationsDialogOpen}">
                     <materialDesign:DialogHost.DialogContent>
                         <StackPanel Margin="20" Width="250">
@@ -157,9 +181,17 @@
                                 StringFormat=dd.MM.yyyy}"
                                 materialDesign:HintAssist.Hint="Дата"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-                            <TextBox Text="{Binding CurrentBusinessOperation.Amount}"
+                            <TextBox
                                 materialDesign:HintAssist.Hint="Сумма"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                                <TextBox.Text>
+                                    <Binding Path="CurrentBusinessOperation.Amount" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <valid:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                             <TextBox Text="{Binding CurrentBusinessOperation.Comment}"
                                 materialDesign:HintAssist.Hint="Примечание"
                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
@@ -265,7 +297,7 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Cash"/>
+                        <materialDesign:PackIcon Kind="TrendingUp"/>
                         <TextBlock Text="Пополнения"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -351,6 +383,28 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
+                    </Grid>
+                </materialDesign:DialogHost>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="TrendingDown"/>
+                        <TextBlock Text="Списания"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <materialDesign:DialogHost>
+                    <materialDesign:DialogHost.DialogContent>
+                        <StackPanel Margin="20" Width="250">
+                           
+                        </StackPanel>
+                    </materialDesign:DialogHost.DialogContent>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
                     </Grid>
                 </materialDesign:DialogHost>
             </TabItem>

@@ -90,7 +90,7 @@
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <DatePicker
+            <DatePicker 
               Style="{StaticResource MaterialDesignOutlinedDatePicker}"
               SelectedDate="{Binding CurrentDate}"/>
             <Button Grid.Row="1" Command="{Binding OpenTrainingDialogCommand}"

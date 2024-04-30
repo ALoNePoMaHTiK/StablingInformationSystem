@@ -89,7 +89,7 @@ namespace StablingClientWPF.ViewModels
 
         private async Task GetClients()
         {
-            Clients = new ObservableCollection<Client>(await _clientsHttpClient.GetAllAsync());
+            Clients = new ObservableCollection<Client>(await _clientsHttpClient.GetByAvailabilityAsync(true));
         }
 
         private async Task GetTrainingTypes()

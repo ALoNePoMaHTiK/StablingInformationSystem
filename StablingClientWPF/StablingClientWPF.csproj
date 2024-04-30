@@ -9,13 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Icons\ActivateIcon.png" />
-    <None Remove="Icons\DeactivateIcon.png" />
-    <None Remove="Icons\EditIcon.png" />
-    <None Remove="Icons\RefreshIcon.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
@@ -23,13 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StablingApiClient\StablingApiClient.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Icons\ActivateIcon.png" />
-    <Resource Include="Icons\DeactivateIcon.png" />
-    <Resource Include="Icons\EditIcon.png" />
-    <Resource Include="Icons\RefreshIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
