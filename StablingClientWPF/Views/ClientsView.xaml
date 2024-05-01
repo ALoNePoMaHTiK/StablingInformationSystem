@@ -6,83 +6,155 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:ClientsViewModel}"
+             x:Name="ClientsUserControl"
              mc:Ignorable="d">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Height="50" HorizontalAlignment="Center">
-            <Button Content="Добавить" Command="{Binding OpenCreateClientCommand}"/>
-            <Button Content="Обновить" Command="{Binding GetClientsCommand}"/>
-        </StackPanel>
-        <TabControl Grid.Row="1">
-            <TabItem Header="Активные" Height="Auto">
-                <ListView x:Name="ClientsListView" ItemsSource="{Binding ActiveClients}" Height="Auto">
-                    <ListView.View>
-                        <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            <GridViewColumn DisplayMemberBinding="{Binding ClientId}">№</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding FullName}">ФИО</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding PhoneNumber}">Номер телефона</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Balance}">Баланс</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Email}">Email</GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
+    <UserControl.Resources>
+        <Thickness x:Key="Margin">10</Thickness>
+    </UserControl.Resources>
+    <materialDesign:DialogHost IsOpen="{Binding IsClientsDialogOpen}">
+        <materialDesign:DialogHost.DialogContent>
+            <StackPanel Margin="20" Width="250">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Margin" Value="{StaticResource Margin}"/>
+                    </Style>
+                    <Style TargetType="{x:Type ComboBox}">
+                        <Setter Property="Margin" Value="{StaticResource Margin}"/>
+                    </Style>
+                </StackPanel.Resources>
+                <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+                    materialDesign:HintAssist.Hint="Тренер"
+                    materialDesign:HintAssist.HintOpacity=".26"
+                    IsEditable="True"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    ItemsSource="{Binding Trainers}" 
+                    SelectedValue="{Binding CurrentClient.TrainerId}" 
+                    DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+                <TextBox Text="{Binding CurrentClient.FullName}"
+                    materialDesign:HintAssist.Hint="ФИО"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <TextBox Text="{Binding CurrentClient.PhoneNumber}"
+                    materialDesign:HintAssist.Hint="Номер телефона"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <TextBox Text="{Binding CurrentClient.Email}"
+                    materialDesign:HintAssist.Hint="Email"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                    <Button IsDefault="True" Command="{Binding ProcessClientCommand}" Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check"/>
+                            <TextBlock Text="Принять"/>
+                        </StackPanel>
+                    </Button>
+                    <Button IsCancel="True" Command="{Binding CloseClientDialogCommand}" Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close"/>
+                            <TextBlock Text="Отмена"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Command="{Binding OpenClientDialogCommand}"
+                VerticalAlignment="Center" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Add"/>
+                    <TextBlock Text="Добавить"/>
+                </StackPanel>
+            </Button>
+            <TabControl Grid.Row="1">
+                <TabItem Height="Auto">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountGroup"/>
+                            <TextBlock Text="Активные"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <DataGrid Grid.Row="2" AutoGenerateColumns="False"
+                        IsReadOnly="True"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        HeadersVisibility="All"
+                        ItemsSource="{Binding ActiveClients}">
+                        <DataGrid.Columns>
+                            <materialDesign:DataGridTextColumn Header="#" Binding="{Binding ClientId}" Width="50"/>
+                            <materialDesign:DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Баланс" Binding="{Binding Balance}" Width="100"/>
+                            <materialDesign:DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                            <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                             <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                                <MenuItem Command="{Binding ElementName=ClientsListView,
-                                                          Path=DataContext.OpenEditClientCommand}"
-                                                          CommandParameter="{Binding ClientId}"
-                                                          Header="Изменить"
-                                                          Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
-                                                <MenuItem Command="{Binding ElementName=ClientsListView,
-                                                          Path=DataContext.ChangeAvailabilityCommand}"
-                                                          CommandParameter="{Binding ClientId}"
-                                                          Header="Скрыть"
-                                                          Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
+                                                <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                                                    Path=DataContext.OpenEditClientDialogCommand}"
+                                                    CommandParameter="{Binding ClientId}"
+                                                    Header="Изменить"
+                                                    Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                                                    Path=DataContext.ChangeClientAvailabilityCommand}"
+                                                    CommandParameter="{Binding ClientId}"
+                                                    Header="Скрыть"
+                                                    Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
                                             </MenuItem>
                                         </Menu>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-            <TabItem Header="Архивные">
-                <ListView ItemsSource="{Binding InactiveClients}" >
-                    <ListView.View>
-                        <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            <GridViewColumn DisplayMemberBinding="{Binding ClientId}">№</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding FullName}">ФИО</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding PhoneNumber}">Номер телефона</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Balance}">Баланс</GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Email}">Email</GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountClock"/>
+                            <TextBlock Text="Архивные"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <DataGrid Grid.Row="2" AutoGenerateColumns="False"
+                            IsReadOnly="True"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            HeadersVisibility="All"
+                            ItemsSource="{Binding InactiveClients}">
+                        <DataGrid.Columns>
+                            <materialDesign:DataGridTextColumn Header="#" Binding="{Binding ClientId}" Width="50"/>
+                            <materialDesign:DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Баланс" Binding="{Binding Balance}" Width="100"/>
+                            <materialDesign:DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                            <DataGridTemplateColumn Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                             <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                                <MenuItem Command="{Binding ElementName=ClientsListView,
-                                                  Path=DataContext.OpenEditClientCommand}"
-                                                  CommandParameter="{Binding ClientId}"
-                                                  Header="Изменить"
-                                                  Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
-                                                <MenuItem Command="{Binding ElementName=ClientsListView,
-                                                  Path=DataContext.ChangeAvailabilityCommand}"
-                                                  CommandParameter="{Binding ClientId}"
-                                                  Header="Скрыть"
-                                                  Icon="{materialDesign:PackIcon Kind=AccountCheckOutline}"/>
+                                                <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                                                    Path=DataContext.OpenEditClientDialogCommand}"
+                                                    CommandParameter="{Binding ClientId}"
+                                                    Header="Изменить"
+                                                    Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                                                    Path=DataContext.ChangeClientAvailabilityCommand}"
+                                                    CommandParameter="{Binding ClientId}"
+                                                    Header="Скрыть"
+                                                    Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
                                             </MenuItem>
                                         </Menu>
                                     </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-        </TabControl>
-    </Grid>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </materialDesign:DialogHost>
 </UserControl>

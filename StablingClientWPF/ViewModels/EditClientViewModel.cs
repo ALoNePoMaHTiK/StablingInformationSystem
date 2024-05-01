@@ -28,7 +28,6 @@ namespace StablingClientWPF.ViewModels
             get { return _Trainers; }
             set { _Trainers = value; OnPropertyChanged(); }
         }
-
         private async Task GetTrainers()
         {
             Trainers = new ObservableCollection<Trainer>(await _trainersHttpClient.GetAllAsync());

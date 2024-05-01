@@ -102,36 +102,39 @@
                                 <TextBlock Text="Добавить"/>
                             </StackPanel>
                         </Button>
-                        <ListView Grid.Row="1" x:Name="TransactionsListView" ItemsSource="{Binding MoneyTransactions}" Height="Auto">
-                            <ListView.View>
-                                <GridView materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2"
-                                          ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                    <GridViewColumn DisplayMemberBinding="{Binding TrainerName}" Header="Ответственный"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding AccountName}" Header="Счёт"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Amount}" Header="Сумма"/>
-                                    <GridViewColumn>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
-                                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                                        <MenuItem Command="{Binding ElementName=MoneyUserControl,
-                                                            Path=DataContext.OpenEditMoneyTransactionDialogCommand}"
-                                                            CommandParameter="{Binding MoneyTransactionId}"
-                                                            Header="Изменить"
-                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
-                                                        <MenuItem Command="{Binding ElementName=MoneyUserControl,
-                                                            Path=DataContext.DeleteMoneyTransactionCommand}"
-                                                            CommandParameter="{Binding MoneyTransactionId}"
-                                                            Header="Удалить" Foreground="Crimson"
-                                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
-                                                    </MenuItem>
-                                                </Menu>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            IsReadOnly="True"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
+                            HeadersVisibility="All"
+                            ItemsSource="{Binding MoneyTransactions}">
+                            <DataGrid.Columns>
+                                <materialDesign:DataGridTextColumn Header="Ответственный" Binding="{Binding TrainerName}" Width="*"/>
+                                <materialDesign:DataGridTextColumn Header="Счёт" Binding="{Binding AccountName}" Width="*"/>
+                                <materialDesign:DataGridTextColumn Header="Сумма" Binding="{Binding Amount}" Width="*"/>
+                                <DataGridTemplateColumn Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                                <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                    <MenuItem Command="{Binding ElementName=MoneyUserControl,
+                                                        Path=DataContext.OpenEditMoneyTransactionDialogCommand}"
+                                                        CommandParameter="{Binding MoneyTransactionId}"
+                                                        Header="Изменить"
+                                                        Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                    <MenuItem Command="{Binding ElementName=MoneyUserControl,
+                                                        Path=DataContext.DeleteMoneyTransactionCommand}"
+                                                        CommandParameter="{Binding MoneyTransactionId}"
+                                                        Header="Удалить" Foreground="Crimson"
+                                                        Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                </MenuItem>
+                                            </Menu>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
                 </materialDesign:DialogHost>
             </TabItem>

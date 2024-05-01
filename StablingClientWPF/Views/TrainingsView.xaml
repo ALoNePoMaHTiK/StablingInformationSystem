@@ -100,45 +100,49 @@
                     <TextBlock Text="Добавить"/>
                 </StackPanel>
             </Button>
-            <ListView Grid.Row="2" ItemsSource="{Binding Trainings, IsAsync=True}">
-                <ListView.View>
-                    <GridView ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <GridViewColumn DisplayMemberBinding="{Binding TrainingId}">№</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding TypeName}">Тип</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding TrainerName}">Тренер</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding ClientName}">Клиент</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding HorseName}">Лошадь</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding TrainingStart, StringFormat=HH-mm}">Начало</GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding TrainingFinish, StringFormat=HH-mm}">Конец</GridViewColumn>
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
-                                        <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                          Path=DataContext.OpenEditTrainingDialogCommand}"
-                                          CommandParameter="{Binding TrainingId}"
-                                          Header="Изменить"
-                                          Icon="{materialDesign:PackIcon Kind=Edit}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                          Path=DataContext.OpenCopyTrainingDialogCommand}"
-                                          CommandParameter="{Binding TrainingId}"
-                                          Header="Копировать"
-                                          Icon="{materialDesign:PackIcon Kind=ContentCopy}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                          Path=DataContext.DeleteTrainingCommand}"
-                                          CommandParameter="{Binding TrainingId}"
-                                          Header="Удалить"
-                                          Foreground="Crimson"
-                                          Icon="{materialDesign:PackIcon Kind=Delete}"/>
-                                        </MenuItem>
-                                    </Menu>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <DataGrid Grid.Row="2" AutoGenerateColumns="False"
+                IsReadOnly="True"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                HeadersVisibility="All"
+                ItemsSource="{Binding Trainings}">
+                <DataGrid.Columns>
+                    <materialDesign:DataGridTextColumn Header="#" Binding="{Binding TrainingId}" Width="50"/>
+                    <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
+                    <materialDesign:DataGridTextColumn Header="Тренер" Binding="{Binding TrainerName}" Width="*"/>
+                    <materialDesign:DataGridTextColumn Header="Клиент" Binding="{Binding ClientName}" Width="*"/>
+                    <materialDesign:DataGridTextColumn Header="Лошадь" Binding="{Binding HorseName}" Width="100"/>
+                    <materialDesign:DataGridTextColumn Header="Начало" Binding="{Binding TrainingStart, StringFormat=HH-mm}" Width="100"/>
+                    <materialDesign:DataGridTextColumn Header="Конец" Binding="{Binding TrainingFinish, StringFormat=HH-mm}" Width="100"/>
+                    <DataGridTemplateColumn Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                        <MenuItem Command="{Binding ElementName=TrainingsUserControl,
+                                              Path=DataContext.OpenEditTrainingDialogCommand}"
+                                              CommandParameter="{Binding TrainingId}"
+                                              Header="Изменить"
+                                              Icon="{materialDesign:PackIcon Kind=Edit}"/>
+                                        <MenuItem Command="{Binding ElementName=TrainingsUserControl,
+                                              Path=DataContext.OpenCopyTrainingDialogCommand}"
+                                              CommandParameter="{Binding TrainingId}"
+                                              Header="Копировать"
+                                              Icon="{materialDesign:PackIcon Kind=ContentCopy}"/>
+                                        <MenuItem Command="{Binding ElementName=TrainingsUserControl,
+                                              Path=DataContext.DeleteTrainingCommand}"
+                                              CommandParameter="{Binding TrainingId}"
+                                              Header="Удалить"
+                                              Foreground="Crimson"
+                                              Icon="{materialDesign:PackIcon Kind=Delete}"/>
+                                    </MenuItem>
+                                </Menu>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </materialDesign:DialogHost>
 </UserControl>
