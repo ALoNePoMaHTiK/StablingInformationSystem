@@ -1,5 +1,6 @@
 ﻿using StablingApiClient;
 using StablingClientWPF.Commands;
+using StablingClientWPF.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -108,13 +109,72 @@ namespace StablingClientWPF.ViewModels
                 await _clientsHttpClient.GetByAvailabilityAsync(true));
         }
 
+        private MoneyDayInfo _DayInfo = new MoneyDayInfo();
+        public MoneyDayInfo DayInfo
+        {
+            get => _DayInfo;
+            set { _DayInfo = value; OnPropertyChanged(); }
+        }
+
+        private void UpdateDayInfo()
+        {
+            if (BalanceReplenishments != null)
+                DayInfo.BalanceReplenishmentSum = BalanceReplenishments.Sum(br => br.Amount);
+            if (MoneyTransactions != null)
+                DayInfo.MoneyTransactionsSum = MoneyTransactions.Sum(mt => mt.Amount);
+        }
+
+        #region Взаимодействие с календарем
+
+        public DelegateCommand GetLastWeekCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>{ GetLastWeek();});
+            }
+        }
+        public DelegateCommand GetYesterdayCommand
+        {
+            get
+            {
+                return new DelegateCommand(o => { GetYesterday(); });
+            }
+        }
+        public DelegateCommand GetTodayCommand
+        {
+            get
+            {
+                return new DelegateCommand(o => { GetToday(); });
+            }
+        }
+        public DelegateCommand GetTomorrowCommand
+        {
+            get
+            {
+                return new DelegateCommand(o => { GetTomorrow(); });
+            }
+        }
+        public DelegateCommand GetNextWeekCommand
+        {
+            get
+            {
+                return new DelegateCommand(o => { GetNextWeek(); });
+            }
+        }
+        private void GetLastWeek() => CurrentDate = CurrentDate.Date.AddDays(-7);
+        private void GetYesterday() => CurrentDate = CurrentDate.Date.AddDays(-1);
+        private void GetToday() => CurrentDate = DateTime.Now;
+        private void GetTomorrow() => CurrentDate = CurrentDate.Date.AddDays(1);
+        private void GetNextWeek() => CurrentDate = CurrentDate.Date.AddDays(7);
+        #endregion
+
         #region BalanceReplenishments
 
         private ObservableCollection<BalanceReplenishmentForShow> _BalanceReplenishments;
         public ObservableCollection<BalanceReplenishmentForShow> BalanceReplenishments
         {
             get { return _BalanceReplenishments; }
-            set { _BalanceReplenishments = value; OnPropertyChanged(); }
+            set { _BalanceReplenishments = value; OnPropertyChanged(); UpdateDayInfo(); }
         }
         private async Task GetBalanceReplenishments()
         {
@@ -434,7 +494,7 @@ namespace StablingClientWPF.ViewModels
         public ObservableCollection<MoneyTransactionForShow> MoneyTransactions
         {
             get { return _MoneyTransactions; }
-            set { _MoneyTransactions = value; OnPropertyChanged(); }
+            set { _MoneyTransactions = value; OnPropertyChanged(); UpdateDayInfo(); }
         }
         public AsyncDelegateCommand GetMoneyTransactionsCommand
         {

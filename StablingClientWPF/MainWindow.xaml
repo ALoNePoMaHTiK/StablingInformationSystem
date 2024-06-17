@@ -12,8 +12,6 @@
         Style="{StaticResource MaterialDesignWindow}"
         d:DataContext="{d:DesignInstance vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
-        
-        
         Title="MainWindow" Height="800" Width="1400">
 
     <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"

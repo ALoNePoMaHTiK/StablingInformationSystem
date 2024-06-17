@@ -1,16 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StablingApiClient;
 using StablingClientWPF.ViewModels;
-using System.Configuration;
-using System.Data;
 using System.Net.Http;
 using System.Windows;
 
 namespace StablingClientWPF
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private ServiceProvider serviceProvider;
@@ -108,5 +103,4 @@ namespace StablingClientWPF
             mainWindow.Show();
         }
     }
-
 }

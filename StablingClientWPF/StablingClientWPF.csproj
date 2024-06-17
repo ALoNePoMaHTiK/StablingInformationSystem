@@ -18,8 +18,4 @@
     <ProjectReference Include="..\StablingApiClient\StablingApiClient.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

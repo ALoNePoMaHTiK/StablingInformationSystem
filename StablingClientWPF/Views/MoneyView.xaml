@@ -16,9 +16,38 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-        SelectedDate="{Binding CurrentDate}"/>
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                SelectedDate="{Binding CurrentDate}" Margin="5"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="5">
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Предыдущая неделя" 
+                        Command="{Binding GetLastWeekCommand}">
+                    <materialDesign:PackIcon Width="24" Height="24" Kind="ChevronDoubleLeft"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Вчера"
+                        Command="{Binding GetYesterdayCommand}">
+                    <materialDesign:PackIcon Width="24" Height="24" Kind="ChevronLeft"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Сегодня"
+                        Command="{Binding GetTodayCommand}">
+                    <materialDesign:PackIcon Width="24" Height="24" Kind="Calendar"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Завтра"
+                        Command="{Binding GetTomorrowCommand}">
+                    <materialDesign:PackIcon Width="24" Height="24" Kind="ChevronRight"/>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFloatingActionButton}" ToolTip="Следующая неделя"
+                        Command="{Binding GetNextWeekCommand}">
+                    <materialDesign:PackIcon Width="24" Height="24" Kind="ChevronDoubleRight"/>
+                </Button>
+            </StackPanel>
+        </Grid>
         <TabControl Grid.Row="1"
                     materialDesign:ColorZoneAssist.Mode="SecondaryDark"
                     Style="{StaticResource MaterialDesignFilledTabControl}">
@@ -412,5 +441,20 @@
                 </materialDesign:DialogHost>
             </TabItem>
         </TabControl>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="{Binding DayInfo.MoneyTransactionsSum}"/>
+                <TextBlock Text="Получено"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="{Binding DayInfo.BalanceReplenishmentSum}"/>
+                <TextBlock Text="Зачисленно"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

@@ -163,7 +163,7 @@ namespace StablingClientWPF.ViewModels
             {
                 await _clientsHttpClient.UpdateAsync(CurrentClient);
                 Client oldClient = ActiveClients.Where(c =>
-                c.ClientId == CurrentClient.ClientId).FirstOrDefault();
+                    c.ClientId == CurrentClient.ClientId).FirstOrDefault();
                 if (oldClient != null)
                 {
                     ActiveClients.Remove(oldClient);
@@ -172,7 +172,7 @@ namespace StablingClientWPF.ViewModels
                 else
                 {
                     oldClient = InactiveClients.Where(c =>
-                    c.ClientId == CurrentClient.ClientId).FirstOrDefault();
+                        c.ClientId == CurrentClient.ClientId).FirstOrDefault();
                     InactiveClients.Remove(oldClient);
                     InactiveClients.Add(CurrentClient);
                 }
@@ -184,57 +184,5 @@ namespace StablingClientWPF.ViewModels
         {
             CurrentClient = new Client();
         }
-
-
-
-
-        public DelegateCommand OpenCreateClientCommand
-        {
-            get
-            {
-                return new DelegateCommand(o => {
-                    OpenCreateClient();
-                });
-            }
-        }
-        private void OpenCreateClient()
-        {
-            OpenModalWindow(new Client());
-        }
-
-        public DelegateCommand OpenEditClientCommand
-        {
-            get
-            {
-                return new DelegateCommand(o => {
-                    OpenEditClient((int)o);
-                });
-            }
-        }
-        private void OpenEditClient(int id)
-        {
-            Client clientForEdit = ActiveClients.FirstOrDefault(o => o.ClientId == id);
-            if (clientForEdit == null)
-                clientForEdit = InactiveClients.Where(o => o.ClientId == id).First();
-            OpenModalWindow(clientForEdit);
-        }
-
-        private void OpenModalWindow(Client clientForProcess)
-        {
-            EditClientViewModel viewModel = new EditClientViewModel(_clientsHttpClient, _trainersHttpClient);
-            viewModel.CurrentClient = clientForProcess;
-            Window modalWindow = new ClientsModalWindow(viewModel);
-            modalWindow.ShowDialog();
-        }
-
-        public AsyncDelegateCommand GetClientsCommand
-        {
-            get
-            {
-                return new AsyncDelegateCommand(async o => { await GetClients(); }, ex => MessageBox.Show(ex.ToString()));
-            }
-        }
-
-
     }
 }
