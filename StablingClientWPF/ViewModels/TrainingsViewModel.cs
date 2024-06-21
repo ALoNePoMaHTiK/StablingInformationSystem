@@ -31,12 +31,14 @@ namespace StablingClientWPF.ViewModels
             set { _Trainings = value; OnPropertyChanged(); }
         }
 
-        public TrainingsViewModel(ClientsHttpClient clientsHttpClient,
+        public TrainingsViewModel(Mediator mediator, ClientsHttpClient clientsHttpClient,
             TrainersHttpClient trainersHttpClient, 
             TrainingsHttpClient trainingsHttpClient,
             TrainingTypesHttpClient trainingTypesHttpClient, 
             HorsesHttpClient horsesHttpClient)
         {
+            mediator.GetDayOperationsDate += OnDateUpdate;
+
             _clientsHttpClient = clientsHttpClient;
             _trainersHttpClient = trainersHttpClient;
             _trainingsHttpClient = trainingsHttpClient;
@@ -245,6 +247,11 @@ namespace StablingClientWPF.ViewModels
                 TrainingForShow oldTraining = Trainings.Where(tr => tr.TrainingId == id).FirstOrDefault();
                 Trainings.Remove(oldTraining);
             }
+        }
+
+        private void OnDateUpdate(DateTime newDate)
+        {
+            CurrentDate = newDate;
         }
     }
 }

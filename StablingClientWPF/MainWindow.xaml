@@ -50,32 +50,18 @@
         </TabItem>
         <TabItem  Width="100" Height="100">
             <TabItem.Header>
-                <StackPanel Width="Auto" Height="auto">
+                <StackPanel Width="auto" Height="auto">
                     <materialDesign:PackIcon
                         Width="24"
                         Height="24"
                         HorizontalAlignment="Center"
-                        Kind="Horse" />
+                        Kind="CalendarToday" />
                     <TextBlock
-                        HorizontalAlignment="Center"
-                        Text="Тренировки" />
+        HorizontalAlignment="Center"
+        Text="Операции" />
                 </StackPanel>
             </TabItem.Header>
-            <v:TrainingsView DataContext="{Binding TrainingsViewModel,Mode=OneWay}"/>
-        </TabItem>
-        <TabItem  Width="100" Height="100">
-            <TabItem.Header>
-                <StackPanel Width="Auto" Height="auto">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        HorizontalAlignment="Center"
-                        Kind="Money100" />
-                    <TextBlock HorizontalAlignment="Center" Text="Денежные" />
-                    <TextBlock HorizontalAlignment="Center" Text="операции" />
-                </StackPanel>
-            </TabItem.Header>
-            <v:MoneyView DataContext="{Binding MoneyViewModel,Mode=OneWay}"/>
+            <v:DayOperationsView DataContext="{Binding DayOperationsViewModel,Mode=OneWay}"/>
         </TabItem>
         <TabItem  Width="100" Height="100">
             <TabItem.Header>

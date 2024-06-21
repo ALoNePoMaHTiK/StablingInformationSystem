@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="StablingClientWPF.Views.BusinessOperationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+             xmlns:local="clr-namespace:StablingClientWPF.Views"
+             xmlns:valid="clr-namespace:StablingClientWPF.Validation"
+             d:DataContext="{d:DesignInstance vm:BusinessOperationsViewModel}"
+             mc:Ignorable="d" d:Background="White"
+             d:DesignHeight="800" d:DesignWidth="1200" x:Name="UserControl">
+    <Grid>
+        <materialDesign:DialogHost Grid.Column="1" Grid.Row="1" IsOpen="{Binding IsBusinessOperationsDialogOpen}">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="20" Width="250">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="Margin" Value="10"/>
+                        </Style>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="Margin" Value="10"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                      materialDesign:HintAssist.Hint="Счёт"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                      materialDesign:HintAssist.HintOpacity=".26"
+                      IsEditable="True"
+                      ItemsSource="{Binding MoneyAccounts}" 
+                      SelectedValue="{Binding CurrentBusinessOperation.MoneyAccountId}" 
+                      DisplayMemberPath="AccountName" SelectedValuePath="MoneyAccountId"/>
+                    <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                      materialDesign:HintAssist.Hint="Доходный тип"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                      materialDesign:HintAssist.HintOpacity=".26"
+                      IsEditable="True"
+                      ItemsSource="{Binding IncomeBusinessOperationTypes}" 
+                      SelectedValue="{Binding CurrentBusinessOperation.OperationTypeId}" 
+                      DisplayMemberPath="TypeName" SelectedValuePath="BusinessOperationTypeId"/>
+                    <ComboBox materialDesign:ComboBoxAssist.MaxLength="4"
+                      materialDesign:HintAssist.Hint="Расходный тип"
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                      materialDesign:HintAssist.HintOpacity=".26"
+                      IsEditable="True"
+                      ItemsSource="{Binding ConsumptionBusinessOperationTypes}" 
+                      SelectedValue="{Binding CurrentBusinessOperation.OperationTypeId}" 
+                      DisplayMemberPath="TypeName" SelectedValuePath="BusinessOperationTypeId"/>
+                    <TextBox IsEnabled="False" Text="{Binding CurrentBusinessOperation.OperationDateTime,
+                StringFormat=dd.MM.yyyy}"
+                materialDesign:HintAssist.Hint="Дата"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <TextBox
+                materialDesign:HintAssist.Hint="Сумма"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <TextBox.Text>
+                            <Binding Path="CurrentBusinessOperation.Amount" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <valid:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBox Text="{Binding CurrentBusinessOperation.Comment}"
+                materialDesign:HintAssist.Hint="Примечание"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button IsDefault="True" Command="{Binding ProcessBusinessOperationCommand}"
+                        Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Check"/>
+                                <TextBlock Text="Принять"/>
+                            </StackPanel>
+                        </Button>
+                        <Button IsCancel="True" Command="{Binding CloseBusinessOperationsDialogCommand}"
+                        Margin="5">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Close"/>
+                                <TextBlock Text="Отмена"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.ColumnSpan="3" Command="{Binding OpenBusinessOperationsDialogCommand}"
+             VerticalAlignment="Center" Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Add"/>
+                        <TextBlock Text="Добавить"/>
+                    </StackPanel>
+                </Button>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" 
+                               Text="Доходные операции" HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        IsReadOnly="True"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        HeadersVisibility="All"
+                        ItemsSource="{Binding IncomeBusinessOperations}">
+                        <DataGrid.Columns>
+                            <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Счёт" Binding="{Binding AccountName}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Сумма" Binding="{Binding Amount}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Примечание" Binding="{Binding Comment}" Width="*"/>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                            <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                <MenuItem Command="{Binding ElementName=UserControl,
+                                Path=DataContext.OpenEditBusinessOperationDialogCommand}"
+                                CommandParameter="{Binding BusinessOperationId}"
+                                Header="Изменить"
+                                Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                <MenuItem Command="{Binding ElementName=UserControl,
+                                Path=DataContext.DeleteBusinessOperationCommand}"
+                                CommandParameter="{Binding BusinessOperationId}"
+                                Header="Удалить" Foreground="Crimson"
+                                Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                            </MenuItem>
+                                        </Menu>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" 
+                       Text="Расходные операции" HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        IsReadOnly="True"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        HeadersVisibility="All"
+                        ItemsSource="{Binding ConsumptionBusinessOperations}">
+                        <DataGrid.Columns>
+                            <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Счёт" Binding="{Binding AccountName}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Сумма" Binding="{Binding Amount}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Примечание" Binding="{Binding Comment}" Width="*"/>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                            <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                                <MenuItem Command="{Binding ElementName=UserControl,
+                                                    Path=DataContext.OpenEditBusinessOperationDialogCommand}"
+                                                    CommandParameter="{Binding BusinessOperationId}"
+                                                    Header="Изменить"
+                                                    Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                                <MenuItem Command="{Binding ElementName=UserControl,
+                                                    Path=DataContext.DeleteBusinessOperationCommand}"
+                                                    CommandParameter="{Binding BusinessOperationId}"
+                                                    Header="Удалить" Foreground="Crimson"
+                                                    Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                            </MenuItem>
+                                        </Menu>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                
+            </Grid>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>

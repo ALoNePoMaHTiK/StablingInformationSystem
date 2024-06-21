@@ -98,6 +98,9 @@ namespace StablingClientWPF
                 return httpClient;
             });
 
+            services.AddSingleton<Mediator>();
+
+
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<ClientsViewModel>();
@@ -105,7 +108,11 @@ namespace StablingClientWPF
             services.AddSingleton<TrainingTypesViewModel>();
             services.AddSingleton<AdministrationViewModel>();
             services.AddSingleton<AbonementsViewModel>();
-            services.AddSingleton<MoneyViewModel>();
+
+            services.AddSingleton<DayOperationsViewModel>();
+            services.AddSingleton<MoneyTransactionsViewModel>();
+            services.AddSingleton<BusinessOperationsViewModel>();
+            services.AddSingleton<BalanceReplenishmentsViewModel>();
         } 
         private void OnStartup(object sender, StartupEventArgs e)
         {

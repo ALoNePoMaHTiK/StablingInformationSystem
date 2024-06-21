@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:TrainingsViewModel}"
-             mc:Ignorable="d"
+             mc:Ignorable="d" d:Background="White"
              x:Name="TrainingsUserControl"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -86,21 +86,17 @@
         </materialDesign:DialogHost.DialogContent>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <DatePicker 
-              Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-              SelectedDate="{Binding CurrentDate}"/>
-            <Button Grid.Row="1" Command="{Binding OpenTrainingDialogCommand}"
+            <Button Command="{Binding OpenTrainingDialogCommand}"
                 VerticalAlignment="Center" Margin="5">
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Add"/>
                     <TextBlock Text="Добавить"/>
                 </StackPanel>
             </Button>
-            <DataGrid Grid.Row="2" AutoGenerateColumns="False"
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False"
                 IsReadOnly="True"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 CanUserAddRows="False"

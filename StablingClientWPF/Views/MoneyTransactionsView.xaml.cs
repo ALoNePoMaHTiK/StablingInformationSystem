@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace StablingClientWPF.Views
 {
     /// <summary>
-    /// Логика взаимодействия для MoneyView.xaml
+    /// Логика взаимодействия для MoneyTransactionsView.xaml
     /// </summary>
-    public partial class MoneyView : UserControl
+    public partial class MoneyTransactionsView : UserControl
     {
-        public MoneyView()
+        public MoneyTransactionsView()
         {
             InitializeComponent();
         }

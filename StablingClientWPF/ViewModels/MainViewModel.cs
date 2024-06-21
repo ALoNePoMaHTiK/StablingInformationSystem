@@ -15,18 +15,19 @@ namespace StablingClientWPF.ViewModels
         public AbonementsViewModel AbonementsViewModel { get; }
         public TrainingsViewModel TrainingsViewModel { get; }
         public AdministrationViewModel AdministrationViewModel { get; }
-        public MoneyViewModel MoneyViewModel { get; }
+        public DayOperationsViewModel DayOperationsViewModel { get; }
         public MainViewModel(ClientsViewModel _ClientsViewModel,
                     AbonementsViewModel _AbonementsViewModel,
                     TrainingsViewModel _TrainingsViewModel,
                     AdministrationViewModel _AdministrationViewModel,
-                    MoneyViewModel _MoneyViewModel)
+                    DayOperationsViewModel _DayOperationsViewModel)
         {
             ClientsViewModel = _ClientsViewModel;
             AbonementsViewModel = _AbonementsViewModel;
             TrainingsViewModel = _TrainingsViewModel;
             AdministrationViewModel = _AdministrationViewModel;
-            MoneyViewModel = _MoneyViewModel;
+            DayOperationsViewModel = _DayOperationsViewModel;
+
         }
 
     }
