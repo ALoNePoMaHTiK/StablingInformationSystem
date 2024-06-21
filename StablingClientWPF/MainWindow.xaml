@@ -35,6 +35,21 @@
         </TabItem>
         <TabItem  Width="100" Height="100">
             <TabItem.Header>
+                <StackPanel Width="auto" Height="auto">
+                    <materialDesign:PackIcon
+                Width="24"
+                Height="24"
+                HorizontalAlignment="Center"
+                Kind="AccountCard" />
+                    <TextBlock
+                HorizontalAlignment="Center"
+                Text="Абонементы" />
+                </StackPanel>
+            </TabItem.Header>
+            <v:AbonementsView DataContext="{Binding AbonementsViewModel,Mode=OneWay}"/>
+        </TabItem>
+        <TabItem  Width="100" Height="100">
+            <TabItem.Header>
                 <StackPanel Width="Auto" Height="auto">
                     <materialDesign:PackIcon
                         Width="24"

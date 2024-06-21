@@ -121,6 +121,11 @@
                                 <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                     <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                         <MenuItem Command="{Binding ElementName=TrainingsUserControl,
+                                              Path=DataContext.OpenDetailTrainingDialogCommand}"
+                                              CommandParameter="{Binding TrainingId}"
+                                              Header="Детали"
+                                              Icon="{materialDesign:PackIcon Kind=Details}"/>
+                                        <MenuItem Command="{Binding ElementName=TrainingsUserControl,
                                               Path=DataContext.OpenEditTrainingDialogCommand}"
                                               CommandParameter="{Binding TrainingId}"
                                               Header="Изменить"

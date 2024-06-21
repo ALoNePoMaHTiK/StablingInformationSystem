@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="StablingClientWPF.Views.AbonementsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+             d:DataContext="{d:DesignInstance vm:AbonementsViewModel}"
+             xmlns:local="clr-namespace:StablingClientWPF.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button Command="{Binding OpenClientDialogCommand}"
+        VerticalAlignment="Center" Margin="5">
+            <StackPanel Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Add"/>
+                <TextBlock Text="Добавить"/>
+            </StackPanel>
+        </Button>
+        <TabControl Grid.Row="1">
+            <TabItem Height="Auto">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountGroup"/>
+                        <TextBlock Text="Активные"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <DataGrid Grid.Row="2" AutoGenerateColumns="False"
+                IsReadOnly="True"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                HeadersVisibility="All"
+                ItemsSource="{Binding Abonements}">
+                    <DataGrid.Columns>
+                        <materialDesign:DataGridTextColumn Header="#" Binding="{Binding AbonementId}" Width="50"/>
+                        <materialDesign:DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
+                        <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
+                        <materialDesign:DataGridTextColumn Header="Макс. исп." Binding="{Binding MaxUses}" Width="100"/>
+                        <materialDesign:DataGridTextColumn Header="Осталось исп." Binding="{Binding UsesCount}" Width="*"/>
+                        <DataGridTemplateColumn Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                        <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                                            Path=DataContext.OpenEditClientDialogCommand}"
+                                            CommandParameter="{Binding AbonementId}"
+                                            Header="Изменить"
+                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                                            Path=DataContext.ChangeClientAvailabilityCommand}"
+                                            CommandParameter="{Binding AbonementId}"
+                                            Header="Закрыть"
+                                            Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
+                                        </MenuItem>
+                                    </Menu>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountClock"/>
+                        <TextBlock Text="Архивные"/>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

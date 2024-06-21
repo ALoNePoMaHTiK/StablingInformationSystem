@@ -161,6 +161,31 @@
         }
       }
     },
+    "/api/Abonements": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_GetAllForShow",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AbonementForShow"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/BalanceReplenishments": {
       "get": {
         "tags": [
@@ -1807,6 +1832,40 @@
         },
         "horseName": {
           "type": "string"
+        },
+        "isAvailable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AbonementForShow": {
+      "type": "object",
+      "required": [
+        "abonementId",
+        "typeName",
+        "fullName",
+        "maxUses",
+        "usesCount",
+        "isAvailable"
+      ],
+      "properties": {
+        "abonementId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "typeName": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "maxUses": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "usesCount": {
+          "type": "integer",
+          "format": "int32"
         },
         "isAvailable": {
           "type": "boolean"

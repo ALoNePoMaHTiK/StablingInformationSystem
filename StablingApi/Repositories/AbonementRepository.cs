@@ -33,6 +33,11 @@ namespace StablingApi.Repositories
             AbonementsContext context = _contextFactory.CreateDbContext();
             return await context.Abonements.ToListAsync();
         }
+        public async Task<IEnumerable<AbonementForShow>> GetAllForShow()
+        {
+            AbonementsContext context = _contextFactory.CreateDbContext();
+            return await context.AbonementsForShow.ToListAsync();
+        }
         public async Task<Abonement> Get(int id)
         {
             AbonementsContext context = _contextFactory.CreateDbContext();
