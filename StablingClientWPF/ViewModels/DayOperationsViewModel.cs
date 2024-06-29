@@ -12,6 +12,7 @@ namespace StablingClientWPF.ViewModels
         public MoneyTransactionsViewModel MoneyTransactionsViewModel { get;}
         public BusinessOperationsViewModel BusinessOperationsViewModel { get;}
         public BalanceReplenishmentsViewModel BalanceReplenishmentsViewModel { get;}
+        public BalanceWithdrawingsViewModel BalanceWithdrawingsViewModel { get;}
 
         private Mediator _mediator;
 
@@ -19,15 +20,18 @@ namespace StablingClientWPF.ViewModels
             TrainingsViewModel trainingsViewModel,
             MoneyTransactionsViewModel moneyTransactionsViewModel,
             BusinessOperationsViewModel businessOperationsViewModel,
-            BalanceReplenishmentsViewModel balanceReplenishmentsViewModel)
+            BalanceReplenishmentsViewModel balanceReplenishmentsViewModel,
+            BalanceWithdrawingsViewModel balanceWithdrawingsViewModel)
         {
             _mediator = mediator;
-            TrainingsViewModel = trainingsViewModel;
+            _mediator.NeedToCreateTrainingWithdrawing += OpenDayOperationsTab;
 
             CurrentDate = DateTime.Now;
+            TrainingsViewModel = trainingsViewModel;
             MoneyTransactionsViewModel = moneyTransactionsViewModel;
             BusinessOperationsViewModel = businessOperationsViewModel;
             BalanceReplenishmentsViewModel = balanceReplenishmentsViewModel;
+            BalanceWithdrawingsViewModel = balanceWithdrawingsViewModel;
 
         }
 
@@ -90,5 +94,16 @@ namespace StablingClientWPF.ViewModels
         private void GetTomorrow() => CurrentDate = CurrentDate.Date.AddDays(1);
         private void GetNextWeek() => CurrentDate = CurrentDate.Date.AddDays(7);
         #endregion
+
+
+        private int _SelectedTab;
+        public int SelectedTab
+        {
+            get { return _SelectedTab; }
+            set { _SelectedTab = value; OnPropertyChanged(); }
+        }
+
+        private void ChangeTab(int tabIndex) => SelectedTab = tabIndex;
+        private void OpenDayOperationsTab(object o) => ChangeTab(4);
     }
 }

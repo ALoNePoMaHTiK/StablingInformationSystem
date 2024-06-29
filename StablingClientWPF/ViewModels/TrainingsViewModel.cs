@@ -31,13 +31,16 @@ namespace StablingClientWPF.ViewModels
             set { _Trainings = value; OnPropertyChanged(); }
         }
 
+        private Mediator _mediator;
+
         public TrainingsViewModel(Mediator mediator, ClientsHttpClient clientsHttpClient,
             TrainersHttpClient trainersHttpClient, 
             TrainingsHttpClient trainingsHttpClient,
             TrainingTypesHttpClient trainingTypesHttpClient, 
             HorsesHttpClient horsesHttpClient)
         {
-            mediator.GetDayOperationsDate += OnDateUpdate;
+            _mediator = mediator;
+            _mediator.GetDayOperationsDate += OnDateUpdate;
 
             _clientsHttpClient = clientsHttpClient;
             _trainersHttpClient = trainersHttpClient;
@@ -133,7 +136,8 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task GetTrainings()
         {
-            Trainings = new ObservableCollection<TrainingForShow>(await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
+            Trainings = new ObservableCollection<TrainingForShow>(
+                await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
         public DelegateCommand OpenTrainingDialogCommand
@@ -244,10 +248,63 @@ namespace StablingClientWPF.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 await _trainingsHttpClient.DeleteAsync(id);
-                TrainingForShow oldTraining = Trainings.Where(tr => tr.TrainingId == id).FirstOrDefault();
+                TrainingForShow oldTraining = Trainings.Where(tr => tr.TrainingId == id).First();
                 Trainings.Remove(oldTraining);
             }
         }
+
+        public AsyncDelegateCommand ChangePaidStatusCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await ChangePaidStatus((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task ChangePaidStatus(int id)
+        {
+            await _trainingsHttpClient.ChangePaidStatusAsync(id);
+            TrainingForShow oldTraining = Trainings.Where(t => t.TrainingId == id).First();
+            TrainingForShow newTraining = oldTraining;
+            newTraining.IsPaid = !newTraining.IsPaid;
+            Trainings.Remove(oldTraining);
+            Trainings.Add(newTraining);
+        }
+
+        #region Переключение на страницу списаний с баланса
+        public AsyncDelegateCommand CreateTrainingWithdrawingCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await CreateTrainingWithdrawing((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task CreateTrainingWithdrawing(int trainingId)
+        {
+            _mediator.CreateTrainingWithdrawing(await _trainingsHttpClient.GetAsync(trainingId));
+        }
+        #endregion
+
+
+        #region Переключение на страницу клиентов
+        public AsyncDelegateCommand ShowClientInfoCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await ShowClientInfo((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task ShowClientInfo(int trainingId)
+        {
+            Training training = await _trainingsHttpClient.GetAsync(trainingId);
+            _mediator.ShowClientInfo(training.ClientId);
+        }
+        #endregion
 
         private void OnDateUpdate(DateTime newDate)
         {

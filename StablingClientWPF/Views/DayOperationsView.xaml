@@ -45,7 +45,7 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <TabControl MinHeight="200" Grid.Row="1"
+        <TabControl MinHeight="200" Grid.Row="1" SelectedIndex="{Binding SelectedTab}"
         materialDesign:ColorZoneAssist.Mode="PrimaryMid"
         materialDesign:NavigationRailAssist.SelectionCornerRadius="50 10 10 10"
         materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
@@ -99,6 +99,7 @@
                         <TextBlock Text="Списания" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </TabItem.Header>
+                <v:BalanceWithdrawingsView DataContext="{Binding BalanceWithdrawingsViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>

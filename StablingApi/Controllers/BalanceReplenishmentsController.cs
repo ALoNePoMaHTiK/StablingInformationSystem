@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StablingApi.Contexts;
 using StablingApi.Models;
 using StablingApi.Repositories.Interfaces;
 
@@ -53,7 +51,7 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
-        ///     Получение списка представлений пополнений баланса клиентов на определенную дату
+        ///     Получение представления пополнения баланса клиента по идентификатору
         /// </summary>
         [HttpGet("ForShow/{id}")]
         public async Task<BalanceReplenishmentForShow> GetForShow(int id)

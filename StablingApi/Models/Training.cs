@@ -12,5 +12,6 @@ namespace StablingApi.Models
         public DateTime TrainingDateTime { get; set; }
         [Column(TypeName = "decimal(2,1)")]
         public decimal Duration { get; set; }
+        public bool IsPaid { get; set; }
     }
 }

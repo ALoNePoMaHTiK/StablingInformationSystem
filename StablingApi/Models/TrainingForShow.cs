@@ -15,5 +15,8 @@ namespace StablingApi.Models
         public string ClientName { get; set; }
         public DateTime TrainingStart { get; set; }
         public DateTime TrainingFinish { get; set; }
+        public bool IsPaid { get; set; }
+        public string TrainingLabel { get; set; }
+        public double TrainingFunds { get; set; }
     }
 }

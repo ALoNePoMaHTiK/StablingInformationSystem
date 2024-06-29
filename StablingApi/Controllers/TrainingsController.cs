@@ -80,6 +80,15 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
+        ///     Получение списка представлений неоплаченных тренировок
+        /// </summary>
+        [HttpGet("Paid/ForShow/")]
+        public async Task<IEnumerable<TrainingForShow>> GetAllNotPaidForShow()
+        {
+            return await _repository.GetAllNotPaidForShow();
+        }
+
+        /// <summary>
         ///     Получение списка тренировок за неделю по дате/времени
         /// </summary>
         [HttpGet("ByHorseDay/{dateTime:datetime}/{horseId:int}")]
@@ -121,6 +130,17 @@ namespace StablingApi.Controllers
             }
             await _repository.Update(training);
             return Ok(training);
+        }
+
+        /// <summary>
+        ///     Изменение статуса оплаты тренировки
+        /// </summary>
+        [HttpPut("PaidStatus/{trainingId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<int>> ChangePaidStatus(int trainingId)
+        {
+            await _repository.ChangePaidStatus(trainingId);
+            return Ok(trainingId);
         }
 
         /// <summary>

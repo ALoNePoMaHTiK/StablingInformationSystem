@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="StablingClientWPF.Views.BalanceWithdrawingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+             d:DataContext="{d:DesignInstance vm:BalanceWithdrawingsViewModel}"
+             xmlns:local="clr-namespace:StablingClientWPF.Views"
+             mc:Ignorable="d" d:Background="White"
+             d:DesignHeight="450" d:DesignWidth="800" x:Name="UserControl">
+    <Grid>
+        <materialDesign:DialogHost IsOpen="{Binding IsBalanceWithdrawingDialogOpen}">
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="20" Width="250">
+                    <ComboBox materialDesign:ComboBoxAssist.MaxLength="6" Margin="5"
+                    materialDesign:HintAssist.Hint="Клиент"
+                    materialDesign:HintAssist.HintOpacity=".26"
+                    IsEditable="True" IsEnabled="{Binding IsEditMode}"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    ItemsSource="{Binding Clients}" 
+                    SelectedValue="{Binding CurrentWithdrawing.ClientId}" 
+                    DisplayMemberPath="FullName" SelectedValuePath="ClientId"/>
+                    <ComboBox materialDesign:ComboBoxAssist.MaxLength="6" Margin="5"
+                    materialDesign:HintAssist.Hint="Тренер"
+                    materialDesign:HintAssist.HintOpacity=".26"
+                    IsEditable="True" IsEnabled="{Binding IsEditMode}"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                    ItemsSource="{Binding Trainers}" 
+                    SelectedValue="{Binding CurrentWithdrawing.TrainerId}" 
+                    DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+                    <TextBox Text="{Binding CurrentWithdrawing.Amount}" Margin="5"
+                    materialDesign:HintAssist.Hint="Сумма" 
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <TextBox IsEnabled="False" Text="{Binding CurrentWithdrawing.WithdrawingDate,
+                    StringFormat=dd.MM.yyyy}" Margin="5"
+                    materialDesign:HintAssist.Hint="Дата"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                    <TextBlock Text="Причина списания"/>
+                    <TabControl>
+                        <TabItem Header="Тренировка">
+                            <StackPanel>
+                                <ComboBox materialDesign:ComboBoxAssist.MaxLength="6" Margin="5"
+                                    materialDesign:HintAssist.Hint="Тренеровка"
+                                    materialDesign:HintAssist.HintOpacity=".26"
+                                    IsEditable="True" IsEnabled="{Binding IsEditMode}"
+                                    Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                    ItemsSource="{Binding Trainings}" 
+                                    SelectedValue="{Binding TrainingId}" 
+                                    DisplayMemberPath="TrainingLabel" SelectedValuePath="TrainingId"/>
+                                <Button IsDefault="True" Command="{Binding ProcessBalanceWithdrawingCommand}" CommandParameter="Training">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Check"/>
+                                        <TextBlock Text="Принять"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                        <Button IsCancel="True" Command="{Binding CloseBalanceWithdrawingDialogCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Close"/>
+                                <TextBlock Text="Отмена"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:DialogHost.DialogContent>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Command="{Binding OpenBalanceWithdrawingDialogCommand}" Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Add"/>
+                        <TextBlock Text="Добавить"/>
+                    </StackPanel>
+                </Button>
+                <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                IsReadOnly="True"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                HeadersVisibility="All"
+                ItemsSource="{Binding BalanceWithdrawings}">
+                    <DataGrid.Columns>
+                        <materialDesign:DataGridTextColumn Header="Клиент" Binding="{Binding ClientName}" Width="*"/>
+                        <materialDesign:DataGridTextColumn Header="Тренер" Binding="{Binding TrainerName}" Width="*"/>
+                        <materialDesign:DataGridTextColumn Header="Сумма" Binding="{Binding Amount}" Width="*"/>
+                        <DataGridTemplateColumn Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                        <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                            <MenuItem Command="{Binding ElementName=UserControl,
+                                            Path=DataContext.OpenEditBalanceWithdrawingDialogCommand}"
+                                            CommandParameter="{Binding BalanceWithdrawingId}"
+                                            Header="Изменить"
+                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                            <MenuItem Command="{Binding ElementName=UserControl,
+                                            Path=DataContext.DeleteBalanceWithdrawingCommand}"
+                                            CommandParameter="{Binding BalanceWithdrawingId}"
+                                            Header="Удалить" Foreground="Crimson"
+                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                        </MenuItem>
+                                    </Menu>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>

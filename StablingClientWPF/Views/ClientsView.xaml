@@ -22,7 +22,7 @@
                         <Setter Property="Margin" Value="{StaticResource Margin}"/>
                     </Style>
                 </StackPanel.Resources>
-                <ComboBox materialDesign:ComboBoxAssist.MaxLength="2"
+                <ComboBox materialDesign:ComboBoxAssist.MaxLength="2" IsEnabled="{Binding IsEditMode}"
                     materialDesign:HintAssist.Hint="Тренер"
                     materialDesign:HintAssist.HintOpacity=".26"
                     IsEditable="True"
@@ -31,13 +31,13 @@
                     SelectedValue="{Binding CurrentClient.TrainerId}" 
                     DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
                 <TextBox Text="{Binding CurrentClient.FullName}"
-                    materialDesign:HintAssist.Hint="ФИО"
+                    materialDesign:HintAssist.Hint="ФИО" IsEnabled="{Binding IsEditMode}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                 <TextBox Text="{Binding CurrentClient.PhoneNumber}"
-                    materialDesign:HintAssist.Hint="Номер телефона"
+                    materialDesign:HintAssist.Hint="Номер телефона" IsEnabled="{Binding IsEditMode}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                 <TextBox Text="{Binding CurrentClient.Email}"
-                    materialDesign:HintAssist.Hint="Email"
+                    materialDesign:HintAssist.Hint="Email" IsEnabled="{Binding IsEditMode}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                     <Button IsDefault="True" Command="{Binding ProcessClientCommand}" Margin="5">

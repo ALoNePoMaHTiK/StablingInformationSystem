@@ -64,7 +64,7 @@ namespace StablingApi.Repositories
         public async Task<IEnumerable<Training>> GetAllNotPaid()
         {
             TrainingsContext context = _contextFactory.CreateDbContext();
-            return await context.Trainings.Where(t => context.TrainingWithdrawings.Where(w => w.TrainingId == t.TrainingId).FirstOrDefault() == null).ToListAsync();
+            return await context.Trainings.Where(t => !t.IsPaid).ToListAsync();
         }
 
         public async Task Update(Training training)
@@ -78,7 +78,18 @@ namespace StablingApi.Repositories
                 trainingForUpdate.HorseId = training.HorseId;
                 trainingForUpdate.ClientId = training.ClientId;
                 trainingForUpdate.TrainingDateTime = training.TrainingDateTime;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task ChangePaidStatus(int trainingId)
+        {
+            TrainingsContext context = _contextFactory.CreateDbContext();
+            Training trainingForUpdate = await context.Trainings.SingleOrDefaultAsync(t => t.TrainingId == trainingId);
+            if (trainingForUpdate != null)
+            {
+                trainingForUpdate.IsPaid = !trainingForUpdate.IsPaid;
+                await context.SaveChangesAsync();
             }
         }
 
@@ -109,6 +120,12 @@ namespace StablingApi.Repositories
         {
             TrainingsContext context = _contextFactory.CreateDbContext();
             return await context.TrainingsForShow.Where(tr => tr.TrainingId == id).FirstAsync();
+        }
+
+        public async Task<IEnumerable<TrainingForShow>> GetAllNotPaidForShow()
+        {
+            TrainingsContext context = _contextFactory.CreateDbContext();
+            return await context.TrainingsForShow.Where(t => !t.IsPaid).ToListAsync();
         }
     }
 }

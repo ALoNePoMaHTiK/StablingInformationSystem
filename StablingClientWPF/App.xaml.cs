@@ -19,70 +19,70 @@ namespace StablingClientWPF
         {
             services.AddHttpClient();
             const string ApiUrl = "http://localhost:5000";
-            services.AddSingleton<ClientsHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new ClientsHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<TrainersHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new TrainersHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<TrainingsHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new TrainingsHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<TrainingTypesHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new TrainingTypesHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<HorsesHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new HorsesHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<MoneyAccountsHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new MoneyAccountsHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<MoneyTransactionsHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new MoneyTransactionsHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<BusinessOperationsHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new BusinessOperationsHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<BusinessOperationTypesHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
                 var httpClient = new BusinessOperationTypesHttpClient(ApiUrl, client);
                 return httpClient;
             });
-            services.AddSingleton<BalanceReplenishmentsHttpClient>(sp =>
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
@@ -90,7 +90,15 @@ namespace StablingClientWPF
                 return httpClient;
             });
 
-            services.AddSingleton<AbonementsHttpClient>(sp =>
+            services.AddSingleton(sp =>
+            {
+                var factory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = factory.CreateClient();
+                var httpClient = new BalanceWithdrawingsHttpClient(ApiUrl, client);
+                return httpClient;
+            });
+
+            services.AddSingleton(sp =>
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
@@ -113,6 +121,7 @@ namespace StablingClientWPF
             services.AddSingleton<MoneyTransactionsViewModel>();
             services.AddSingleton<BusinessOperationsViewModel>();
             services.AddSingleton<BalanceReplenishmentsViewModel>();
+            services.AddSingleton<BalanceWithdrawingsViewModel>();
         } 
         private void OnStartup(object sender, StartupEventArgs e)
         {

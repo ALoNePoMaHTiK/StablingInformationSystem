@@ -24,15 +24,32 @@ namespace StablingClientWPF.ViewModels
 
         private ClientsHttpClient _clientsHttpClient;
         private TrainersHttpClient _trainersHttpClient;
-        public ClientsViewModel(ClientsHttpClient clientsHttpClient,
+        public ClientsViewModel(Mediator mediator,ClientsHttpClient clientsHttpClient,
             TrainersHttpClient trainersHttpClient)
         {
             _clientsHttpClient = clientsHttpClient;
             _trainersHttpClient = trainersHttpClient;
+
+            mediator.GetClientInfo += ShowClient;
+
             GetClients();
 
             ClearCurrentClient();
             GetTrainers();
+        }
+
+        private void ShowClient(int clientId)
+        {
+            CurrentClient = ActiveClients.Where(c => c.ClientId == clientId).First();
+            IsEditMode = false;
+            OpenClientDialog();
+        }
+
+        private bool _IsEditMode = true;
+        public bool IsEditMode
+        {
+            get { return _IsEditMode; }
+            set { _IsEditMode = value; OnPropertyChanged(); }
         }
 
         private bool _IsClientsDialogOpen = false;
@@ -97,6 +114,7 @@ namespace StablingClientWPF.ViewModels
         private void CloseClientDialog()
         {
             IsClientsDialogOpen = false;
+            IsEditMode = true;
         }
 
         public DelegateCommand OpenEditClientDialogCommand
