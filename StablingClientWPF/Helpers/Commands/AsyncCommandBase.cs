@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace StablingClientWPF.Commands
+namespace StablingClientWPF.Helpers.Commands
 {
     public abstract class AsyncCommandBase : ICommand
     {
@@ -9,7 +9,7 @@ namespace StablingClientWPF.Commands
         private bool _isExecuting;
         public bool IsExecuting
         {
-            get{ return _isExecuting; }
+            get { return _isExecuting; }
             set
             {
                 _isExecuting = value;

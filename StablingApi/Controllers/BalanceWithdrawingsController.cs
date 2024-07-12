@@ -40,6 +40,14 @@ namespace StablingApi.Controllers
         {
             return await _repository.GetForShowByDate(date);
         }
+        /// <summary>
+        ///     Получение списка представлений списаний с баланса клиентов по идентификатору тренировки
+        /// </summary>
+        [HttpGet("ForShow/ByTraining/{trainingId}")]
+        public async Task<IEnumerable<BalanceWithdrawingForShow>> GetForShowByTraining(int trainingId)
+        {
+            return await _repository.GetForShowByTraining(trainingId);
+        }
 
         /// <summary>
         ///     Добавление списания с баланса клиента

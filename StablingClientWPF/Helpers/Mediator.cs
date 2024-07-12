@@ -1,6 +1,6 @@
 ﻿using StablingApiClient;
 
-namespace StablingClientWPF
+namespace StablingClientWPF.Helpers
 {
     public class Mediator
     {

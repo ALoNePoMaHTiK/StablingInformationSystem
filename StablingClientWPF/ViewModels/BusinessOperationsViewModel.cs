@@ -1,5 +1,6 @@
 ﻿using StablingApiClient;
-using StablingClientWPF.Commands;
+using StablingClientWPF.Helpers;
+using StablingClientWPF.Helpers.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

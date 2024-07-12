@@ -1,5 +1,6 @@
 ﻿using StablingApiClient;
-using StablingClientWPF.Commands;
+using StablingClientWPF.Helpers;
+using StablingClientWPF.Helpers.Commands;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -184,12 +185,15 @@ namespace StablingClientWPF.ViewModels
 
         private void CreateTrainingWithdrawing(Training training)
         {
-            ClearCurrentWithdrawing();
-            CurrentWithdrawing.TrainerId = training.TrainerId;
-            CurrentWithdrawing.ClientId = training.ClientId;
+            CurrentWithdrawing = new BalanceWithdrawing() 
+            { 
+                WithdrawingDate = CurrentDate,
+                TrainerId = training.TrainerId,
+                ClientId = training.ClientId
+            };
+            OpenBalanceWithdrawingDialog();
             TrainingId = training.TrainingId;
             IsEditMode = false;
-            OpenBalanceWithdrawingDialog();
         }
 
         private bool _IsEditMode = true;
@@ -203,7 +207,7 @@ namespace StablingClientWPF.ViewModels
         private int _TrainingId;
         public int TrainingId
         {
-            get => _TrainingId;
+            get { return _TrainingId; }
             set { _TrainingId = value; OnPropertyChanged(); }
         }
 

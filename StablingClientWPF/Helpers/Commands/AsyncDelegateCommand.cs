@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StablingClientWPF.Commands
+namespace StablingClientWPF.Helpers.Commands
 {
     public class AsyncDelegateCommand : AsyncCommandBase
     {
-        private readonly Func<object,Task> _callback;
+        private readonly Func<object, Task> _callback;
 
         public AsyncDelegateCommand(Func<object, Task> callback, Action<Exception> onException)
             : base(onException)

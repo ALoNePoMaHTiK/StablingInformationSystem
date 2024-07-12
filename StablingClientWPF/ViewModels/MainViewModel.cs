@@ -1,5 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using StablingApiClient;
+using StablingClientWPF.Helpers;
 using StablingClientWPF.Views;
 using System;
 using System.Collections.Generic;

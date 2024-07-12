@@ -6,7 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              xmlns:local="clr-namespace:StablingClientWPF.Views"
-             xmlns:valid="clr-namespace:StablingClientWPF.Validation"
+             xmlns:valid="clr-namespace:StablingClientWPF.Helpers.Validation"
              d:DataContext="{d:DesignInstance vm:BusinessOperationsViewModel}"
              mc:Ignorable="d" d:Background="White"
              d:DesignHeight="800" d:DesignWidth="1200" x:Name="UserControl">

@@ -1,5 +1,6 @@
 ﻿using StablingApiClient;
-using StablingClientWPF.Commands;
+using StablingClientWPF.Helpers;
+using StablingClientWPF.Helpers.Commands;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -12,6 +13,7 @@ namespace StablingClientWPF.ViewModels
         private TrainingsHttpClient _trainingsHttpClient;
         private TrainingTypesHttpClient _trainingTypesHttpClient;
         private HorsesHttpClient _horsesHttpClient;
+        public BalanceWithdrawingsHttpClient _balanceWithdrawingsHttpClient { get; }
 
         private DateTime _CurrentDate;
         public DateTime CurrentDate
@@ -20,7 +22,7 @@ namespace StablingClientWPF.ViewModels
             set { _CurrentDate = value; OnPropertyChanged(); 
                 GetTrainings();
                 ClearCurrentTraining();
-                CloseTrainingDialog();
+                MainForm.CloseDialog();
             }
         }
 
@@ -37,7 +39,8 @@ namespace StablingClientWPF.ViewModels
             TrainersHttpClient trainersHttpClient, 
             TrainingsHttpClient trainingsHttpClient,
             TrainingTypesHttpClient trainingTypesHttpClient, 
-            HorsesHttpClient horsesHttpClient)
+            HorsesHttpClient horsesHttpClient,
+            BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient)
         {
             _mediator = mediator;
             _mediator.GetDayOperationsDate += OnDateUpdate;
@@ -47,7 +50,9 @@ namespace StablingClientWPF.ViewModels
             _trainingsHttpClient = trainingsHttpClient;
             _trainingTypesHttpClient = trainingTypesHttpClient;
             _horsesHttpClient = horsesHttpClient;
+            _balanceWithdrawingsHttpClient = balanceWithdrawingsHttpClient;
 
+            MainForm = new DialogManager();
             CurrentDate = DateTime.Now.Date;
 
             GetTrainers();
@@ -108,12 +113,43 @@ namespace StablingClientWPF.ViewModels
 
         #endregion
 
-        private bool _IsTrainingsDialogOpen = false;
-        public bool IsTrainingsDialogOpen
+        #region Основная форма
+
+        public DialogManager MainForm { get; }
+
+        public DelegateCommand OpenEditTrainingDialogCommand
         {
-            get { return _IsTrainingsDialogOpen; }
-            set { _IsTrainingsDialogOpen = value; OnPropertyChanged(); }
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenEditTrainingDialog((int)o);
+                });
+            }
         }
+        private async void OpenEditTrainingDialog(int id)
+        {
+            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
+            MainForm.OpenDialog();
+        }
+
+        public DelegateCommand OpenCopyTrainingDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenCopyTrainingDialog((int)o);
+                });
+            }
+        }
+        private async void OpenCopyTrainingDialog(int id)
+        {
+            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
+            CurrentTraining.TrainingId = 0;
+            MainForm.OpenDialog();
+        }
+        #endregion
 
         private Training _CurrentTraining;
         public Training CurrentTraining
@@ -140,68 +176,6 @@ namespace StablingClientWPF.ViewModels
                 await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
-        public DelegateCommand OpenTrainingDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    OpenTrainingDialog();
-                });
-            }
-        }
-        private void OpenTrainingDialog()
-        {
-            IsTrainingsDialogOpen = true;
-        }
-
-        public DelegateCommand CloseTrainingDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    CloseTrainingDialog();
-                });
-            }
-        }
-        private void CloseTrainingDialog()
-        {
-            IsTrainingsDialogOpen = false;
-        }
-
-        public DelegateCommand OpenEditTrainingDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    OpenEditTrainingDialog((int)o);
-                });
-            }
-        }
-        private async void OpenEditTrainingDialog(int id)
-        {
-            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
-            OpenTrainingDialog();
-        }
-
-        public DelegateCommand OpenCopyTrainingDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    OpenCopyTrainingDialog((int)o);
-                });
-            }
-        }
-        private async void OpenCopyTrainingDialog(int id)
-        {
-            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
-            CurrentTraining.TrainingId = 0;
-            OpenTrainingDialog();
-        }
 
         public AsyncDelegateCommand ProcessTrainingCommand
         {
@@ -229,7 +203,7 @@ namespace StablingClientWPF.ViewModels
                     await _trainingsHttpClient.GetForShowAsync(
                         CurrentTraining.TrainingId));
             }
-            CloseTrainingDialog();
+            MainForm.CloseDialog();
             ClearCurrentTraining();
         }
 
@@ -271,6 +245,62 @@ namespace StablingClientWPF.ViewModels
             Trainings.Remove(oldTraining);
             Trainings.Add(newTraining);
         }
+
+        #region Детали
+
+        #region Форма для отображения деталей
+
+        private bool _IsTrainingDetailsDialogOpen = false;
+        public bool IsTrainingDetailsDialogOpen
+        {
+            get { return _IsTrainingDetailsDialogOpen; }
+            set { _IsTrainingDetailsDialogOpen = value; OnPropertyChanged(); }
+        }
+        public DelegateCommand OpenTrainingDetailsDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenTrainingDetailsDialogAsync((int)o);
+                });
+            }
+        }
+        private async Task OpenTrainingDetailsDialogAsync(int trainingId)
+        {
+            IsTrainingDetailsDialogOpen = true;
+            CurrentTraining = await _trainingsHttpClient.GetAsync(trainingId);
+            GetBalanceWithdrawings();
+        }
+        public DelegateCommand CloseTrainingDetailsDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    CloseTrainingDetailsDialog();
+                });
+            }
+        }
+        private void CloseTrainingDetailsDialog()
+        {
+            IsTrainingDetailsDialogOpen = false;
+        }
+
+        #endregion
+        private ObservableCollection<BalanceWithdrawingForShow> _BalanceWithdrawings;
+        public ObservableCollection<BalanceWithdrawingForShow> BalanceWithdrawings
+        {
+            get { return _BalanceWithdrawings; }
+            set { _BalanceWithdrawings = value; OnPropertyChanged(); }
+        }
+        private async Task GetBalanceWithdrawings()
+        {
+            BalanceWithdrawings = new ObservableCollection<BalanceWithdrawingForShow>(
+                await _balanceWithdrawingsHttpClient.GetForShowByTrainingAsync(CurrentTraining.TrainingId));
+        }
+
+        #endregion
 
         #region Переключение на страницу списаний с баланса
         public AsyncDelegateCommand CreateTrainingWithdrawingCommand

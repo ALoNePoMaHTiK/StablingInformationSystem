@@ -548,6 +548,41 @@
         }
       }
     },
+    "/api/BalanceWithdrawings/ForShow/ByTraining/{trainingId}": {
+      "get": {
+        "tags": [
+          "BalanceWithdrawings"
+        ],
+        "operationId": "BalanceWithdrawings_GetForShowByTraining",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "trainingId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BalanceWithdrawingForShow"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/BalanceWithdrawings": {
       "post": {
         "tags": [

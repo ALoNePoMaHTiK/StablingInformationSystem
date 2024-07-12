@@ -41,7 +41,7 @@
                         <TabItem Header="Тренировка">
                             <StackPanel>
                                 <ComboBox materialDesign:ComboBoxAssist.MaxLength="6" Margin="5"
-                                    materialDesign:HintAssist.Hint="Тренеровка"
+                                    materialDesign:HintAssist.Hint="Тренировка"
                                     materialDesign:HintAssist.HintOpacity=".26"
                                     IsEditable="True" IsEnabled="{Binding IsEditMode}"
                                     Style="{StaticResource MaterialDesignFloatingHintComboBox}"

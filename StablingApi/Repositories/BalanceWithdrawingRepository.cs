@@ -66,6 +66,13 @@ namespace StablingApi.Repositories
             MoneyContext context = _contextFactory.CreateDbContext();
             return await context.BalanceWithdrawingsForShow.Where(bw => bw.WithdrawingDate == date).ToListAsync();
         }
+        
+        public async Task<IEnumerable<BalanceWithdrawingForShow>> GetForShowByTraining(int trainingId)
+        {
+            MoneyContext context = _contextFactory.CreateDbContext();
+            IEnumerable<Guid> trainingWithdrawings = await context.TrainingWithdrawings.Where(tw => tw.TrainingId == trainingId).Select(tw => tw.BalanceWithdrawingId).ToListAsync();
+            return await context.BalanceWithdrawingsForShow.Where(bw => trainingWithdrawings.Contains(bw.BalanceWithdrawingId)).ToListAsync();
+        }
 
         public async Task Update(BalanceWithdrawing withdrawing)
         {

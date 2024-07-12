@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StablingApiClient;
+using StablingClientWPF.Helpers;
 using StablingClientWPF.ViewModels;
 using System.Net.Http;
 using System.Windows;
