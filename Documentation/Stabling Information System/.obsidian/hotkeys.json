@@ -1,0 +1,10 @@
+{
+  "templater-obsidian:Templates/Default Template.md": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "]"
+    }
+  ]
+}

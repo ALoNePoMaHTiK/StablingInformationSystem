@@ -1,0 +1,222 @@
+{
+  "main": {
+    "id": "c050f18e3cebe5c4",
+    "type": "split",
+    "children": [
+      {
+        "id": "77100e6b93f13264",
+        "type": "tabs",
+        "dimension": 61.95848375451264,
+        "children": [
+          {
+            "id": "d3ae728a573695ba",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Stabling Information System/StablingApi/Contexts/TrainingContext.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "48952650bd4a4a06",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      },
+      {
+        "id": "20a36a6a1b8563cf",
+        "type": "tabs",
+        "dimension": 38.041516245487365,
+        "children": [
+          {
+            "id": "bef28317b056a11c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Stabling Information System/Тонкий клиент.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "e1ad36a3ca32537c",
+    "type": "split",
+    "children": [
+      {
+        "id": "e95d152703d9f9b2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ff03240575690cd5",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "fe9b09acc70419bf",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "ff569fe5e152a492",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "381c40762516340f",
+    "type": "split",
+    "children": [
+      {
+        "id": "8a1b7c90f4a49d40",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "482c6d13216c76dd",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "f7c02f120f99d656",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "7c084a34a8ca8f42",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "01882e9545395683",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false,
+      "templater-obsidian:Templater": false
+    }
+  },
+  "active": "48952650bd4a4a06",
+  "lastOpenFiles": [
+    "Stabling Information System/StablingDB/Tables/Horses.md",
+    "Stabling Information System/StablingDB/Tables/BusinessOperationTypes.md",
+    "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+    "Stabling Information System/StablingApi/Contexts/ClientsContext.md",
+    "Stabling Information System/StablingApi/Contexts/MoneyContext.md",
+    "Stabling Information System/StablingApi/Contexts/TrainingContext.md",
+    "Stabling Information System/StablingApi/StablingApi.md",
+    "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
+    "Stabling Information System/StablingDB/Tables/TrainingTypes.md",
+    "Stabling Information System/StablingDB/Tables/Trainings.md",
+    "Stabling Information System/StablingDB/Tables/Trainers.md",
+    "Stabling Information System/StablingDB/Tables/MoneyTransactions.md",
+    "Stabling Information System/StablingDB/Tables/MoneyAccounts.md",
+    "Stabling Information System/StablingDB/Tables/Clients.md",
+    "Stabling Information System/StablingDB/Tables/BusinessOperations.md",
+    "Stabling Information System/StablingDB/Tables/BalanceReplenishment.md",
+    "Stabling Information System/StablingDB/Tables/AbonementTypes.md",
+    "Stabling Information System/StablingDB/Tables/Abonements.md",
+    "Stabling Information System/Описание сущностей.md",
+    "Stabling Information System/Основные блоки задач.md",
+    "Stabling Information System/Технологии.md",
+    "Stabling Information System/Тонкий клиент.md",
+    "Stabling Information System/Stabling Information System.md",
+    "Templates/Default Template.md",
+    "Stabling Information System/sdf.md",
+    "Stabling Information System/StablingClientWPF/sdf.md",
+    "Images",
+    "Stabling Information System/StablingDB/Views",
+    "Stabling Information System/StablingDB/Tables",
+    "Stabling Information System/StablingDB",
+    "Stabling Information System/StablingClientWPF",
+    "Stabling Information System/StablingApi/Controllers",
+    "Stabling Information System/StablingApi/Contexts",
+    "Stabling Information System/StablingApi",
+    "Templates",
+    "Stabling Information System"
+  ]
+}
