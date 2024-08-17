@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StablingClientWPF.ViewModels
 {
-    public abstract class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -16,5 +11,8 @@ namespace StablingClientWPF.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public string ROOT_IDENTIFIER { get { return "Root"; } }
+        public string DAY_OPERATIONS_IDENTIFIER { get { return "DayOperations"; } }
     }
 }

@@ -27,7 +27,7 @@ namespace StablingClientWPF.ViewModels
             _mediator = mediator;
             _mediator.NeedToCreateTrainingWithdrawing += OpenDayOperationsTab;
 
-            CurrentDate = DateTime.Now;
+            CurrentDate = DateTime.Now.Date;
             TrainingsViewModel = trainingsViewModel;
             MoneyTransactionsViewModel = moneyTransactionsViewModel;
             BusinessOperationsViewModel = businessOperationsViewModel;

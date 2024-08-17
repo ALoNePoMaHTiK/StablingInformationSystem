@@ -7,7 +7,7 @@
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:AbonementsViewModel}"
              xmlns:local="clr-namespace:StablingClientWPF.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" d:Background="White"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -35,7 +35,7 @@
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 HeadersVisibility="All"
-                ItemsSource="{Binding Abonements}">
+                ItemsSource="{Binding ActiveAbonements}">
                     <DataGrid.Columns>
                         <materialDesign:DataGridTextColumn Header="#" Binding="{Binding AbonementId}" Width="50"/>
                         <materialDesign:DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
@@ -72,6 +72,41 @@
                         <TextBlock Text="Архивные"/>
                     </StackPanel>
                 </TabItem.Header>
+                <DataGrid Grid.Row="2" AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    HeadersVisibility="All"
+                    ItemsSource="{Binding InactiveAbonements}">
+                    <DataGrid.Columns>
+                        <materialDesign:DataGridTextColumn Header="#" Binding="{Binding AbonementId}" Width="50"/>
+                        <materialDesign:DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="*"/>
+                        <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
+                        <materialDesign:DataGridTextColumn Header="Макс. исп." Binding="{Binding MaxUses}" Width="100"/>
+                        <materialDesign:DataGridTextColumn Header="Осталось исп." Binding="{Binding UsesCount}" Width="*"/>
+                        <DataGridTemplateColumn Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                        <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                            Path=DataContext.OpenEditClientDialogCommand}"
+                            CommandParameter="{Binding AbonementId}"
+                            Header="Изменить"
+                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
+                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
+                            Path=DataContext.ChangeClientAvailabilityCommand}"
+                            CommandParameter="{Binding AbonementId}"
+                            Header="Закрыть"
+                            Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
+                                        </MenuItem>
+                                    </Menu>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
     </Grid>

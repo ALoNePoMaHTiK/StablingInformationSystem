@@ -21,7 +21,7 @@ namespace StablingClientWPF.ViewModels
             BusinessOperationTypesHttpClient businessOperationTypesHttpClient,
             MoneyAccountsHttpClient moneyAccountsHttpClient)
         {
-            mediator.GetDayOperationsDate += OnDateUpdate;
+            mediator.OnDayOperationsDateUpdated += OnDateUpdate;
             _businessOperationsHttpClient = businessOperationsHttpClient;
             _businessOperationTypesHttpClient = businessOperationTypesHttpClient;
             _moneyAccountsHttpClient = moneyAccountsHttpClient;

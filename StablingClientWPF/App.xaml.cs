@@ -2,6 +2,7 @@
 using StablingApiClient;
 using StablingClientWPF.Helpers;
 using StablingClientWPF.ViewModels;
+using StablingClientWPF.Views;
 using System.Net.Http;
 using System.Windows;
 

@@ -31,7 +31,7 @@ namespace StablingClientWPF.ViewModels
             TrainersHttpClient trainersHttpClient, ClientsHttpClient clientsHttpClient,
             BalanceReplenishmentsHttpClient balanceReplenishmentsHttpClient)
         {
-            mediator.GetDayOperationsDate += OnDateUpdate;
+            mediator.OnDayOperationsDateUpdated += OnDateUpdate;
             _moneyAccountsHttpClient = moneyAccountsHttpClient;
             _trainersHttpClient = trainersHttpClient;
             _clientsHttpClient = clientsHttpClient;

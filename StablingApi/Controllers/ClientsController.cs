@@ -36,8 +36,8 @@ namespace StablingApi.Controllers
         /// <summary>
         ///     Получение клиента по идентификатору
         /// </summary>
-        [HttpGet("ByAvailable")]
-        public async Task<IEnumerable<Client>> GetByAvailability([FromQuery] bool IsAvailable)
+        [HttpGet("ByAvailability/{IsAvailable}")]
+        public async Task<IEnumerable<Client>> GetByAvailability(bool IsAvailable)
         {
             return await _repository.GetByAvailability(IsAvailable);
         }

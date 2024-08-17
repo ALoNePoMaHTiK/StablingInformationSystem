@@ -33,7 +33,7 @@ namespace StablingClientWPF.ViewModels
             TrainersHttpClient trainersHttpClient, ClientsHttpClient clientsHttpClient, TrainingsHttpClient trainingsHttpClient,
             BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient)
         {
-            mediator.GetDayOperationsDate += OnDateUpdate;
+            mediator.OnDayOperationsDateUpdated += OnDateUpdate;
             mediator.NeedToCreateTrainingWithdrawing += CreateTrainingWithdrawing;
 
 

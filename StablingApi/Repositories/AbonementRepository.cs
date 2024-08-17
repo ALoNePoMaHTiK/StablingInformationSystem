@@ -79,5 +79,28 @@ namespace StablingApi.Repositories
             AbonementsContext context = _contextFactory.CreateDbContext();
             return await context.Abonements.Where(t => context.AbonementWithdrawings.Where(w => w.AbonementId == t.AbonementId).FirstOrDefault() == null).ToListAsync();
         }
+
+        public async Task<AbonementForShow> GetForShow(int id)
+        {
+            AbonementsContext context = _contextFactory.CreateDbContext();
+            return await context.AbonementsForShow.Where(a => a.AbonementId == id).FirstAsync();
+        }
+
+        public async Task ChangeAvailability(int id)
+        {
+            AbonementsContext context = _contextFactory.CreateDbContext();
+            Abonement abonementToUpdate = await context.Abonements.FindAsync(id);
+            if (abonementToUpdate != null)
+            {
+                abonementToUpdate.IsAvailable = !abonementToUpdate.IsAvailable;
+            }
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<AbonementForShow>> GetForShowByAvailability(bool isAvailable)
+        {
+            AbonementsContext context = _contextFactory.CreateDbContext();
+            return await context.AbonementsForShow.Where(ab => ab.IsAvailable == isAvailable).ToListAsync();
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace StablingClientWPF.ViewModels
         public MoneyTransactionsViewModel(Mediator mediator, MoneyTransactionsHttpClient moneyTrainsactionsHttpClient,
             MoneyAccountsHttpClient moneyAccountsHttpClient, TrainersHttpClient trainersHttpClient)
         {
-            mediator.GetDayOperationsDate += OnDateUpdate;
+            mediator.OnDayOperationsDateUpdated += OnDateUpdate;
             _moneyTransactionsHttpClient = moneyTrainsactionsHttpClient;
             _moneyAccountsHttpClient = moneyAccountsHttpClient;
             _trainersHttpClient = trainersHttpClient;

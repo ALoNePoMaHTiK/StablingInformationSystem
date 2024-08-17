@@ -5,6 +5,7 @@ using StablingClientWPF.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace StablingClientWPF.ViewModels
         public TrainingsViewModel TrainingsViewModel { get; }
         public AdministrationViewModel AdministrationViewModel { get; }
         public DayOperationsViewModel DayOperationsViewModel { get; }
-
+        
         private Mediator _mediator;
 
         public MainViewModel(Mediator mediator,ClientsViewModel _ClientsViewModel,
@@ -28,9 +29,7 @@ namespace StablingClientWPF.ViewModels
                     DayOperationsViewModel _DayOperationsViewModel)
         {
             _mediator = mediator;
-
             _mediator.GetClientInfo += OpenClientsTab;
-
             ClientsViewModel = _ClientsViewModel;
             AbonementsViewModel = _AbonementsViewModel;
             TrainingsViewModel = _TrainingsViewModel;

@@ -7,12 +7,12 @@
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:TrainingsViewModel}"
              mc:Ignorable="d" d:Background="White"
-             x:Name="TrainingsUserControl"
+             x:Name="UserControl"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Thickness x:Key="Margin">10</Thickness>
     </UserControl.Resources>
-    <materialDesign:DialogHost IsOpen="{Binding MainForm.IsDialogOpen}">
+    <materialDesign:DialogHost Identifier="TrainingsDialog" IsOpen="{Binding IsDialogOpen}">
         <materialDesign:DialogHost.DialogContent>
             <StackPanel Margin="20" Width="250">
                 <StackPanel.Resources>
@@ -74,7 +74,7 @@
                             <TextBlock Text="Принять"/>
                         </StackPanel>
                     </Button>
-                    <Button IsCancel="True" Command="{Binding MainForm.CloseDialogCommand}" Margin="5">
+                    <Button IsCancel="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Margin="5">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Close"/>
                             <TextBlock Text="Отмена"/>
@@ -83,144 +83,109 @@
                 </StackPanel>
             </StackPanel>
         </materialDesign:DialogHost.DialogContent>
-        <materialDesign:DialogHost IsOpen="{Binding IsTrainingDetailsDialogOpen}">
-            <materialDesign:DialogHost.DialogContent>
-                <StackPanel Margin="20" Width="400">
-                    <TabControl>
-                        <TabItem Header="Оплаты">
-                            <DataGrid AutoGenerateColumns="False"
-                                IsReadOnly="True" Margin="20"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                CanUserAddRows="False"
-                                CanUserDeleteRows="False"
-                                HeadersVisibility="All"
-                                ItemsSource="{Binding BalanceWithdrawings}">
-                                <DataGrid.Columns>
-                                    <materialDesign:DataGridTextColumn Header="Дата" Binding="{Binding WithdrawingDate, StringFormat=dd.MM.yy}" Width="100"/>
-                                    <materialDesign:DataGridTextColumn Header="Сумма" Binding="{Binding Amount}" Width="100"/>
-                                    <DataGridTemplateColumn Width="100">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
-                                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                                        <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                                              Path=DataContext.OpenEditBalanceWithdrawingDialogCommand}"
-                                                              CommandParameter="{Binding TrainingId}"
-                                                              Header="Изменить"
-                                                              Icon="{materialDesign:PackIcon Kind=Edit}"/>
-                                                        <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                                              Path=DataContext.DeleteBalanceWithdrawingCommand}"
-                                                              CommandParameter="{Binding TrainingId}"
-                                                              Header="Удалить"
-                                                              Foreground="Crimson"
-                                                              Icon="{materialDesign:PackIcon Kind=Delete}"/>
-                                                    </MenuItem>
-                                                </Menu>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </TabItem>
-                    </TabControl>
-                    <Button IsCancel="True" Command="{Binding CloseTrainingDetailsDialogCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Close"/>
-                            <TextBlock Text="Отмена"/>
-                        </StackPanel>
-                    </Button>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Command="{Binding OpenDialogCommand}"
+VerticalAlignment="Center" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Add"/>
+                    <TextBlock Text="Добавить"/>
                 </StackPanel>
-            </materialDesign:DialogHost.DialogContent>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Button Command="{Binding MainForm.OpenDialogCommand}"
-        VerticalAlignment="Center" Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Add"/>
-                        <TextBlock Text="Добавить"/>
-                    </StackPanel>
-                </Button>
-                <DataGrid Grid.Row="1" AutoGenerateColumns="False"
-        IsReadOnly="True" Margin="20"
-        ScrollViewer.VerticalScrollBarVisibility="Auto"
-        CanUserAddRows="False"
-        CanUserDeleteRows="False"
-        HeadersVisibility="All"
-        ItemsSource="{Binding Trainings}">
-                    <DataGrid.Columns>
-                        <materialDesign:DataGridTextColumn Header="#" Binding="{Binding TrainingId}" Width="50"/>
-                        <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
-                        <materialDesign:DataGridTextColumn Header="Тренер" Binding="{Binding TrainerName}" Width="*"/>
-                        <materialDesign:DataGridTextColumn Header="Клиент" Binding="{Binding ClientName}" Width="*"/>
-                        <materialDesign:DataGridTextColumn Header="Лошадь" Binding="{Binding HorseName}" Width="100"/>
-                        <materialDesign:DataGridTextColumn Header="Начало" Binding="{Binding TrainingStart, StringFormat=HH-mm}" Width="100"/>
-                        <materialDesign:DataGridTextColumn Header="Конец" Binding="{Binding TrainingFinish, StringFormat=HH-mm}" Width="100"/>
-                        <materialDesign:DataGridTextColumn Header="Оплата" Binding="{Binding TrainingFunds}" Width="100"/>
-                        <DataGridTemplateColumn Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
-                                        <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                      Path=DataContext.OpenTrainingDetailsDialogCommand}"
-                                      CommandParameter="{Binding TrainingId}"
-                                      Header="Детали"
-                                      Icon="{materialDesign:PackIcon Kind=Details}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                      Path=DataContext.OpenEditTrainingDialogCommand}"
-                                      CommandParameter="{Binding TrainingId}"
-                                      Header="Изменить"
-                                      Icon="{materialDesign:PackIcon Kind=Edit}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                      Path=DataContext.OpenCopyTrainingDialogCommand}"
-                                      CommandParameter="{Binding TrainingId}"
-                                      Header="Копировать"
-                                      Icon="{materialDesign:PackIcon Kind=ContentCopy}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                      Path=DataContext.DeleteTrainingCommand}"
-                                      CommandParameter="{Binding TrainingId}"
-                                      Header="Удалить" IsEnabled="{Binding IsPaid, Converter={StaticResource InvertBooleanConverter}}"
-                                      Foreground="Crimson"
-                                      Icon="{materialDesign:PackIcon Kind=Delete}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                      Path=DataContext.ShowClientInfoCommand}"
-                                      CommandParameter="{Binding TrainingId}"
-                                      Header="Показать инф. по клиенту"
-                                      Icon="{materialDesign:PackIcon Kind=Info}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                      Path=DataContext.CreateTrainingWithdrawingCommand}"
-                                      CommandParameter="{Binding TrainingId}"
-                                      Header="Добавить оплату" IsEnabled="{Binding IsPaid, Converter={StaticResource InvertBooleanConverter}}"
-                                      Icon="{materialDesign:PackIcon Kind=Payment}"/>
-                                            <MenuItem Command="{Binding ElementName=TrainingsUserControl,
-                                      Path=DataContext.ChangePaidStatusCommand}"
-                                      CommandParameter="{Binding TrainingId}"
-                                      Header="Изменить статус"
-                                      Icon="{materialDesign:PackIcon Kind=Check}"/>
-                                        </MenuItem>
-                                    </Menu>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="DataGridRow">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsPaid}" Value="false">
-                                    <Setter Property="Background" Value="Red"></Setter>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsPaid}" Value="true">
-                                    <Setter Property="Background" Value="Green"></Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.RowStyle>
-                </DataGrid>
-            </Grid>
-        </materialDesign:DialogHost>
-        
+            </Button>
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False"
+                IsReadOnly="True" Margin="20"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                HeadersVisibility="All"
+                ItemsSource="{Binding Trainings, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Columns>
+                    <materialDesign:DataGridTextColumn Header="#" Binding="{Binding TrainingId}" Width="50"/>
+                    <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
+                    <materialDesign:DataGridTextColumn Header="Тренер" Binding="{Binding TrainerName}" Width="*"/>
+                    <materialDesign:DataGridTextColumn Header="Клиент" Binding="{Binding ClientName}" Width="*"/>
+                    <materialDesign:DataGridTextColumn Header="Лошадь" Binding="{Binding HorseName}" Width="100"/>
+                    <materialDesign:DataGridTextColumn Header="Начало" Binding="{Binding TrainingStart, StringFormat=HH-mm}" Width="100"/>
+                    <materialDesign:DataGridTextColumn Header="Конец" Binding="{Binding TrainingFinish, StringFormat=HH-mm}" Width="100"/>
+                    <materialDesign:DataGridTextColumn Header="Оплата" Binding="{Binding TrainingFunds}" Width="100"/>
+                    <DataGridTemplateColumn Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
+                                    <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                              Path=DataContext.OpenTrainingDetailsDialogCommand}"
+                              CommandParameter="{Binding TrainingId}"
+                              Header="Детали"
+                              Icon="{materialDesign:PackIcon Kind=Details}"/>
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                              Path=DataContext.OpenEditTrainingDialogCommand}"
+                              CommandParameter="{Binding TrainingId}"
+                              Header="Изменить"
+                              Icon="{materialDesign:PackIcon Kind=Edit}"/>
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                              Path=DataContext.OpenCopyTrainingDialogCommand}"
+                              CommandParameter="{Binding TrainingId}"
+                              Header="Копировать"
+                              Icon="{materialDesign:PackIcon Kind=ContentCopy}"/>
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                                Path=DataContext.MakeFullPaymentCommand}"
+                                CommandParameter="{Binding TrainingId}"
+                                Header="Закрыть тренировку"
+                                Icon="{materialDesign:PackIcon Kind=CheckAll}"/>
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                                Path=DataContext.CreateTrainingWithdrawingCommand}"
+                                CommandParameter="{Binding TrainingId}" Visibility="Collapsed"
+                                Header="Добавить оплату" IsEnabled="{Binding IsPaid, Converter={StaticResource InvertBooleanConverter}}"
+                                Icon="{materialDesign:PackIcon Kind=Payment}"/>
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                                Path=DataContext.ChangePaidStatusCommand}"
+                                CommandParameter="{Binding TrainingId}"
+                                Header="Изменить статус"
+                                Icon="{materialDesign:PackIcon Kind=Check}"/>
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                                Path=DataContext.ShowClientInfoCommand}"
+                                CommandParameter="{Binding TrainingId}"
+                                Header="Показать инф. по клиенту"
+                                Icon="{materialDesign:PackIcon Kind=Info}"/>
+                                        <MenuItem Command="{Binding ElementName=UserControl,
+                                Path=DataContext.DeleteTrainingCommand}"
+                                CommandParameter="{Binding TrainingId}"
+                                Header="Удалить" IsEnabled="{Binding IsPaid, Converter={StaticResource InvertBooleanConverter}}"
+                                Foreground="Crimson"
+                                Icon="{materialDesign:PackIcon Kind=Delete}"/>
+                                    </MenuItem>
+                                </Menu>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Width="100" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Foreground="White" Padding="3">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPaid}" Value="false">
+                                                    <Setter Property="Background" Value="Red"/>
+                                                    <Setter Property="Text" Value="Неоплачено"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsPaid}" Value="true">
+                                                    <Setter Property="Background" Value="Green"/>
+                                                    <Setter Property="Text" Value="Оплачено"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </materialDesign:DialogHost>
 </UserControl>

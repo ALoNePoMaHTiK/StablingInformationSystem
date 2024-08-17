@@ -161,7 +161,7 @@
         }
       }
     },
-    "/api/Abonements": {
+    "/api/Abonements/ForShow": {
       "get": {
         "tags": [
           "Abonements"
@@ -180,6 +180,199 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/AbonementForShow"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/{abonementId}": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_Get",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "abonementId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Abonement"
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/ForShow/{abonementId}": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_GetForShow",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "abonementId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AbonementForShow"
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/ByAvailability/ForShow/{isAvailable}": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_GetForShowByAvailability",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "boolean",
+            "name": "isAvailable",
+            "in": "path",
+            "required": true,
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AbonementForShow"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements": {
+      "post": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_Create",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "abonement",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Abonement"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Abonement"
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/ChangeAvailability/{abonementId}": {
+      "put": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_ChangeAvailability",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "abonementId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Abonement"
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/Types": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_GetTypes",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AbonementType"
               }
             }
           }
@@ -1121,7 +1314,7 @@
         }
       }
     },
-    "/api/Clients/ByAvailable": {
+    "/api/Clients/ByAvailability/{IsAvailable}": {
       "get": {
         "tags": [
           "Clients"
@@ -1136,7 +1329,8 @@
           {
             "type": "boolean",
             "name": "IsAvailable",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "x-nullable": false
           }
         ],
@@ -2174,6 +2368,72 @@
           "format": "int32"
         },
         "usesCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "isAvailable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Abonement": {
+      "type": "object",
+      "required": [
+        "abonementId",
+        "clientId",
+        "abonementTypeId",
+        "usesCount",
+        "openDateTime",
+        "isAvailable"
+      ],
+      "properties": {
+        "abonementId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "clientId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "abonementTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "usesCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "openDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isAvailable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AbonementType": {
+      "type": "object",
+      "required": [
+        "abonementTypeId",
+        "typeName",
+        "typeUsesCount",
+        "typePrice",
+        "isAvailable"
+      ],
+      "properties": {
+        "abonementTypeId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "typeName": {
+          "type": "string"
+        },
+        "typeUsesCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "typePrice": {
           "type": "integer",
           "format": "int32"
         },

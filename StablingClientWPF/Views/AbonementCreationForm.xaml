@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="StablingClientWPF.Views.AbonementCreationForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+             d:DataContext="{d:DesignInstance vm:AbonementCreationFormViewModel}"
+             xmlns:local="clr-namespace:StablingClientWPF.Views"
+             mc:Ignorable="d" d:Background="White">
+    <StackPanel Margin="20" Width="400">
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="2" Margin="5"
+            materialDesign:HintAssist.Hint="Клиент"
+            materialDesign:HintAssist.HintOpacity=".26"
+            IsEditable="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ItemsSource="{Binding Clients}" 
+            SelectedValue="{Binding Abonement.ClientId}" 
+            DisplayMemberPath="FullName" SelectedValuePath="ClientId"/>
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="2" Margin="5"
+            materialDesign:HintAssist.Hint="Тип абонемента"
+            materialDesign:HintAssist.HintOpacity=".26"
+            IsEditable="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ItemsSource="{Binding AbonementTypes}" 
+            SelectedValue="{Binding Abonement.AbonementTypeId}" 
+            DisplayMemberPath="TypeName" SelectedValuePath="AbonementTypeId"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button IsDefault="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" 
+                CommandParameter="{Binding Abonement}" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Check" VerticalAlignment="Center"/>
+                    <TextBlock Text="Принять" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button IsCancel="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="{x:Null}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Close" VerticalAlignment="Center"/>
+                    <TextBlock Text="Отмена"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

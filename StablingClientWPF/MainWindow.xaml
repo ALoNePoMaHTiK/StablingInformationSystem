@@ -12,71 +12,73 @@
         Style="{StaticResource MaterialDesignWindow}"
         d:DataContext="{d:DesignInstance vm:MainViewModel}"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="800" Width="1400">
+        Title="MainWindow" Height="800" Width="1600">
 
-    <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
-        SnapsToDevicePixels="True" SelectedIndex="{Binding SelectedTab}"
-        Style="{StaticResource MaterialDesignNavigationRailTabControl}"
-        TabStripPlacement="Left">
-        <TabItem  Width="100" Height="100">
-            <TabItem.Header>
-                <StackPanel Width="auto" Height="auto">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        HorizontalAlignment="Center"
-                        Kind="Account" />
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        Text="Клиенты" />
-                </StackPanel>
-            </TabItem.Header>
-            <v:ClientsView DataContext="{Binding ClientsViewModel,Mode=OneWay}"/>
-        </TabItem>
-        <TabItem  Width="100" Height="100">
-            <TabItem.Header>
-                <StackPanel Width="auto" Height="auto">
-                    <materialDesign:PackIcon
-                Width="24"
-                Height="24"
-                HorizontalAlignment="Center"
-                Kind="AccountCard" />
-                    <TextBlock
-                HorizontalAlignment="Center"
-                Text="Абонементы" />
-                </StackPanel>
-            </TabItem.Header>
-            <v:AbonementsView DataContext="{Binding AbonementsViewModel,Mode=OneWay}"/>
-        </TabItem>
-        <TabItem  Width="100" Height="100">
-            <TabItem.Header>
-                <StackPanel Width="auto" Height="auto">
-                    <materialDesign:PackIcon
-                        Width="24"
-                        Height="24"
-                        HorizontalAlignment="Center"
-                        Kind="CalendarToday" />
-                    <TextBlock
-        HorizontalAlignment="Center"
-        Text="Операции" />
-                </StackPanel>
-            </TabItem.Header>
-            <v:DayOperationsView DataContext="{Binding DayOperationsViewModel,Mode=OneWay}"/>
-        </TabItem>
-        <TabItem  Width="100" Height="100">
-            <TabItem.Header>
-                <StackPanel Width="Auto" Height="auto">
-                    <materialDesign:PackIcon
-                Width="24"
-                Height="24"
-                HorizontalAlignment="Center"
-                Kind="Administrator" />
-                    <TextBlock
-                HorizontalAlignment="Center"
-                Text="Справочники" />
-                </StackPanel>
-            </TabItem.Header>
-            <v:AdministrationView DataContext="{Binding AdministrationViewModel,Mode=OneWay}"/>
-        </TabItem>
-    </TabControl>
+    <materialDesign:DialogHost Identifier="{Binding ROOT_IDENTIFIER}">
+        <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+    SnapsToDevicePixels="True" SelectedIndex="{Binding SelectedTab}"
+    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+    TabStripPlacement="Left">
+            <TabItem  Width="100" Height="100">
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    HorizontalAlignment="Center"
+                    Kind="Account" />
+                        <TextBlock
+                    HorizontalAlignment="Center"
+                    Text="Клиенты" />
+                    </StackPanel>
+                </TabItem.Header>
+                <v:ClientsView DataContext="{Binding ClientsViewModel,Mode=OneWay}"/>
+            </TabItem>
+            <TabItem  Width="100" Height="100">
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon
+            Width="24"
+            Height="24"
+            HorizontalAlignment="Center"
+            Kind="AccountCard" />
+                        <TextBlock
+            HorizontalAlignment="Center"
+            Text="Абонементы" />
+                    </StackPanel>
+                </TabItem.Header>
+                <v:AbonementsView DataContext="{Binding AbonementsViewModel,Mode=OneWay}"/>
+            </TabItem>
+            <TabItem  Width="100" Height="100">
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <materialDesign:PackIcon
+                    Width="24"
+                    Height="24"
+                    HorizontalAlignment="Center"
+                    Kind="CalendarToday" />
+                        <TextBlock
+    HorizontalAlignment="Center"
+    Text="Операции" />
+                    </StackPanel>
+                </TabItem.Header>
+                <v:DayOperationsView DataContext="{Binding DayOperationsViewModel,Mode=OneWay}"/>
+            </TabItem>
+            <TabItem  Width="100" Height="100">
+                <TabItem.Header>
+                    <StackPanel Width="Auto" Height="auto">
+                        <materialDesign:PackIcon
+            Width="24"
+            Height="24"
+            HorizontalAlignment="Center"
+            Kind="Administrator" />
+                        <TextBlock
+            HorizontalAlignment="Center"
+            Text="Справочники" />
+                    </StackPanel>
+                </TabItem.Header>
+                <v:AdministrationView DataContext="{Binding AdministrationViewModel,Mode=OneWay}"/>
+            </TabItem>
+        </TabControl>
+    </materialDesign:DialogHost>
 </Window>

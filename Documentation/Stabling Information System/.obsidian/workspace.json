@@ -26,7 +26,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
                 "mode": "source",
                 "source": false
               }
@@ -118,7 +118,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -135,7 +135,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -158,7 +158,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Stabling Information System/StablingDB/Tables/HorseStateChanges.md"
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md"
               }
             }
           }
@@ -182,32 +182,32 @@
   },
   "active": "48952650bd4a4a06",
   "lastOpenFiles": [
-    "Stabling Information System/StablingDB/Tables/Horses.md",
-    "Stabling Information System/StablingDB/Tables/BusinessOperationTypes.md",
-    "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
-    "Stabling Information System/StablingApi/Contexts/ClientsContext.md",
-    "Stabling Information System/StablingApi/Contexts/MoneyContext.md",
-    "Stabling Information System/StablingApi/Contexts/TrainingContext.md",
-    "Stabling Information System/StablingApi/StablingApi.md",
-    "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
-    "Stabling Information System/StablingDB/Tables/TrainingTypes.md",
+    "Stabling Information System/StablingClientWPF/Текущие задачи.md",
     "Stabling Information System/StablingDB/Tables/Trainings.md",
     "Stabling Information System/StablingDB/Tables/Trainers.md",
-    "Stabling Information System/StablingDB/Tables/MoneyTransactions.md",
     "Stabling Information System/StablingDB/Tables/MoneyAccounts.md",
-    "Stabling Information System/StablingDB/Tables/Clients.md",
-    "Stabling Information System/StablingDB/Tables/BusinessOperations.md",
+    "Stabling Information System/StablingDB/Tables/Horses.md",
     "Stabling Information System/StablingDB/Tables/BalanceReplenishment.md",
-    "Stabling Information System/StablingDB/Tables/AbonementTypes.md",
-    "Stabling Information System/StablingDB/Tables/Abonements.md",
+    "Stabling Information System/StablingDB/Tables/MoneyTransactions.md",
+    "Stabling Information System/StablingDB/Tables/BusinessOperations.md",
     "Stabling Information System/Описание сущностей.md",
-    "Stabling Information System/Основные блоки задач.md",
-    "Stabling Information System/Технологии.md",
-    "Stabling Information System/Тонкий клиент.md",
     "Stabling Information System/Stabling Information System.md",
+    "Stabling Information System/Тонкий клиент.md",
+    "Stabling Information System/Технологии.md",
+    "Stabling Information System/Основные блоки задач.md",
+    "Stabling Information System/StablingDB/Tables/Abonements.md",
+    "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
     "Templates/Default Template.md",
+    "Stabling Information System/StablingDB/Tables/AbonementTypes.md",
+    "Stabling Information System/StablingDB/Tables/BusinessOperationTypes.md",
+    "Stabling Information System/StablingDB/Tables/HorseStateChanges.md",
+    "Stabling Information System/StablingDB/Tables/TrainingTypes.md",
+    "Stabling Information System/StablingApi/StablingApi.md",
+    "Stabling Information System/StablingApi/Contexts/TrainingContext.md",
+    "Stabling Information System/StablingApi/Contexts/MoneyContext.md",
+    "Stabling Information System/StablingApi/Contexts/ClientsContext.md",
+    "Stabling Information System/StablingDB/Tables/Clients.md",
     "Stabling Information System/sdf.md",
-    "Stabling Information System/StablingClientWPF/sdf.md",
     "Images",
     "Stabling Information System/StablingDB/Views",
     "Stabling Information System/StablingDB/Tables",
