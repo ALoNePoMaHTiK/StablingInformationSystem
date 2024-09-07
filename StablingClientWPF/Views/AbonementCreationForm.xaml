@@ -25,6 +25,8 @@
             ItemsSource="{Binding AbonementTypes}" 
             SelectedValue="{Binding Abonement.AbonementTypeId}" 
             DisplayMemberPath="TypeName" SelectedValuePath="AbonementTypeId"/>
+        <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+            SelectedDate="{Binding Abonement.OpenDateTime}" Margin="5"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button IsDefault="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" 
                 CommandParameter="{Binding Abonement}" Margin="5">

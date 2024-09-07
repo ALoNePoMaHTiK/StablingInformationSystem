@@ -14,7 +14,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Command="{Binding OpenClientDialogCommand}"
+        <Button Command="{Binding CreateAbonementCommand}"
         VerticalAlignment="Center" Margin="5">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="Add"/>

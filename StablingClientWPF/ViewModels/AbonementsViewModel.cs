@@ -60,7 +60,11 @@ namespace StablingClientWPF.ViewModels
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new AbonementCreationForm(
                     new AbonementCreationFormViewModel(
-                    new Abonement(),
+                    new Abonement()
+                    {
+                        OpenDateTime = DateTime.Now,
+                        IsAvailable = true,
+                    },
                     await _clientsHttpClient.GetByAvailabilityAsync(true),
                     await _abonementsHttpClient.GetTypesAsync())), ROOT_IDENTIFIER);
             if (result != null)

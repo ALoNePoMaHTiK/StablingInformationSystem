@@ -14,7 +14,7 @@ namespace StablingApi.Contexts
         {
             modelBuilder.Entity<Abonement>(builder =>
             {
-                builder.ToTable(tb => tb.HasTrigger("TR_Abonements_InsteadInsert"));
+                builder.ToTable(tb => tb.HasTrigger("TR_Abonements_AfterInsert"));
             });
             modelBuilder.Entity<AbonementWithdrawing>().HasKey(w => new { w.AbonementId, w.BalanceWithdrawingId });
 
