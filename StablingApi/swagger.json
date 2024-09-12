@@ -379,6 +379,29 @@
         }
       }
     },
+    "/api/Abonements/{id}": {
+      "delete": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_Delete",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/BalanceReplenishments": {
       "get": {
         "tags": [

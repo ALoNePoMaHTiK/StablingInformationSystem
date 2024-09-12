@@ -99,5 +99,25 @@ namespace StablingClientWPF.ViewModels
                 ActiveAbonements.Add(abonementForWork);
             }
         }
+
+        public AsyncDelegateCommand DeleteAbonementCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => { await DeleteAbonementAsync((int)o); }, ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task DeleteAbonementAsync(int abonementId)
+        {
+            AbonementForShow abonementForDelete = ActiveAbonements.Where(ab => ab.AbonementId == abonementId).FirstOrDefault();
+            if (abonementForDelete == null)
+            {
+                abonementForDelete = InactiveAbonements.Where(ab => ab.AbonementId == abonementId).FirstOrDefault();
+                InactiveAbonements.Remove(abonementForDelete);
+            }
+            else
+                ActiveAbonements.Remove(abonementForDelete);
+            await _abonementsHttpClient.DeleteAsync(abonementId);
+        }
     }
 }

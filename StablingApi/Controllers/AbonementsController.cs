@@ -86,5 +86,20 @@ namespace StablingApi.Controllers
         {
             return await _abonementTypeRepository.GetAll();
         }
+
+        /// <summary>
+        ///     Удаление абонемента
+        /// </summary>
+        /// <param name="id">Идентификатор абонемента</param>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            Abonement abonementToDelete = await _repository.Get(id);
+            if (abonementToDelete == null)
+                return NotFound();
+            await _repository.Delete(id);
+            return Ok(id);
+        }
     }
 }

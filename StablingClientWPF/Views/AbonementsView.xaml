@@ -7,20 +7,29 @@
              xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
              d:DataContext="{d:DesignInstance vm:AbonementsViewModel}"
              xmlns:local="clr-namespace:StablingClientWPF.Views"
-             mc:Ignorable="d" d:Background="White"
+             mc:Ignorable="d" d:Background="White" x:Name="UserControl"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Command="{Binding CreateAbonementCommand}"
-        VerticalAlignment="Center" Margin="5">
-            <StackPanel Orientation="Horizontal">
-                <materialDesign:PackIcon Kind="Add"/>
-                <TextBlock Text="Добавить"/>
-            </StackPanel>
-        </Button>
+        <StackPanel Orientation="Horizontal">
+            <Button Command="{Binding CreateAbonementCommand}"
+                VerticalAlignment="Center" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Add"/>
+                    <TextBlock Text="Добавить"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding GetAbonementsCommand}"
+    VerticalAlignment="Center" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Update"/>
+                    <TextBlock Text="Обновить"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
         <TabControl Grid.Row="1">
             <TabItem Height="Auto">
                 <TabItem.Header>
@@ -47,16 +56,13 @@
                                 <DataTemplate>
                                     <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                         <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
-                                            Path=DataContext.OpenEditClientDialogCommand}"
-                                            CommandParameter="{Binding AbonementId}"
-                                            Header="Изменить"
-                                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
-                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
-                                            Path=DataContext.ChangeClientAvailabilityCommand}"
-                                            CommandParameter="{Binding AbonementId}"
-                                            Header="Закрыть"
-                                            Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
+                                            
+                                            <MenuItem Command="{Binding ElementName=UserControl,
+                                                Path=DataContext.DeleteAbonementCommand}"
+                                                CommandParameter="{Binding AbonementId}"
+                                                Header="Удалить"
+                                                Foreground="Crimson"
+                                                Icon="{materialDesign:PackIcon Kind=Delete}"/>
                                         </MenuItem>
                                     </Menu>
                                 </DataTemplate>
@@ -90,16 +96,12 @@
                                 <DataTemplate>
                                     <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                         <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
-                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
-                            Path=DataContext.OpenEditClientDialogCommand}"
-                            CommandParameter="{Binding AbonementId}"
-                            Header="Изменить"
-                            Icon="{materialDesign:PackIcon Kind=AccountEdit}"/>
-                                            <MenuItem Command="{Binding ElementName=ClientsUserControl,
-                            Path=DataContext.ChangeClientAvailabilityCommand}"
-                            CommandParameter="{Binding AbonementId}"
-                            Header="Закрыть"
-                            Icon="{materialDesign:PackIcon Kind=AccountCancelOutline}"/>
+                                            <MenuItem Command="{Binding ElementName=UserControl,
+                                                Path=DataContext.DeleteAbonementCommand}"
+                                                CommandParameter="{Binding AbonementId}"
+                                                Header="Удалить"
+                                                Foreground="Crimson"
+                                                Icon="{materialDesign:PackIcon Kind=Delete}"/>
                                         </MenuItem>
                                     </Menu>
                                 </DataTemplate>

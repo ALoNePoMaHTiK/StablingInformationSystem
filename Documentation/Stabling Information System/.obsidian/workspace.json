@@ -118,7 +118,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
+                "file": "Stabling Information System/Тонкий клиент.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -135,7 +135,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
+                "file": "Stabling Information System/Тонкий клиент.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -158,7 +158,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md"
+                "file": "Stabling Information System/Тонкий клиент.md"
               }
             }
           }
@@ -180,8 +180,9 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "48952650bd4a4a06",
+  "active": "bef28317b056a11c",
   "lastOpenFiles": [
+    "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
     "Stabling Information System/StablingClientWPF/Текущие задачи.md",
     "Stabling Information System/StablingDB/Tables/Trainings.md",
     "Stabling Information System/StablingDB/Tables/Trainers.md",
@@ -196,7 +197,6 @@
     "Stabling Information System/Технологии.md",
     "Stabling Information System/Основные блоки задач.md",
     "Stabling Information System/StablingDB/Tables/Abonements.md",
-    "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
     "Templates/Default Template.md",
     "Stabling Information System/StablingDB/Tables/AbonementTypes.md",
     "Stabling Information System/StablingDB/Tables/BusinessOperationTypes.md",
