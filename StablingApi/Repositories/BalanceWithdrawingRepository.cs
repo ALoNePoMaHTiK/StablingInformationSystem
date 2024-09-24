@@ -20,9 +20,14 @@ namespace StablingApi.Repositories
             return withdrawing;
         }
 
-        public Task<BalanceWithdrawing> CreateByAbonement(BalanceWithdrawing withdrawing, int abonementId)
+        public async Task<BalanceWithdrawing> CreateByAbonement(BalanceWithdrawing withdrawing, int abonementId)
         {
-            throw new NotImplementedException();
+            MoneyContext context = _contextFactory.CreateDbContext();
+            await context.BalanceWithdrawings.AddAsync(withdrawing);
+            AbonementWithdrawing abonementWithdrawing = new AbonementWithdrawing(abonementId, withdrawing.BalanceWithdrawingId);
+            await context.AbonementWithdrawings.AddAsync(abonementWithdrawing);
+            await context.SaveChangesAsync();
+            return withdrawing;
         }
 
         public async Task<BalanceWithdrawing> CreateByTraining(BalanceWithdrawing withdrawing, int trainingId)
@@ -72,6 +77,15 @@ namespace StablingApi.Repositories
             MoneyContext context = _contextFactory.CreateDbContext();
             IEnumerable<Guid> trainingWithdrawings = await context.TrainingWithdrawings.Where(tw => tw.TrainingId == trainingId).Select(tw => tw.BalanceWithdrawingId).ToListAsync();
             return await context.BalanceWithdrawingsForShow.Where(bw => trainingWithdrawings.Contains(bw.BalanceWithdrawingId)).ToListAsync();
+        }
+
+        public async Task<IEnumerable<BalanceWithdrawingForShow>> GetForShowByAbonement(int abonementId)
+        {
+            MoneyContext context = _contextFactory.CreateDbContext();
+            IEnumerable<Guid> abonementWithdrawings = await context.AbonementWithdrawings.Where(aw =>
+            aw.AbonementId == abonementId).Select(tw => tw.BalanceWithdrawingId).ToListAsync();
+            return await context.BalanceWithdrawingsForShow.Where(bw =>
+            abonementWithdrawings.Contains(bw.BalanceWithdrawingId)).ToListAsync();
         }
 
         public async Task Update(BalanceWithdrawing withdrawing)

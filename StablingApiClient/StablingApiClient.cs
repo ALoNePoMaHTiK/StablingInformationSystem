@@ -1020,14 +1020,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Abonement> ChangeAvailabilityAsync(int abonementId)
+        public virtual System.Threading.Tasks.Task<int> ChangeAvailabilityAsync(int abonementId)
         {
             return ChangeAvailabilityAsync(abonementId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Abonement> ChangeAvailabilityAsync(int abonementId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<int> ChangeAvailabilityAsync(int abonementId, System.Threading.CancellationToken cancellationToken)
         {
             if (abonementId == null)
                 throw new System.ArgumentNullException("abonementId");
@@ -1073,7 +1073,7 @@ namespace StablingApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<Abonement>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<int>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -2587,6 +2587,86 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BalanceWithdrawingForShow>> GetForShowByAbonementAsync(int abonementId)
+        {
+            return GetForShowByAbonementAsync(abonementId, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<BalanceWithdrawingForShow>> GetForShowByAbonementAsync(int abonementId, System.Threading.CancellationToken cancellationToken)
+        {
+            if (abonementId == null)
+                throw new System.ArgumentNullException("abonementId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/BalanceWithdrawings/ForShow/ByAbonement/{abonementId}"
+                    urlBuilder_.Append("api/BalanceWithdrawings/ForShow/ByAbonement/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<BalanceWithdrawingForShow>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task CreateAsync(BalanceWithdrawing withdrawing)
         {
             return CreateAsync(withdrawing, System.Threading.CancellationToken.None);
@@ -2773,6 +2853,87 @@ namespace StablingApiClient
                     // Operation Path: "api/BalanceWithdrawings/ByTraining/{trainingId}"
                     urlBuilder_.Append("api/BalanceWithdrawings/ByTraining/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(trainingId, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task CreateByAbonementAsync(BalanceWithdrawing withdrawing, int abonementId)
+        {
+            return CreateByAbonementAsync(withdrawing, abonementId, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task CreateByAbonementAsync(BalanceWithdrawing withdrawing, int abonementId, System.Threading.CancellationToken cancellationToken)
+        {
+            if (abonementId == null)
+                throw new System.ArgumentNullException("abonementId");
+
+            if (withdrawing == null)
+                throw new System.ArgumentNullException("withdrawing");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(withdrawing, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/BalanceWithdrawings/ByAbonement/{abonementId}"
+                    urlBuilder_.Append("api/BalanceWithdrawings/ByAbonement/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(abonementId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -7978,9 +8139,19 @@ namespace StablingApiClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string TypeName { get; set; } = default!;
 
-        [Newtonsoft.Json.JsonProperty("fullName", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("clientId", Required = Newtonsoft.Json.Required.Always)]
+        public int ClientId { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("clientName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string FullName { get; set; } = default!;
+        public string ClientName { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("trainerId", Required = Newtonsoft.Json.Required.Always)]
+        public int TrainerId { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("trainerName", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string TrainerName { get; set; } = default!;
 
         [Newtonsoft.Json.JsonProperty("maxUses", Required = Newtonsoft.Json.Required.Always)]
         public int MaxUses { get; set; } = default!;
@@ -7990,6 +8161,9 @@ namespace StablingApiClient
 
         [Newtonsoft.Json.JsonProperty("isAvailable", Required = Newtonsoft.Json.Required.Always)]
         public bool IsAvailable { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("isPaid", Required = Newtonsoft.Json.Required.Always)]
+        public bool IsPaid { get; set; } = default!;
 
     }
 
@@ -8005,6 +8179,9 @@ namespace StablingApiClient
         [Newtonsoft.Json.JsonProperty("abonementTypeId", Required = Newtonsoft.Json.Required.Always)]
         public int AbonementTypeId { get; set; } = default!;
 
+        [Newtonsoft.Json.JsonProperty("trainerId", Required = Newtonsoft.Json.Required.Always)]
+        public int TrainerId { get; set; } = default!;
+
         [Newtonsoft.Json.JsonProperty("usesCount", Required = Newtonsoft.Json.Required.Always)]
         public int UsesCount { get; set; } = default!;
 
@@ -8014,6 +8191,9 @@ namespace StablingApiClient
 
         [Newtonsoft.Json.JsonProperty("isAvailable", Required = Newtonsoft.Json.Required.Always)]
         public bool IsAvailable { get; set; } = default!;
+
+        [Newtonsoft.Json.JsonProperty("isPaid", Required = Newtonsoft.Json.Required.Always)]
+        public bool IsPaid { get; set; } = default!;
 
     }
 

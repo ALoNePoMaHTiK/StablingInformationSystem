@@ -16,6 +16,7 @@ namespace StablingApi.Contexts
         public DbSet<BalanceWithdrawing> BalanceWithdrawings { get; set; }
         public DbSet<BalanceWithdrawingForShow> BalanceWithdrawingsForShow { get; set; }
         public DbSet<TrainingWithdrawing> TrainingWithdrawings { get; set; }
+        public DbSet<AbonementWithdrawing> AbonementWithdrawings { get; set; }
 
         public MoneyContext(DbContextOptions<MoneyContext> options)
             : base(options)
@@ -70,6 +71,7 @@ namespace StablingApi.Contexts
                     t.TrainingId
                 });
             });
+            modelBuilder.Entity<AbonementWithdrawing>().HasKey(w => new { w.AbonementId, w.BalanceWithdrawingId });
 
         }
     }

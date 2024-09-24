@@ -348,7 +348,8 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/Abonement"
+              "type": "integer",
+              "format": "int32"
             }
           }
         }
@@ -799,6 +800,41 @@
         }
       }
     },
+    "/api/BalanceWithdrawings/ForShow/ByAbonement/{abonementId}": {
+      "get": {
+        "tags": [
+          "BalanceWithdrawings"
+        ],
+        "operationId": "BalanceWithdrawings_GetForShowByAbonement",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "abonementId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BalanceWithdrawingForShow"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/BalanceWithdrawings": {
       "post": {
         "tags": [
@@ -879,6 +915,43 @@
           {
             "type": "integer",
             "name": "trainingId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/BalanceWithdrawings/ByAbonement/{abonementId}": {
+      "post": {
+        "tags": [
+          "BalanceWithdrawings"
+        ],
+        "operationId": "BalanceWithdrawings_CreateByAbonement",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "withdrawing",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BalanceWithdrawing"
+            },
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "abonementId",
             "in": "path",
             "required": true,
             "format": "int32",
@@ -2370,10 +2443,14 @@
       "required": [
         "abonementId",
         "typeName",
-        "fullName",
+        "clientId",
+        "clientName",
+        "trainerId",
+        "trainerName",
         "maxUses",
         "usesCount",
-        "isAvailable"
+        "isAvailable",
+        "isPaid"
       ],
       "properties": {
         "abonementId": {
@@ -2383,7 +2460,18 @@
         "typeName": {
           "type": "string"
         },
-        "fullName": {
+        "clientId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "clientName": {
+          "type": "string"
+        },
+        "trainerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainerName": {
           "type": "string"
         },
         "maxUses": {
@@ -2396,6 +2484,9 @@
         },
         "isAvailable": {
           "type": "boolean"
+        },
+        "isPaid": {
+          "type": "boolean"
         }
       }
     },
@@ -2405,9 +2496,11 @@
         "abonementId",
         "clientId",
         "abonementTypeId",
+        "trainerId",
         "usesCount",
         "openDateTime",
-        "isAvailable"
+        "isAvailable",
+        "isPaid"
       ],
       "properties": {
         "abonementId": {
@@ -2422,6 +2515,10 @@
           "type": "integer",
           "format": "int32"
         },
+        "trainerId": {
+          "type": "integer",
+          "format": "int32"
+        },
         "usesCount": {
           "type": "integer",
           "format": "int32"
@@ -2431,6 +2528,9 @@
           "format": "date-time"
         },
         "isAvailable": {
+          "type": "boolean"
+        },
+        "isPaid": {
           "type": "boolean"
         }
       }

@@ -10,11 +10,13 @@ namespace StablingClientWPF.ViewModels
 {
     public class AbonementCreationFormViewModel : BaseViewModel
     {
-        public AbonementCreationFormViewModel(Abonement abonement, IEnumerable<Client> clients, IEnumerable<AbonementType> abonementTypes)
+        public AbonementCreationFormViewModel(Abonement abonement,
+            IEnumerable<Client> clients, IEnumerable<AbonementType> abonementTypes, IEnumerable<Trainer> trainers)
         {
             Abonement = abonement;
             Clients = new ObservableCollection<Client>(clients);
             AbonementTypes = new ObservableCollection<AbonementType>(abonementTypes);
+            Trainers = new ObservableCollection<Trainer>(trainers);
         }
 
         private Abonement _Abonement;
@@ -36,6 +38,13 @@ namespace StablingClientWPF.ViewModels
         {
             get { return _AbonementTypes; }
             set { _AbonementTypes = value; OnPropertyChanged(); }
+        }
+
+        private ObservableCollection<Trainer> _Trainers;
+        public ObservableCollection<Trainer> Trainers
+        {
+            get { return _Trainers; }
+            set { _Trainers = value; OnPropertyChanged(); }
         }
     }
 }

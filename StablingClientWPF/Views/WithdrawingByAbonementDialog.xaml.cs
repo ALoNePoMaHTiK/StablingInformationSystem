@@ -17,14 +17,14 @@ using System.Windows.Shapes;
 namespace StablingClientWPF.Views
 {
     /// <summary>
-    /// Логика взаимодействия для WithdrawingByTrainingDialog.xaml
+    /// Логика взаимодействия для WithdrawingByAbonementDialog.xaml
     /// </summary>
-    public partial class WithdrawingByTrainingDialog : UserControl
+    public partial class WithdrawingByAbonementDialog : UserControl
     {
-        public WithdrawingByTrainingDialog(WithdrawingByTrainingDialogViewModel viewModel)
+        public WithdrawingByAbonementDialog(WithdrawingByAbonementDialogViewModel viewModel)
         {
-            InitializeComponent();
             DataContext = viewModel;
+            InitializeComponent();
         }
     }
 }

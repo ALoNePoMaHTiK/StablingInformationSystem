@@ -10,11 +10,11 @@ using System.Windows;
 
 namespace StablingClientWPF.ViewModels
 {
-    public class WithdrawingByTrainingFormViewModel : BaseViewModel
+    public class WithdrawingByTrainingDialogViewModel : BaseViewModel
     {
 
         //Используется при вызове для ДОБАВЛЕНИЯ
-        public WithdrawingByTrainingFormViewModel(DateTime currentDate, TrainingForShow training)
+        public WithdrawingByTrainingDialogViewModel(DateTime currentDate, TrainingForShow training)
         {
             Training = training;
             CurrentWithdrawing = new BalanceWithdrawing()
@@ -27,7 +27,7 @@ namespace StablingClientWPF.ViewModels
         }
 
         //Используется при вызове для ИЗМЕНЕНИЯ
-        public WithdrawingByTrainingFormViewModel(BalanceWithdrawing withdrawing, TrainingForShow training)
+        public WithdrawingByTrainingDialogViewModel(BalanceWithdrawing withdrawing, TrainingForShow training)
         {
             CurrentWithdrawing = withdrawing;
             Training = training;

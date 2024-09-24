@@ -50,6 +50,15 @@ namespace StablingApi.Controllers
         }
 
         /// <summary>
+        ///     Получение списка представлений списаний с баланса клиентов по идентификатору абонемента
+        /// </summary>
+        [HttpGet("ForShow/ByAbonement/{abonementId}")]
+        public async Task<IEnumerable<BalanceWithdrawingForShow>> GetForShowByAbonement(int abonementId)
+        {
+            return await _repository.GetForShowByAbonement(abonementId);
+        }
+
+        /// <summary>
         ///     Добавление списания с баланса клиента
         /// </summary>
         [HttpPost]
@@ -68,6 +77,17 @@ namespace StablingApi.Controllers
         public async Task<ActionResult> CreateByTraining([FromBody] BalanceWithdrawing withdrawing, int trainingId)
         {
             BalanceWithdrawing newWithdrawing = await _repository.CreateByTraining(withdrawing, trainingId);
+            return CreatedAtAction(nameof(Create), newWithdrawing);
+        }
+
+        /// <summary>
+        ///     Добавление списания с баланса клиента на основании абонемента
+        /// </summary>
+        [HttpPost("ByAbonement/{abonementId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult> CreateByAbonement([FromBody] BalanceWithdrawing withdrawing, int abonementId)
+        {
+            BalanceWithdrawing newWithdrawing = await _repository.CreateByAbonement(withdrawing, abonementId);
             return CreatedAtAction(nameof(Create), newWithdrawing);
         }
 

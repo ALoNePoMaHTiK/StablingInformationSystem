@@ -18,6 +18,12 @@ namespace StablingClientWPF.Helpers
         public void UpdateTrainingFunds(int trainingId)
             => OnTrainingFundsUpdated?.Invoke(trainingId);
 
+        //Обновление суммы списаний по абонементу
+        public event Action<int> OnAbonementFundsUpdated;
+        public void UpdateAbonementFunds(int trainingId)
+            => OnAbonementFundsUpdated?.Invoke(trainingId);
+        
+
         public event Action<BalanceReplenishment> OnReplenishmentByTrainingCreateNotified;
         public void NotifyReplenishmentByTrainingCreate(BalanceReplenishment replenishment)
             => OnReplenishmentByTrainingCreateNotified?.Invoke(replenishment);

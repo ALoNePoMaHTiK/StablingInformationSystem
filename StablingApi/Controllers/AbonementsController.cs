@@ -68,7 +68,7 @@ namespace StablingApi.Controllers
         /// </summary>
         [HttpPut("ChangeAvailability/{abonementId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Abonement>> ChangeAvailability(int abonementId)
+        public async Task<ActionResult<int>> ChangeAvailability(int abonementId)
         {
             if (_repository.Get(abonementId) == null)
             {

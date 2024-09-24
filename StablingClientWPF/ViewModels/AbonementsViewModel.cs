@@ -9,13 +9,20 @@ namespace StablingClientWPF.ViewModels
 {
     public class AbonementsViewModel : BaseViewModel
     {
-        private AbonementsHttpClient _abonementsHttpClient;
-        private ClientsHttpClient _clientsHttpClient;
-        public AbonementsViewModel(AbonementsHttpClient abonementsHttpClient,
-            ClientsHttpClient clientsHttpClient)
+        private readonly AbonementsHttpClient _abonementsHttpClient;
+        private readonly ClientsHttpClient _clientsHttpClient;
+        private readonly TrainersHttpClient _trainersHttpClient;
+        private readonly BalanceWithdrawingsHttpClient _balanceWithdrawingsHttpClient;
+
+        private readonly Mediator _mediator;
+        public AbonementsViewModel(Mediator mediator, AbonementsHttpClient abonementsHttpClient,
+            ClientsHttpClient clientsHttpClient, TrainersHttpClient trainersHttpClient, BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient)
         {
+            _mediator = mediator;
             _abonementsHttpClient = abonementsHttpClient;
             _clientsHttpClient = clientsHttpClient;
+            _trainersHttpClient = trainersHttpClient;
+            _balanceWithdrawingsHttpClient = balanceWithdrawingsHttpClient;
             GetAbonements();
         }
 
@@ -37,7 +44,8 @@ namespace StablingClientWPF.ViewModels
         {
             get
             {
-                return new AsyncDelegateCommand(async o => { await GetAbonements(); }, ex => MessageBox.Show(ex.ToString()));
+                return new AsyncDelegateCommand(async o => { await GetAbonements(); },
+                    ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task GetAbonements()
@@ -66,7 +74,8 @@ namespace StablingClientWPF.ViewModels
                         IsAvailable = true,
                     },
                     await _clientsHttpClient.GetByAvailabilityAsync(true),
-                    await _abonementsHttpClient.GetTypesAsync())), ROOT_IDENTIFIER);
+                    await _abonementsHttpClient.GetTypesAsync(),
+                    await _trainersHttpClient.GetAllAsync())), ROOT_IDENTIFIER);
             if (result != null)
             {
                 await _abonementsHttpClient.CreateAsync((Abonement)result);
@@ -85,12 +94,10 @@ namespace StablingClientWPF.ViewModels
         private async Task ChangeAvailability(int abonementId)
         {
             AbonementForShow abonementForWork = ActiveAbonements.FirstOrDefault(o => o.AbonementId == abonementId);
-            if (abonementForWork == null)
-                abonementForWork = InactiveAbonements.Where(o => o.AbonementId == abonementId).First();
-            await _abonementsHttpClient.ChangeAvailabilityAsync(abonementId);
+            abonementForWork ??= InactiveAbonements.First(o => o.AbonementId == abonementId);
             if (abonementForWork.IsAvailable)
             {
-                ActiveAbonements.Remove(abonementForWork);
+                ActiveAbonements.Remove(abonementForWork);  //Проблема с отображением при перемещеннии из групп
                 InactiveAbonements.Add(abonementForWork);
             }
             else
@@ -98,18 +105,21 @@ namespace StablingClientWPF.ViewModels
                 InactiveAbonements.Remove(abonementForWork);
                 ActiveAbonements.Add(abonementForWork);
             }
+            await _abonementsHttpClient.ChangeAvailabilityAsync(abonementId);
         }
 
         public AsyncDelegateCommand DeleteAbonementCommand
         {
             get
             {
-                return new AsyncDelegateCommand(async o => { await DeleteAbonementAsync((int)o); }, ex => MessageBox.Show(ex.ToString()));
+                return new AsyncDelegateCommand(async o => { await DeleteAbonementAsync((int)o); },
+                    ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task DeleteAbonementAsync(int abonementId)
         {
-            AbonementForShow abonementForDelete = ActiveAbonements.Where(ab => ab.AbonementId == abonementId).FirstOrDefault();
+            AbonementForShow abonementForDelete = ActiveAbonements.Where(ab =>
+            ab.AbonementId == abonementId).FirstOrDefault();
             if (abonementForDelete == null)
             {
                 abonementForDelete = InactiveAbonements.Where(ab => ab.AbonementId == abonementId).FirstOrDefault();
@@ -119,5 +129,26 @@ namespace StablingClientWPF.ViewModels
                 ActiveAbonements.Remove(abonementForDelete);
             await _abonementsHttpClient.DeleteAsync(abonementId);
         }
+
+        #region Детали
+
+        public DelegateCommand OpenAbonementDetailsDialogCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    OpenAbonementDetailsDialogAsync((int)o);
+                });
+            }
+        }
+        private async Task OpenAbonementDetailsDialogAsync(int abonementId)
+        {
+            await MaterialDesignThemes.Wpf.DialogHost.Show(
+                new AbonementsDetailsDialog(new AbonementsDetailsDialogViewModel(_mediator,
+                    _abonementsHttpClient, _balanceWithdrawingsHttpClient, DateTime.Now, abonementId)), ROOT_IDENTIFIER);
+        }
+
+        #endregion
     }
 }

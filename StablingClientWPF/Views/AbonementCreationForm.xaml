@@ -25,6 +25,14 @@
             ItemsSource="{Binding AbonementTypes}" 
             SelectedValue="{Binding Abonement.AbonementTypeId}" 
             DisplayMemberPath="TypeName" SelectedValuePath="AbonementTypeId"/>
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="2" Margin="5"
+            materialDesign:HintAssist.Hint="Тренер"
+            materialDesign:HintAssist.HintOpacity=".26"
+            IsEditable="True"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            ItemsSource="{Binding Trainers}" 
+            SelectedValue="{Binding Abonement.TrainerId}"
+            DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
         <DatePicker Style="{StaticResource MaterialDesignOutlinedDatePicker}"
             SelectedDate="{Binding Abonement.OpenDateTime}" Margin="5"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">

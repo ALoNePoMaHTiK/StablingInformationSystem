@@ -8,6 +8,7 @@ namespace StablingApi.Repositories.Interfaces
         Task<BalanceWithdrawingForShow> GetForShow(Guid id);
         Task<IEnumerable<BalanceWithdrawingForShow>> GetForShowByDate(DateTime date);
         Task<IEnumerable<BalanceWithdrawingForShow>> GetForShowByTraining(int trainingId);
+        Task<IEnumerable<BalanceWithdrawingForShow>> GetForShowByAbonement(int abonementId);
         Task<BalanceWithdrawing> Create(BalanceWithdrawing withdrawing);
         Task<BalanceWithdrawing> CreateByTraining(BalanceWithdrawing withdrawing, int trainingId);
         Task<BalanceWithdrawing> CreateByAbonement(BalanceWithdrawing withdrawing, int abonementId);
