@@ -1,4 +1,5 @@
 # StablingInformationSystem
 
 # Database Diagram
-![image](https://github.com/user-attachments/assets/724ea1e3-431f-4b75-9972-27106546d0cf)
+![image](https://github.com/user-attachments/assets/a32d2e72-5781-4b51-88c2-4d84b37e1d9d)
+
