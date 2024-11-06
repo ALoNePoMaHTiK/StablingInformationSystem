@@ -53,21 +53,34 @@ VerticalAlignment="Center" Margin="5">
                             <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
                             <materialDesign:DataGridTextColumn Header="Макс. исп." Binding="{Binding MaxUses}" Width="100"/>
                             <materialDesign:DataGridTextColumn Header="Осталось исп." Binding="{Binding UsesCount}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Дата открытия" Binding="{Binding OpenDateTime}" Width="*"/>
+                            <materialDesign:DataGridTextColumn Header="Полученная сумма" Binding="{Binding AbonementFunds}" Width="*"/>
                             <DataGridTemplateColumn Width="100">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                             <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                 <MenuItem Command="{Binding ElementName=UserControl,
-                                            Path=DataContext.ChangeAvailabilityCommand}"
-                                            CommandParameter="{Binding AbonementId}"
-                                            Header="Закрыть"
-                                            Icon="{materialDesign:PackIcon Kind=Hide}"/>
+                                                    Path=DataContext.ChangeAvailabilityCommand}"
+                                                    CommandParameter="{Binding AbonementId}"
+                                                    Header="Закрыть"
+                                                    Icon="{materialDesign:PackIcon Kind=Hide}"/>
+                                                <!--TODO Добавить проверку на изменение статуса оплаты-->
                                                 <MenuItem Command="{Binding ElementName=UserControl,
-                                            Path=DataContext.OpenAbonementDetailsDialogCommand}"
-                                            CommandParameter="{Binding AbonementId}"
-                                            Header="Детали"
-                                            Icon="{materialDesign:PackIcon Kind=Details}"/>
+                                                    Path=DataContext.OpenAbonementDetailsDialogCommand}"
+                                                    CommandParameter="{Binding AbonementId}"
+                                                    Header="Детали"
+                                                    Icon="{materialDesign:PackIcon Kind=Details}"/>
+                                                <MenuItem Command="{Binding ElementName=UserControl,
+                                                    Path=DataContext.MakeFullPaymentCommand}"
+                                                    CommandParameter="{Binding AbonementId}"
+                                                    Header="Оплатить абонемент"
+                                                    Icon="{materialDesign:PackIcon Kind=CheckAll}"/>
+                                                <MenuItem Command="{Binding ElementName=UserControl,
+                                                    Path=DataContext.ChangePaidStatusCommand}"
+                                                    CommandParameter="{Binding AbonementId}"
+                                                    Header="Изменить статус оплаты"
+                                                    Icon="{materialDesign:PackIcon Kind=Check}"/>
                                                 <MenuItem Command="{Binding ElementName=UserControl,
                                             Path=DataContext.DeleteAbonementCommand}"
                                             CommandParameter="{Binding AbonementId}"

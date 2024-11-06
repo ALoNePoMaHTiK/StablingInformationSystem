@@ -36,7 +36,7 @@
                                         <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                             <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                 <MenuItem Command="{Binding ElementName=UserControl,
-                                                  Path=DataContext.UpdateTrainingWithdrawingCommand}"
+                                                  Path=DataContext.UpdateAbonementWithdrawingCommand}"
                                                   CommandParameter="{Binding BalanceWithdrawingId}"
                                                   Header="Изменить"
                                                   Icon="{materialDesign:PackIcon Kind=Edit}"/>

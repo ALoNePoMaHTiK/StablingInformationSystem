@@ -13,9 +13,7 @@ using System.Windows.Shapes;
 
 namespace StablingClientWPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    //TODO Реализовать возможность указания адреса API через модульное окно/вкладку
     public partial class MainWindow : Window
     {
         public MainWindow(MainViewModel viewModel)

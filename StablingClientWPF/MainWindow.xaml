@@ -16,9 +16,9 @@
 
     <materialDesign:DialogHost Identifier="{Binding ROOT_IDENTIFIER}">
         <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
-    SnapsToDevicePixels="True" SelectedIndex="{Binding SelectedTab}"
-    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
-    TabStripPlacement="Left">
+            SnapsToDevicePixels="True" SelectedIndex="{Binding SelectedTab}"
+            Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+            TabStripPlacement="Left">
             <TabItem  Width="100" Height="100">
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
@@ -78,6 +78,23 @@
                     </StackPanel>
                 </TabItem.Header>
                 <v:AdministrationView DataContext="{Binding AdministrationViewModel,Mode=OneWay}"/>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="Auto" Height="auto">
+                        <materialDesign:PackIcon
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="Settings" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Text="Настройки" />
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel>
+                    
+                </StackPanel>
             </TabItem>
         </TabControl>
     </materialDesign:DialogHost>

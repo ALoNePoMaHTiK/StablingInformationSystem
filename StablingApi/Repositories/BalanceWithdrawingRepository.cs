@@ -17,6 +17,7 @@ namespace StablingApi.Repositories
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             await context.BalanceWithdrawings.AddAsync(withdrawing);
+            await context.SaveChangesAsync();
             return withdrawing;
         }
 
@@ -24,16 +25,18 @@ namespace StablingApi.Repositories
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             await context.BalanceWithdrawings.AddAsync(withdrawing);
+            await context.SaveChangesAsync();
             AbonementWithdrawing abonementWithdrawing = new AbonementWithdrawing(abonementId, withdrawing.BalanceWithdrawingId);
             await context.AbonementWithdrawings.AddAsync(abonementWithdrawing);
             await context.SaveChangesAsync();
             return withdrawing;
         }
-
+        
         public async Task<BalanceWithdrawing> CreateByTraining(BalanceWithdrawing withdrawing, int trainingId)
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             await context.BalanceWithdrawings.AddAsync(withdrawing);
+            await context.SaveChangesAsync();
             TrainingWithdrawing trainingWithdrawing = new TrainingWithdrawing(trainingId,withdrawing.BalanceWithdrawingId);
             await context.TrainingWithdrawings.AddAsync(trainingWithdrawing);
             await context.SaveChangesAsync();

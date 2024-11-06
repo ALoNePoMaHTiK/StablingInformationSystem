@@ -71,7 +71,14 @@ namespace StablingApi.Contexts
                     t.TrainingId
                 });
             });
-            modelBuilder.Entity<AbonementWithdrawing>().HasKey(w => new { w.AbonementId, w.BalanceWithdrawingId });
+            modelBuilder.Entity<AbonementWithdrawing>(builder =>
+            {
+                builder.HasKey(w => new
+                {
+                    w.BalanceWithdrawingId,
+                    w.AbonementId
+                });
+            });
 
         }
     }

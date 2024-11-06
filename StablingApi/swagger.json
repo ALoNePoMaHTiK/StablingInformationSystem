@@ -250,6 +250,76 @@
         }
       }
     },
+    "/api/Abonements/ForShow/ByClient/{clientId}": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_GetForShowByClient",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AbonementForShow"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/ByClient/{clientId}": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_GetByClient",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Abonement"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Abonements/ByAvailability/ForShow/{isAvailable}": {
       "get": {
         "tags": [
@@ -322,12 +392,83 @@
         }
       }
     },
+    "/api/Abonements/Usage": {
+      "post": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_CreateMark",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "mark",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AbonementMark"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AbonementMark"
+            }
+          }
+        }
+      }
+    },
     "/api/Abonements/ChangeAvailability/{abonementId}": {
       "put": {
         "tags": [
           "Abonements"
         ],
         "operationId": "Abonements_ChangeAvailability",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "abonementId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/PaidStatus/{abonementId}": {
+      "put": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_ChangePaidStatus",
         "produces": [
           "text/plain",
           "application/json",
@@ -375,6 +516,38 @@
               "items": {
                 "$ref": "#/definitions/AbonementType"
               }
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/Types/{id}": {
+      "get": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_GetType",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AbonementType"
             }
           }
         }
@@ -2442,6 +2615,7 @@
       "type": "object",
       "required": [
         "abonementId",
+        "abonementTypeId",
         "typeName",
         "clientId",
         "clientName",
@@ -2450,10 +2624,17 @@
         "maxUses",
         "usesCount",
         "isAvailable",
-        "isPaid"
+        "isPaid",
+        "openDateTime",
+        "abonementFunds",
+        "abonementLabel"
       ],
       "properties": {
         "abonementId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "abonementTypeId": {
           "type": "integer",
           "format": "int32"
         },
@@ -2487,6 +2668,17 @@
         },
         "isPaid": {
           "type": "boolean"
+        },
+        "openDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "abonementFunds": {
+          "type": "number",
+          "format": "double"
+        },
+        "abonementLabel": {
+          "type": "string"
         }
       }
     },
@@ -2532,6 +2724,28 @@
         },
         "isPaid": {
           "type": "boolean"
+        }
+      }
+    },
+    "AbonementMark": {
+      "type": "object",
+      "required": [
+        "abonementMarkId",
+        "abonementId",
+        "trainingId"
+      ],
+      "properties": {
+        "abonementMarkId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "abonementId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "trainingId": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

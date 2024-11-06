@@ -48,6 +48,13 @@ namespace StablingApi.Repositories
             AbonementsContext context = _contextFactory.CreateDbContext();
             return await context.Abonements.Where(a => a.ClientId == clientId).ToListAsync();
         }
+        public async Task<IEnumerable<AbonementForShow>> GetForShowByClient(int clientId)
+        {
+            AbonementsContext context = _contextFactory.CreateDbContext();
+            return await context.AbonementsForShow.Where(a => a.ClientId == clientId).ToListAsync();
+        }
+
+        
         public async Task<IEnumerable<Abonement>> GetByType(int abonementTypeId)
         {
             AbonementsContext context = _contextFactory.CreateDbContext();
@@ -95,6 +102,17 @@ namespace StablingApi.Repositories
                 abonementToUpdate.IsAvailable = !abonementToUpdate.IsAvailable;
             }
             await context.SaveChangesAsync();
+        }
+
+        public async Task ChangePaidStatus(int abonementId)
+        {
+            AbonementsContext context = _contextFactory.CreateDbContext();
+            Abonement abonementForUpdate = await context.Abonements.SingleOrDefaultAsync(a => a.AbonementId == abonementId);
+            if (abonementForUpdate != null)
+            {
+                abonementForUpdate.IsPaid = !abonementForUpdate.IsPaid;
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<AbonementForShow>> GetForShowByAvailability(bool isAvailable)

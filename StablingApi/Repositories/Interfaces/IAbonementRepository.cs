@@ -7,6 +7,7 @@ namespace StablingApi.Repositories.Interfaces
         Task<IEnumerable<Abonement>> GetAll();
         Task<IEnumerable<AbonementForShow>> GetAllForShow();
         Task<IEnumerable<AbonementForShow>> GetForShowByAvailability(bool isAvailable);
+        Task<IEnumerable<AbonementForShow>> GetForShowByClient(int id);
         Task<Abonement> Get(int id);
         Task<AbonementForShow> GetForShow(int id);
         Task<IEnumerable<Abonement>> GetByClient(int id);
@@ -16,6 +17,7 @@ namespace StablingApi.Repositories.Interfaces
         Task<Abonement> Create(Abonement abonement);
         Task Update(Abonement abonement);
         Task ChangeAvailability(int id);
+        Task ChangePaidStatus(int id);
         Task Delete(int id);
     }
 }
