@@ -5955,14 +5955,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CreateAsync(MoneyTransaction transaction)
+        public virtual System.Threading.Tasks.Task<MoneyTransaction> CreateAsync(MoneyTransaction transaction)
         {
             return CreateAsync(transaction, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CreateAsync(MoneyTransaction transaction, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<MoneyTransaction> CreateAsync(MoneyTransaction transaction, System.Threading.CancellationToken cancellationToken)
         {
             if (transaction == null)
                 throw new System.ArgumentNullException("transaction");
@@ -5978,6 +5978,7 @@ namespace StablingApiClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
@@ -6009,7 +6010,12 @@ namespace StablingApiClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 201)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<MoneyTransaction>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {

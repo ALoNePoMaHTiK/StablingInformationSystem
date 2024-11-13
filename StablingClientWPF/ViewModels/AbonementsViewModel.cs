@@ -90,21 +90,10 @@ namespace StablingClientWPF.ViewModels
         #region Создание абонемента на основании тренировки
         private async void CreateAbonementByClient(int clientId)
         {
-            var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new AbonementCreationDialog(
-                    new AbonementCreationDialogViewModel(
-                    new Abonement()
-                    {
-                        ClientId = clientId,
-                        OpenDateTime = DateTime.Now,
-                        IsAvailable = true,
-                    },
-                    await _clientsHttpClient.GetByAvailabilityAsync(true),
-                    await _abonementsHttpClient.GetTypesAsync(),
-                    await _trainersHttpClient.GetAllAsync())), ROOT_IDENTIFIER);
+            Abonement? result = await _dialogManager.OpenAbonementCreationFormAsync(clientId);
             if (result != null)
             {
-                Abonement createdAbonement = await _abonementsHttpClient.CreateAsync((Abonement)result);
+                Abonement createdAbonement = await _abonementsHttpClient.CreateAsync(result);
                 await GetAbonements();
                 _mediator.AbonementByClientCreated(createdAbonement);
             }
@@ -169,16 +158,20 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task DeleteAbonementAsync(int abonementId)
         {
-            AbonementForShow abonementForDelete = ActiveAbonements.Where(ab =>
-            ab.AbonementId == abonementId).FirstOrDefault();
-            if (abonementForDelete == null)
+            MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
-                abonementForDelete = InactiveAbonements.Where(ab => ab.AbonementId == abonementId).FirstOrDefault();
-                InactiveAbonements.Remove(abonementForDelete);
+                AbonementForShow? abonementForDelete = ActiveAbonements.Where(ab =>
+                    ab.AbonementId == abonementId).FirstOrDefault();
+                if (abonementForDelete == null)
+                {
+                    abonementForDelete = InactiveAbonements.Where(ab => ab.AbonementId == abonementId).First();
+                    InactiveAbonements.Remove(abonementForDelete);
+                }
+                else
+                    ActiveAbonements.Remove(abonementForDelete);
+                await _abonementsHttpClient.DeleteAsync(abonementId);
             }
-            else
-                ActiveAbonements.Remove(abonementForDelete);
-            await _abonementsHttpClient.DeleteAsync(abonementId);
         }
         #endregion
 

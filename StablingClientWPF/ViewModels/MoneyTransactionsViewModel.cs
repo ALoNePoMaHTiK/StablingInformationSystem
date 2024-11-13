@@ -8,9 +8,12 @@ namespace StablingClientWPF.ViewModels
 {
     public class MoneyTransactionsViewModel : BaseViewModel
     {
-        public MoneyTransactionsHttpClient _moneyTransactionsHttpClient { get; }
-        public MoneyAccountsHttpClient _moneyAccountsHttpClient { get; }
-        public TrainersHttpClient _trainersHttpClient { get; }
+        private readonly Mediator _mediator;
+        private readonly DialogManager _dialogManager;
+
+        private readonly MoneyTransactionsHttpClient _moneyTransactionsHttpClient;
+        private readonly MoneyAccountsHttpClient _moneyAccountsHttpClient;
+        private readonly TrainersHttpClient _trainersHttpClient;
 
         private DateTime _CurrentDate;
         public DateTime CurrentDate
@@ -20,53 +23,27 @@ namespace StablingClientWPF.ViewModels
             {
                 _CurrentDate = value; OnPropertyChanged();
                 GetMoneyTransactions();
-                ClearCurrentMoneyTransaction();
-                CloseMoneyTransactionsDialog();
             }
         }
 
-        public MoneyTransactionsViewModel(Mediator mediator, MoneyTransactionsHttpClient moneyTrainsactionsHttpClient,
-            MoneyAccountsHttpClient moneyAccountsHttpClient, TrainersHttpClient trainersHttpClient)
+        public MoneyTransactionsViewModel(Mediator mediator,DialogManager dialogManager,
+            MoneyTransactionsHttpClient moneyTrainsactionsHttpClient,
+            MoneyAccountsHttpClient moneyAccountsHttpClient,
+            TrainersHttpClient trainersHttpClient)
         {
-            mediator.OnDayOperationsDateUpdated += OnDateUpdate;
+            _mediator = mediator;
+            _dialogManager = dialogManager;
+            _mediator.OnDayOperationsDateUpdated += OnDateUpdate;
             _moneyTransactionsHttpClient = moneyTrainsactionsHttpClient;
             _moneyAccountsHttpClient = moneyAccountsHttpClient;
             _trainersHttpClient = trainersHttpClient;
 
-            GetMoneyAccounts();
-            GetTrainers();
         }
 
         private void OnDateUpdate(DateTime newDate)
         {
             CurrentDate = newDate;
         }
-
-        #region Справочники
-        private ObservableCollection<MoneyAccount> _MoneyAccounts;
-        public ObservableCollection<MoneyAccount> MoneyAccounts
-        {
-            get { return _MoneyAccounts; }
-            set { _MoneyAccounts = value; OnPropertyChanged(); }
-        }
-        private async void GetMoneyAccounts()
-        {
-            MoneyAccounts = new ObservableCollection<MoneyAccount>(
-                await _moneyAccountsHttpClient.GetAllAsync());
-        }
-
-        private ObservableCollection<Trainer> _Trainers;
-        public ObservableCollection<Trainer> Trainers
-        {
-            get { return _Trainers; }
-            set { _Trainers = value; OnPropertyChanged(); }
-        }
-        private async void GetTrainers()
-        {
-            Trainers = new ObservableCollection<Trainer>(
-                await _trainersHttpClient.GetAllAsync());
-        }
-        #endregion
 
         private ObservableCollection<MoneyTransactionForShow> _MoneyTransactions;
         public ObservableCollection<MoneyTransactionForShow> MoneyTransactions
@@ -89,97 +66,56 @@ namespace StablingClientWPF.ViewModels
                 await _moneyTransactionsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
-        private MoneyTransaction _CurrentTransaction;
-        public MoneyTransaction CurrentTransaction
-        {
-            get => _CurrentTransaction;
-            set { _CurrentTransaction = value; OnPropertyChanged(); }
-        }
-
-        private bool _IsMoneyTransactionsDialogOpen;
-        public bool IsMoneyTransactionsDialogOpen
-        {
-            get => _IsMoneyTransactionsDialogOpen;
-            set { _IsMoneyTransactionsDialogOpen = value; OnPropertyChanged(); }
-        }
-
-        public DelegateCommand OpenMoneyTransactionsDialogCommand
+        public AsyncDelegateCommand CreateMoneyTransactionCommand
         {
             get
             {
-                return new DelegateCommand(o =>
-                {
-                    OpenMoneyTransactionsDialog();
-                });
+                return new AsyncDelegateCommand(async o => {
+                    await CreateMoneyTransaction();
+                }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-        private void OpenMoneyTransactionsDialog()
+        private async Task CreateMoneyTransaction()
         {
-            IsMoneyTransactionsDialogOpen = true;
+            MoneyTransaction? newTransaction = await _dialogManager.OpenMoneyTransactionCreateDialog(
+                await _moneyAccountsHttpClient.GetAllAsync(),
+                await _trainersHttpClient.GetAllAsync(),
+                CurrentDate);
+            if (newTransaction != null)
+            {
+                newTransaction = await _moneyTransactionsHttpClient.CreateAsync(newTransaction);
+                MoneyTransactions.Add(
+                    await _moneyTransactionsHttpClient.GetForShowAsync(
+                        newTransaction.MoneyTransactionId));
+            }
         }
 
-        public DelegateCommand CloseMoneyTransactionsDialogCommand
+        public AsyncDelegateCommand UpdateMoneyTransactionCommand
         {
             get
             {
-                return new DelegateCommand(o =>
-                {
-                    CloseMoneyTransactionsDialog();
-                });
+                return new AsyncDelegateCommand(async o => {
+                    await UpdateMoneyTransaction((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-        private void CloseMoneyTransactionsDialog()
+        private async Task UpdateMoneyTransaction(int transactionId)
         {
-            IsMoneyTransactionsDialogOpen = false;
-        }
-
-        public DelegateCommand OpenEditMoneyTransactionDialogCommand
-        {
-            get
+            MoneyTransaction? updatedTransaction = await _dialogManager.OpenMoneyTransactionUpdateDialog(
+                await _moneyAccountsHttpClient.GetAllAsync(),
+                await _trainersHttpClient.GetAllAsync(),
+                CurrentDate,
+                await _moneyTransactionsHttpClient.GetAsync(transactionId));
+            if (updatedTransaction != null)
             {
-                return new DelegateCommand(o =>
-                {
-                    OpenEditMoneyTransactionDialog((int)o);
-                });
-            }
-        }
-        private async void OpenEditMoneyTransactionDialog(int id)
-        {
-            CurrentTransaction = await _moneyTransactionsHttpClient.GetAsync(id);
-            OpenMoneyTransactionsDialog();
-        }
-
-
-        public AsyncDelegateCommand ProcessTransactionCommand
-        {
-            get
-            {
-                return new AsyncDelegateCommand(async o => { await ProcessTransaction(); },
-                    ex => MessageBox.Show(ex.ToString()));
-            }
-        }
-        private async Task ProcessTransaction()
-        {
-            if (CurrentTransaction.MoneyTransactionId == 0)
-            {
-                await _moneyTransactionsHttpClient.CreateAsync(CurrentTransaction);
-                await GetMoneyTransactions();
-            }
-            else
-            {
-                await _moneyTransactionsHttpClient.UpdateAsync(CurrentTransaction);
-                MoneyTransactionForShow oldTransaction = MoneyTransactions.Where(t =>
-                t.MoneyTransactionId == CurrentTransaction.MoneyTransactionId).FirstOrDefault();
+                await _moneyTransactionsHttpClient.UpdateAsync(updatedTransaction);
+                MoneyTransactionForShow oldTransaction = MoneyTransactions.Where(
+                    t => t.MoneyTransactionId == updatedTransaction.MoneyTransactionId).First();
                 MoneyTransactions.Remove(oldTransaction);
-                MoneyTransactions.Add(await _moneyTransactionsHttpClient.GetForShowAsync(CurrentTransaction.MoneyTransactionId));
+                MoneyTransactions.Add(
+                    await _moneyTransactionsHttpClient.GetForShowAsync(
+                        updatedTransaction.MoneyTransactionId));
             }
-            ClearCurrentMoneyTransaction();
-            CloseMoneyTransactionsDialog();
-        }
-
-        private void ClearCurrentMoneyTransaction()
-        {
-            CurrentTransaction = new MoneyTransaction() { TransactionDate = CurrentDate };
         }
 
         public AsyncDelegateCommand DeleteMoneyTransactionCommand
@@ -197,7 +133,7 @@ namespace StablingClientWPF.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 await _moneyTransactionsHttpClient.DeleteAsync(id);
-                MoneyTransactionForShow oldTransaction = MoneyTransactions.Where(op => op.MoneyTransactionId == id).FirstOrDefault();
+                MoneyTransactionForShow oldTransaction = MoneyTransactions.Where(op => op.MoneyTransactionId == id).First();
                 MoneyTransactions.Remove(oldTransaction);
             }
         }

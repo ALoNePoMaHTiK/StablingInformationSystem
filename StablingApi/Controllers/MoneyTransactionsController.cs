@@ -65,7 +65,7 @@ namespace StablingApi.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> Create([FromBody] MoneyTransaction transaction)
+        public async Task<ActionResult<MoneyTransaction>> Create([FromBody] MoneyTransaction transaction)
         {
             MoneyTransaction newTransaction = await _repository.Create(transaction);
             return CreatedAtAction(nameof(Create), newTransaction);

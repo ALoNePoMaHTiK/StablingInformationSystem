@@ -1806,6 +1806,11 @@
           "text/json",
           "application/*+json"
         ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
             "name": "transaction",
@@ -1819,7 +1824,11 @@
         ],
         "responses": {
           "201": {
-            "description": ""
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MoneyTransaction"
+            }
           }
         }
       },

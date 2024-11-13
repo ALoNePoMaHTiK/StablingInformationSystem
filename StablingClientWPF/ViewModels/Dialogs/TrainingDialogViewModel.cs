@@ -5,6 +5,10 @@ namespace StablingClientWPF.ViewModels.Dialogs
 {
     public class TrainingDialogViewModel : BaseViewModel
     {
+
+        /// <summary>
+        /// Конструктор для создания новой тренировки
+        /// </summary>
         public TrainingDialogViewModel(IEnumerable<Trainer> trainers,
             IEnumerable<Client> clients,
             IEnumerable<TrainingType> trainingTypes,
@@ -17,15 +21,14 @@ namespace StablingClientWPF.ViewModels.Dialogs
             Training = new Training() { TrainingDateTime = dateTime };
         }
 
+        /// <summary>
+        /// Конструктор для изменения тренировки
+        /// </summary>
         public TrainingDialogViewModel(IEnumerable<Trainer> trainers,
             IEnumerable<Client> clients,
             IEnumerable<TrainingType> trainingTypes,
-            IEnumerable<Horse> horses, Training training)
+            IEnumerable<Horse> horses, Training training) : this(trainers,clients,trainingTypes,horses,DateTime.Now)
         {
-            Trainers = new ObservableCollection<Trainer>(trainers);
-            Clients = new ObservableCollection<Client>(clients);
-            TrainingTypes = new ObservableCollection<TrainingType>(trainingTypes);
-            Horses = new ObservableCollection<Horse>(horses);
             Training = training;
         }
 

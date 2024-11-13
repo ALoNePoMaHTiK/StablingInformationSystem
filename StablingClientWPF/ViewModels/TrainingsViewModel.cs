@@ -61,64 +61,7 @@ namespace StablingClientWPF.ViewModels
             _balanceReplenishmentsHttpClient = balanceReplenishmentsHttpClient;
 
             _dialogManager = dialogManager;
-
-            GetTrainers();
-            GetClients();
-            GetTrainingTypes();
-            GetHorses();
         }
-
-        #region Справочники
-
-        private ObservableCollection<Trainer> _Trainers;
-        public ObservableCollection<Trainer> Trainers
-        {
-            get { return _Trainers; }
-            set { _Trainers = value; OnPropertyChanged(); }
-        }
-
-        private ObservableCollection<Client> _Clients;
-        public ObservableCollection<Client> Clients
-        {
-            get { return _Clients; }
-            set { _Clients = value; OnPropertyChanged(); }
-        }
-
-        private ObservableCollection<TrainingType> _TrainingTypes;
-        public ObservableCollection<TrainingType> TrainingTypes
-        {
-            get { return _TrainingTypes; }
-            set { _TrainingTypes = value; OnPropertyChanged(); }
-        }
-
-        private ObservableCollection<Horse> _Horses;
-        public ObservableCollection<Horse> Horses
-        {
-            get { return _Horses; }
-            set { _Horses = value; OnPropertyChanged(); }
-        }
-
-        private async Task GetTrainers()
-        {
-            Trainers = new ObservableCollection<Trainer>(await _trainersHttpClient.GetAllAsync());
-        }
-
-        private async Task GetClients()
-        {
-            Clients = new ObservableCollection<Client>(await _clientsHttpClient.GetByAvailabilityAsync(true));
-        }
-
-        private async Task GetTrainingTypes()
-        {
-            TrainingTypes = new ObservableCollection<TrainingType>(await _trainingsHttpClient.GetTypesAsync());
-        }
-
-        private async Task GetHorses()
-        {
-            Horses = new ObservableCollection<Horse>(await _horsesHttpClient.GetAllAsync());
-        }
-
-        #endregion
 
         #region Основные операции
 
@@ -227,7 +170,6 @@ namespace StablingClientWPF.ViewModels
             }
         }
 
-
         private async Task GetTrainings()
         {
             Trainings = new ObservableCollection<TrainingForShow>(
@@ -267,9 +209,7 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task OpenTrainingDetailsDialogAsync(int trainingId)
         {
-            await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new TrainingsDetailsDialog(new TrainingsDetailsDialogViewModel(_mediator,
-                    _trainingsHttpClient, _balanceWithdrawingsHttpClient, CurrentDate, trainingId)), ROOT_IDENTIFIER);
+            await _dialogManager.OpenTrainingDetailsDialogAsync(CurrentDate,trainingId);
         }
 
         #endregion
