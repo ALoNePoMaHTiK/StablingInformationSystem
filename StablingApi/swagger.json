@@ -397,7 +397,7 @@
         "tags": [
           "Abonements"
         ],
-        "operationId": "Abonements_CreateMark",
+        "operationId": "Abonements_CreateUsage",
         "consumes": [
           "application/json",
           "text/json",
@@ -410,11 +410,11 @@
         ],
         "parameters": [
           {
-            "name": "mark",
+            "name": "usage",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/AbonementMark"
+              "$ref": "#/definitions/AbonementUsage"
             },
             "x-nullable": false
           }
@@ -424,7 +424,47 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/AbonementMark"
+              "$ref": "#/definitions/AbonementUsage"
+            }
+          }
+        }
+      }
+    },
+    "/api/Abonements/Usage/{abonementId}/{trainingId}": {
+      "post": {
+        "tags": [
+          "Abonements"
+        ],
+        "operationId": "Abonements_CreateUsage2",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "abonementId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "trainingId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AbonementUsage"
             }
           }
         }
@@ -668,11 +708,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "id",
             "in": "path",
             "required": true,
-            "format": "int32",
+            "format": "guid",
             "x-nullable": false
           }
         ],
@@ -693,11 +733,11 @@
         "operationId": "BalanceReplenishments_Delete",
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "id",
             "in": "path",
             "required": true,
-            "format": "int32",
+            "format": "guid",
             "x-nullable": false
           }
         ],
@@ -795,11 +835,11 @@
         ],
         "parameters": [
           {
-            "type": "integer",
+            "type": "string",
             "name": "id",
             "in": "path",
             "required": true,
-            "format": "int32",
+            "format": "guid",
             "x-nullable": false
           }
         ],
@@ -2460,12 +2500,12 @@
         }
       }
     },
-    "/api/TrainingTypes": {
+    "/api/Trainings/Types": {
       "get": {
         "tags": [
-          "TrainingTypes"
+          "Trainings"
         ],
-        "operationId": "TrainingTypes_GetAll",
+        "operationId": "Trainings_GetTypes",
         "produces": [
           "text/plain",
           "application/json",
@@ -2486,9 +2526,9 @@
       },
       "post": {
         "tags": [
-          "TrainingTypes"
+          "Trainings"
         ],
-        "operationId": "TrainingTypes_Create",
+        "operationId": "Trainings_Create2",
         "consumes": [
           "application/json",
           "text/json",
@@ -2522,9 +2562,9 @@
       },
       "put": {
         "tags": [
-          "TrainingTypes"
+          "Trainings"
         ],
-        "operationId": "TrainingTypes_Update",
+        "operationId": "Trainings_Update2",
         "consumes": [
           "application/json",
           "text/json",
@@ -2557,12 +2597,12 @@
         }
       }
     },
-    "/api/TrainingTypes/{id}": {
+    "/api/Trainings/Types/{typeId}": {
       "get": {
         "tags": [
-          "TrainingTypes"
+          "Trainings"
         ],
-        "operationId": "TrainingTypes_Get",
+        "operationId": "Trainings_GetType",
         "produces": [
           "text/plain",
           "application/json",
@@ -2571,7 +2611,7 @@
         "parameters": [
           {
             "type": "integer",
-            "name": "id",
+            "name": "typeId",
             "in": "path",
             "required": true,
             "format": "int32",
@@ -2727,15 +2767,15 @@
         }
       }
     },
-    "AbonementMark": {
+    "AbonementUsage": {
       "type": "object",
       "required": [
-        "abonementMarkId",
+        "abonementUsageId",
         "abonementId",
         "trainingId"
       ],
       "properties": {
-        "abonementMarkId": {
+        "abonementUsageId": {
           "type": "integer",
           "format": "int32"
         },
@@ -2790,8 +2830,8 @@
       ],
       "properties": {
         "balanceReplenishmentId": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "guid"
         },
         "clientId": {
           "type": "integer",
@@ -2822,8 +2862,8 @@
       ],
       "properties": {
         "balanceReplenishmentId": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "guid"
         },
         "trainerName": {
           "type": "string"

@@ -17,7 +17,9 @@
                 "file": "Stabling Information System/StablingApi/Contexts/TrainingContext.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "TrainingContext"
             }
           },
           {
@@ -29,7 +31,9 @@
                 "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "StablingWPFClient"
             }
           }
         ],
@@ -46,10 +50,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Stabling Information System/Тонкий клиент.md",
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "StablingWPFClient"
             }
           }
         ]
@@ -72,7 +78,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
             }
           },
           {
@@ -87,7 +95,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
             }
           },
           {
@@ -95,7 +105,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
             }
           }
         ]
@@ -118,7 +130,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Stabling Information System/Тонкий клиент.md",
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -126,7 +138,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для StablingWPFClient"
             }
           },
           {
@@ -135,10 +149,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Stabling Information System/Тонкий клиент.md",
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки из StablingWPFClient"
             }
           },
           {
@@ -149,7 +165,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
             }
           },
           {
@@ -158,8 +176,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Stabling Information System/Тонкий клиент.md"
-              }
+                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md"
+              },
+              "icon": "lucide-list",
+              "title": "Структура StablingWPFClient"
             }
           }
         ]
@@ -182,6 +202,7 @@
   },
   "active": "bef28317b056a11c",
   "lastOpenFiles": [
+    "Stabling Information System/Тонкий клиент.md",
     "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
     "Stabling Information System/StablingClientWPF/Текущие задачи.md",
     "Stabling Information System/StablingDB/Tables/Trainings.md",
@@ -193,7 +214,6 @@
     "Stabling Information System/StablingDB/Tables/BusinessOperations.md",
     "Stabling Information System/Описание сущностей.md",
     "Stabling Information System/Stabling Information System.md",
-    "Stabling Information System/Тонкий клиент.md",
     "Stabling Information System/Технологии.md",
     "Stabling Information System/Основные блоки задач.md",
     "Stabling Information System/StablingDB/Tables/Abonements.md",

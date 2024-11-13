@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StablingApi.Models;
+using StablingApi.Repositories;
 using StablingApi.Repositories.Interfaces;
 
 namespace StablingApi.Controllers
@@ -9,10 +10,12 @@ namespace StablingApi.Controllers
     public class TrainingsController : ControllerBase
     {
         private readonly ITrainingRepository _repository;
+        private readonly ITrainingTypeRepository _trainingTypeRepository;
 
-        public TrainingsController(ITrainingRepository repository)
+        public TrainingsController(ITrainingRepository repository, ITrainingTypeRepository trainingTypeRepository)
         {
             _repository = repository;
+            _trainingTypeRepository = trainingTypeRepository;
         }
 
         /// <summary>
@@ -173,6 +176,48 @@ namespace StablingApi.Controllers
                 return NotFound();
             await _repository.Delete(id);
             return Ok(id);
+        }
+
+        /// <summary>
+        ///     Получение списка всех типов тренировок
+        /// </summary>
+        [HttpGet("Types")]
+        public async Task<IEnumerable<TrainingType>> GetTypes()
+        {
+            return await _trainingTypeRepository.GetAll();
+        }
+
+        /// <summary>
+        ///     Получение списка всех типов тренировок
+        /// </summary>
+        [HttpGet("Types/{typeId}")]
+        public async Task<TrainingType> GetType(int typeId)
+        {
+            return await _trainingTypeRepository.Get(typeId);
+        }
+
+        /// <summary>
+        ///     Добавление типа тренировки
+        /// </summary>
+        [HttpPost("Types")]
+        public async Task<ActionResult<TrainingType>> Create([FromBody] TrainingType type)
+        {
+            TrainingType newType = await _trainingTypeRepository.Create(type);
+            return CreatedAtAction(nameof(Create), newType);
+        }
+
+        /// <summary>
+        ///     Изменение типа тренировки
+        /// </summary>
+        [HttpPut("Types")]
+        public async Task<ActionResult<TrainingType>> Update([FromBody] TrainingType type)
+        {
+            if (_trainingTypeRepository.Get(type.TrainingTypeId) == null)
+            {
+                return NotFound();
+            }
+            await _trainingTypeRepository.Update(type);
+            return Ok();
         }
     }
 }

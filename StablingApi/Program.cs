@@ -19,7 +19,7 @@ string connectionString = "Server=tcp:127.0.0.1,45565;Database=TimeTable;User Id
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingTypeRepository, TrainingTypeRepository>();
-builder.Services.AddScoped<IAbonementMarkRepository, AbonementMarkRepository>();
+builder.Services.AddScoped<IAbonementUsageRepository, AbonementUsageRepository>();
 builder.Services.AddScoped<IAbonementRepository, AbonementRepository>();
 builder.Services.AddScoped<IAbonementTypeRepository, AbonementTypeRepository>();
 builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
@@ -42,7 +42,7 @@ builder.Services.AddDbContextFactory<MoneyContext>(o => o.UseSqlServer(connectio
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (true)
 {
     app.UseOpenApi();
     app.UseSwaggerUI();

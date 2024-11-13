@@ -1,4 +1,4 @@
-﻿using StablingClientWPF.ViewModels;
+﻿using StablingClientWPF.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace StablingClientWPF.Views
+namespace StablingClientWPF.Views.Dialogs
 {
     /// <summary>
-    /// Логика взаимодействия для WithdrawingByTrainingDialog.xaml
+    /// Логика взаимодействия для TrainingDialog.xaml
     /// </summary>
-    public partial class WithdrawingByTrainingDialog : UserControl
+    public partial class TrainingDialog : UserControl
     {
-        public WithdrawingByTrainingDialog(WithdrawingByTrainingDialogViewModel viewModel)
+        public TrainingDialog(TrainingDialogViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

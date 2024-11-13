@@ -1,6 +1,7 @@
 ﻿using StablingApiClient;
 using StablingClientWPF.Helpers;
 using StablingClientWPF.Helpers.Commands;
+using StablingClientWPF.ViewModels.Dialogs;
 using StablingClientWPF.Views;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -14,12 +15,13 @@ namespace StablingClientWPF.ViewModels
         private readonly TrainersHttpClient _trainersHttpClient;
         private readonly BalanceWithdrawingsHttpClient _balanceWithdrawingsHttpClient;
         private readonly BalanceReplenishmentsHttpClient _balanceReplenishmentsHttpClient;
+        private readonly DialogManager _dialogManager;
 
         private readonly Mediator _mediator;
         public AbonementsViewModel(Mediator mediator, AbonementsHttpClient abonementsHttpClient,
             ClientsHttpClient clientsHttpClient, TrainersHttpClient trainersHttpClient,
             BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient, 
-            BalanceReplenishmentsHttpClient balanceReplenishmentsHttpClient)
+            BalanceReplenishmentsHttpClient balanceReplenishmentsHttpClient, DialogManager dialogManager)
         {
             _mediator = mediator;
             _abonementsHttpClient = abonementsHttpClient;
@@ -27,8 +29,13 @@ namespace StablingClientWPF.ViewModels
             _trainersHttpClient = trainersHttpClient;
             _balanceWithdrawingsHttpClient = balanceWithdrawingsHttpClient;
             _balanceReplenishmentsHttpClient = balanceReplenishmentsHttpClient;
+            _dialogManager = dialogManager;
+
+            _mediator.OnCreateAbonementByClient += CreateAbonementByClient;
             GetAbonements();
         }
+
+        #region Коллекции
 
         private ObservableCollection<AbonementForShow> _ActiveAbonements;
         public ObservableCollection<AbonementForShow> ActiveAbonements
@@ -43,6 +50,8 @@ namespace StablingClientWPF.ViewModels
             get { return _InactiveAbonements; }
             set { _InactiveAbonements = value; OnPropertyChanged(); }
         }
+
+        #endregion
 
         public AsyncDelegateCommand GetAbonementsCommand
         {
@@ -69,11 +78,23 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task CreateAbonement()
         {
+            Abonement? result = await _dialogManager.OpenAbonementCreationFormAsync();
+            if (result != null)
+            {
+                await _abonementsHttpClient.CreateAsync(result);
+                await GetAbonements();
+            }
+        }
+
+        #region Создание абонемента на основании тренировки
+        private async void CreateAbonementByClient(int clientId)
+        {
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new AbonementCreationForm(
-                    new AbonementCreationFormViewModel(
+                new AbonementCreationDialog(
+                    new AbonementCreationDialogViewModel(
                     new Abonement()
                     {
+                        ClientId = clientId,
                         OpenDateTime = DateTime.Now,
                         IsAvailable = true,
                     },
@@ -82,10 +103,12 @@ namespace StablingClientWPF.ViewModels
                     await _trainersHttpClient.GetAllAsync())), ROOT_IDENTIFIER);
             if (result != null)
             {
-                await _abonementsHttpClient.CreateAsync((Abonement)result);
+                Abonement createdAbonement = await _abonementsHttpClient.CreateAsync((Abonement)result);
                 await GetAbonements();
+                _mediator.AbonementByClientCreated(createdAbonement);
             }
         }
+        #endregion
 
         #region Закрытие/открытие абонемента
         public AsyncDelegateCommand ChangeAvailabilityCommand
@@ -158,24 +181,21 @@ namespace StablingClientWPF.ViewModels
         }
         #endregion
 
-
         #region Детали
 
-        public DelegateCommand OpenAbonementDetailsDialogCommand
+        public AsyncDelegateCommand OpenAbonementDetailsDialogCommand
         {
             get
             {
-                return new DelegateCommand(o =>
+                return new AsyncDelegateCommand(async o =>
                 {
-                    OpenAbonementDetailsDialogAsync((int)o);
-                });
+                    await OpenAbonementDetailsDialogAsync((int)o);
+                }, ex => MessageBox.Show(ex.ToString()));
             }
         }
         private async Task OpenAbonementDetailsDialogAsync(int abonementId)
         {
-            await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new AbonementsDetailsDialog(new AbonementsDetailsDialogViewModel(_mediator,
-                    _abonementsHttpClient, _balanceWithdrawingsHttpClient, DateTime.Now, abonementId)), ROOT_IDENTIFIER);
+            await _dialogManager.OpenAbonementDetailsDialogAsync(abonementId);
         }
 
         #endregion

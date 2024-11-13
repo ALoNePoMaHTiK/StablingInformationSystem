@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace StablingClientWPF.ViewModels
+namespace StablingClientWPF.ViewModels.Dialogs
 {
     public class WithdrawingByTrainingDialogViewModel : BaseViewModel
     {

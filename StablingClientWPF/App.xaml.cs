@@ -46,13 +46,6 @@ namespace StablingClientWPF
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
-                var httpClient = new TrainingTypesHttpClient(ApiUrl, client);
-                return httpClient;
-            });
-            services.AddSingleton(sp =>
-            {
-                var factory = sp.GetRequiredService<IHttpClientFactory>();
-                var client = factory.CreateClient();
                 var httpClient = new HorsesHttpClient(ApiUrl, client);
                 return httpClient;
             });
@@ -109,6 +102,7 @@ namespace StablingClientWPF
             });
 
             services.AddSingleton<Mediator>();
+            services.AddSingleton<DialogManager>();
 
 
             services.AddSingleton<MainWindow>();

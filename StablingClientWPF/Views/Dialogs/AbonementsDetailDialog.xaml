@@ -1,32 +1,32 @@
-﻿<UserControl x:Class="StablingClientWPF.Views.TrainingsDetailsDialog"
+﻿<UserControl x:Class="StablingClientWPF.Views.Dialogs.AbonementsDetailsDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:StablingClientWPF.Views"
+             xmlns:local="clr-namespace:StablingClientWPF.Views.Dialogs"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:vm="clr-namespace:StablingClientWPF.ViewModels"
+             xmlns:vmd="clr-namespace:StablingClientWPF.ViewModels.Dialogs"
              x:Name="UserControl"
-             d:DataContext="{d:DesignInstance vm:TrainingsDetailsDialogViewModel}"
+             d:DataContext="{d:DesignInstance vmd:AbonementsDetailsDialogViewModel}"
              mc:Ignorable="d" d:Background="White">
     <StackPanel Margin="20" Width="400" Height="400">
         <TabControl>
             <TabItem Header="Оплаты">
                 <StackPanel>
-                    <Button Command="{Binding CreateTrainingWithdrawingCommand}"
-                            VerticalAlignment="Center" Margin="5">
+                    <Button Command="{Binding CreateAbonementWithdrawingCommand}"
+                        VerticalAlignment="Center" Margin="5">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Add"/>
                             <TextBlock Text="Добавить"/>
                         </StackPanel>
                     </Button>
                     <DataGrid AutoGenerateColumns="False"
-                            IsReadOnly="True" Margin="20"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
-                            HeadersVisibility="All"
-                            ItemsSource="{Binding Withdrawings}">
+                        IsReadOnly="True" Margin="20"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        HeadersVisibility="All"
+                        ItemsSource="{Binding Withdrawings}">
                         <DataGrid.Columns>
                             <materialDesign:DataGridTextColumn Header="Дата" Binding="{Binding WithdrawingDate, StringFormat=dd.MM.yy}" Width="100"/>
                             <materialDesign:DataGridTextColumn Header="Сумма" Binding="{Binding Amount}" Width="100"/>
@@ -36,16 +36,16 @@
                                         <Menu materialDesign:MenuAssist.TopLevelMenuItemHeight="25">
                                             <MenuItem Icon="{materialDesign:PackIcon Kind=Settings}">
                                                 <MenuItem Command="{Binding ElementName=UserControl,
-                                                      Path=DataContext.UpdateTrainingWithdrawingCommand}"
-                                                      CommandParameter="{Binding BalanceWithdrawingId}"
-                                                      Header="Изменить"
-                                                      Icon="{materialDesign:PackIcon Kind=Edit}"/>
-                                                <MenuItem Command="{Binding ElementName=UserControl,
-                                                  Path=DataContext.DeleteWithdrawingCommand}"
+                                                  Path=DataContext.UpdateAbonementWithdrawingCommand}"
                                                   CommandParameter="{Binding BalanceWithdrawingId}"
-                                                  Header="Удалить"
-                                                  Foreground="Crimson"
-                                                  Icon="{materialDesign:PackIcon Kind=Delete}"/>
+                                                  Header="Изменить"
+                                                  Icon="{materialDesign:PackIcon Kind=Edit}"/>
+                                                <MenuItem Command="{Binding ElementName=UserControl,
+                                              Path=DataContext.DeleteWithdrawingCommand}"
+                                              CommandParameter="{Binding BalanceWithdrawingId}"
+                                              Header="Удалить"
+                                              Foreground="Crimson"
+                                              Icon="{materialDesign:PackIcon Kind=Delete}"/>
                                             </MenuItem>
                                         </Menu>
                                     </DataTemplate>

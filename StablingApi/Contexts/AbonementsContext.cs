@@ -28,7 +28,7 @@ namespace StablingApi.Contexts
         public DbSet<Abonement> Abonements { get; set; }
         public DbSet<AbonementForShow> AbonementsForShow { get; set; }
         public DbSet<AbonementType> AbonementTypes { get; set; }
-        public DbSet<AbonementMark> AbonementMarks { get; set; }
+        public DbSet<AbonementUsage> AbonementUsages { get; set; }
         public DbSet<AbonementWithdrawing> AbonementWithdrawings { get; set; }
     }
 }

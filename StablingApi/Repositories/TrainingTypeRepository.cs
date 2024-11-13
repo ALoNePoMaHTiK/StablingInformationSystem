@@ -20,7 +20,7 @@ namespace StablingApi.Repositories
             return type;
         }
 
-        public async Task<IEnumerable<TrainingType>> Get()
+        public async Task<IEnumerable<TrainingType>> GetAll()
         {
             TrainingsContext context = _contextFactory.CreateDbContext();
             return await context.TrainingTypes.ToListAsync();

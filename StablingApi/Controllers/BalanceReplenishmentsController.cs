@@ -27,7 +27,7 @@ namespace StablingApi.Controllers
         ///     Получение пополнения баланса клиентов по идентификатору
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<BalanceReplenishment> Get(int id)
+        public async Task<BalanceReplenishment> Get(Guid id)
         {
             return await _repository.Get(id);
         }
@@ -54,7 +54,7 @@ namespace StablingApi.Controllers
         ///     Получение представления пополнения баланса клиента по идентификатору
         /// </summary>
         [HttpGet("ForShow/{id}")]
-        public async Task<BalanceReplenishmentForShow> GetForShow(int id)
+        public async Task<BalanceReplenishmentForShow> GetForShow(Guid id)
         {
             return await _repository.GetForShow(id);
         }
@@ -90,7 +90,7 @@ namespace StablingApi.Controllers
         ///     Удаление пополнения баланса клиента
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             BalanceReplenishment replenishmentToDelete = await _repository.Get(id);
             if (replenishmentToDelete == null)

@@ -28,9 +28,17 @@ namespace StablingClientWPF.Helpers
         public void NotifyReplenishmentByTrainingCreate(BalanceReplenishment replenishment)
             => OnReplenishmentByTrainingCreateNotified?.Invoke(replenishment);
 
-        //old
+        /// <summary>
+        /// Уведомление о том, что необходимо создать абонемент на основании данных о клиенте
+        /// </summary>
+        public event Action<int> OnCreateAbonementByClient;
+        public void CreateAbonementByClient(int clientId)
+            => OnCreateAbonementByClient?.Invoke(clientId);
+
+        public event Action<Abonement> OnAbonementByClientCreated;
+        public void AbonementByClientCreated(Abonement createdAbonement)
+            => OnAbonementByClientCreated?.Invoke(createdAbonement);
+
         public event Action<Training> NeedToCreateTrainingWithdrawing;
-        public void CreateTrainingWithdrawing(Training trining)
-            => NeedToCreateTrainingWithdrawing?.Invoke(trining);
     }
 }

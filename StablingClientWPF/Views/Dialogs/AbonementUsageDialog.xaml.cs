@@ -1,4 +1,4 @@
-﻿using StablingClientWPF.ViewModels;
+﻿using StablingClientWPF.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace StablingClientWPF.Views
+namespace StablingClientWPF.Views.Dialogs
 {
     /// <summary>
-    /// Логика взаимодействия для AbonementsDetailDialog.xaml
+    /// Логика взаимодействия для AbonementUsageDialog.xaml
     /// </summary>
-    public partial class AbonementsDetailsDialog : UserControl
+    public partial class AbonementUsageDialog : UserControl
     {
-        public AbonementsDetailsDialog(AbonementsDetailsDialogViewModel viewModel)
+        public AbonementUsageDialog(AbonementUsageDialogViewModel viewModel)
         {
             DataContext = viewModel;
             InitializeComponent();

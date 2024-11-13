@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StablingClientWPF.ViewModels
+namespace StablingClientWPF.ViewModels.Dialogs
 {
     public class WithdrawingByAbonementDialogViewModel : BaseViewModel
     {

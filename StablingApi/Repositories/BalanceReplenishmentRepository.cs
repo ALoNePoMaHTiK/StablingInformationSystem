@@ -22,7 +22,7 @@ namespace StablingApi.Repositories
             return replenishment;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             BalanceReplenishment replenishmenToDelete = await context.BalanceReplenishments.FindAsync(id);
@@ -30,7 +30,7 @@ namespace StablingApi.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<BalanceReplenishment> Get(int id)
+        public async Task<BalanceReplenishment> Get(Guid id)
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             return await context.BalanceReplenishments.FindAsync(id);
@@ -55,7 +55,7 @@ namespace StablingApi.Repositories
             br.ReplenishmentDate.Date == date.Date).ToListAsync();
         }
 
-        public async Task<BalanceReplenishmentForShow> GetForShow(int id)
+        public async Task<BalanceReplenishmentForShow> GetForShow(Guid id)
         {
             MoneyContext context = _contextFactory.CreateDbContext();
             return await context.BalanceReplenishmentsForShow.Where(br =>

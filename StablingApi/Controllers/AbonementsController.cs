@@ -9,15 +9,15 @@ namespace StablingApi.Controllers
     public class AbonementsController : Controller
     {
         private readonly IAbonementRepository _repository;
-        private readonly IAbonementMarkRepository _abonementMarkRepository;
+        private readonly IAbonementUsageRepository _abonementUsageRepository;
         private readonly IAbonementTypeRepository _abonementTypeRepository;
         public AbonementsController(IAbonementRepository repository,
             IAbonementTypeRepository abonementTypeRepository,
-            IAbonementMarkRepository abonementMarkRepository)
+            IAbonementUsageRepository abonementUsageRepository)
         {
             _repository = repository;
             _abonementTypeRepository = abonementTypeRepository;
-            _abonementMarkRepository = abonementMarkRepository;
+            _abonementUsageRepository = abonementUsageRepository;
         }
 
         /// <summary>
@@ -90,10 +90,21 @@ namespace StablingApi.Controllers
         /// </summary>
         [HttpPost("Usage/")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<AbonementMark>> CreateMark([FromBody] AbonementMark mark)
+        public async Task<ActionResult<AbonementUsage>> CreateUsage([FromBody] AbonementUsage usage)
         {
-            AbonementMark newMark = await _abonementMarkRepository.Create(mark);
+            AbonementUsage newMark = await _abonementUsageRepository.Create(usage);
             return CreatedAtAction(nameof(Create), newMark);
+        }
+
+        /// <summary>
+        ///     Добавление использование абонемента
+        /// </summary>
+        [HttpPost("Usage/{abonementId}/{trainingId}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<AbonementUsage>> CreateUsage(int abonementId, int trainingId)
+        {
+            AbonementUsage newUsage = await _abonementUsageRepository.Create(abonementId, trainingId);
+            return CreatedAtAction(nameof(Create), newUsage);
         }
 
         /// <summary>

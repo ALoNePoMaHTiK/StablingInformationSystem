@@ -12,10 +12,10 @@ namespace StablingClientWPF.ViewModels
 {
     public class TrainingTypesViewModel : BaseViewModel
     {
-        private TrainingTypesHttpClient _trainingTypesHttpClient;
-        public TrainingTypesViewModel(TrainingTypesHttpClient trainingTypesHttpClient)
+        private TrainingsHttpClient _trainingsHttpClient;
+        public TrainingTypesViewModel(TrainingsHttpClient trainingsHttpClient)
         {
-            _trainingTypesHttpClient = trainingTypesHttpClient;
+            _trainingsHttpClient = trainingsHttpClient;
             GetTrainingTypes();
         }
 
@@ -37,7 +37,7 @@ namespace StablingClientWPF.ViewModels
         private async Task GetTrainingTypes()
         {
             TrainingTypes = new ObservableCollection<TrainingType>(
-                await _trainingTypesHttpClient.GetAllAsync());
+                await _trainingsHttpClient.GetTypesAsync());
         }
     }
 }

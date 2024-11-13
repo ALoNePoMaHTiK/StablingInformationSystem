@@ -153,11 +153,11 @@ namespace StablingClientWPF.ViewModels
             {
                 return new DelegateCommand(o =>
                 {
-                    OpenEditBalanceReplenishmentDialog((int)o);
+                    OpenEditBalanceReplenishmentDialog((Guid)o);
                 });
             }
         }
-        private async void OpenEditBalanceReplenishmentDialog(int id)
+        private async void OpenEditBalanceReplenishmentDialog(Guid id)
         {
             CurrentReplenishment = await _balanceReplenishmentsHttpClient.GetAsync(id);
             OpenBalanceReplenishmentDialog();
@@ -174,8 +174,9 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task ProcessBalanceReplenishment()
         {
-            if (CurrentReplenishment.BalanceReplenishmentId == 0)
+            if (CurrentReplenishment.BalanceReplenishmentId == Guid.Empty)
             {
+                CurrentReplenishment.BalanceReplenishmentId = Guid.NewGuid();
                 await _balanceReplenishmentsHttpClient.CreateAsync(CurrentReplenishment);
                 await GetBalanceReplenishments();
             }
@@ -198,11 +199,11 @@ namespace StablingClientWPF.ViewModels
             get
             {
                 return new AsyncDelegateCommand(async o => {
-                    await DeleteBalanceReplenishment((int)o);
+                    await DeleteBalanceReplenishment((Guid)o);
                 }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-        private async Task DeleteBalanceReplenishment(int id)
+        private async Task DeleteBalanceReplenishment(Guid id)
         {
             MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)

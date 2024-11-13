@@ -1,16 +1,11 @@
 ﻿using StablingApiClient;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace StablingClientWPF.ViewModels
+namespace StablingClientWPF.ViewModels.Dialogs
 {
-    public class AbonementCreationFormViewModel : BaseViewModel
+    public class AbonementCreationDialogViewModel : BaseViewModel
     {
-        public AbonementCreationFormViewModel(Abonement abonement,
+        public AbonementCreationDialogViewModel(Abonement abonement,
             IEnumerable<Client> clients, IEnumerable<AbonementType> abonementTypes, IEnumerable<Trainer> trainers)
         {
             Abonement = abonement;

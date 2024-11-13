@@ -137,7 +137,7 @@ VerticalAlignment="Center" Margin="5">
                                 Header="Закрыть тренировку"
                                 Icon="{materialDesign:PackIcon Kind=CheckAll}"/>
                                         <MenuItem Command="{Binding ElementName=UserControl,
-                                            Path=DataContext.UseAbonementForPayCommand}"
+                                            Path=DataContext.MakeAbonementPaymentCommand}"
                                             CommandParameter="{Binding TrainingId}"
                                             Header="Использовать абонемент"
                                             Icon="{materialDesign:PackIcon Kind=BusinessCard}"/>

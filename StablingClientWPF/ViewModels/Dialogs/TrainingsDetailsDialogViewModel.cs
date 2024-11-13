@@ -2,20 +2,16 @@
 using StablingClientWPF.Helpers;
 using StablingClientWPF.Helpers.Commands;
 using StablingClientWPF.Views;
-using System;
-using System.Collections.Generic;
+using StablingClientWPF.Views.Dialogs;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace StablingClientWPF.ViewModels
+namespace StablingClientWPF.ViewModels.Dialogs
 {
-    public class AbonementsDetailsDialogViewModel : BaseViewModel
+    public class TrainingsDetailsDialogViewModel : BaseViewModel
     {
-        private readonly AbonementsHttpClient _abonementsHttpClient;
-        private readonly BalanceWithdrawingsHttpClient _balanceWithdrawingsHttpClient;
+        public TrainingsHttpClient _trainingsHttpClient { get; }
+        public BalanceWithdrawingsHttpClient _balanceWithdrawingsHttpClient { get; }
 
         private DateTime _CurrentDate;
         public DateTime CurrentDate
@@ -27,54 +23,52 @@ namespace StablingClientWPF.ViewModels
             }
         }
 
-        private readonly Mediator _mediator;
+        public Mediator _mediator { get; }
 
-        public AbonementsDetailsDialogViewModel(Mediator mediator, 
-            AbonementsHttpClient abonementsHttpClient, 
-            BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient,
-            DateTime currentDate, int abonementId)
+        public TrainingsDetailsDialogViewModel(Mediator mediator, TrainingsHttpClient trainingsHttpClient, BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient,
+            DateTime currentDate, int trainingId)
         {
             _mediator = mediator;
-            _abonementsHttpClient = abonementsHttpClient;
+            _trainingsHttpClient = trainingsHttpClient;
             _balanceWithdrawingsHttpClient = balanceWithdrawingsHttpClient;
             CurrentDate = currentDate;
-            Abonement = _abonementsHttpClient.GetForShowAsync(abonementId).Result;
-            GetWithdrawings();
+            Training = _trainingsHttpClient.GetForShowAsync(trainingId).Result;
+            Withdrawings = new ObservableCollection<BalanceWithdrawingForShow>(
+                _balanceWithdrawingsHttpClient.GetForShowByTrainingAsync(trainingId).Result);
         }
 
-        public AsyncDelegateCommand CreateAbonementWithdrawingCommand
+        public AsyncDelegateCommand CreateTrainingWithdrawingCommand
         {
             get
             {
-                return new AsyncDelegateCommand(async o => { await CreateAbonementWithdrawing(); }, ex => MessageBox.Show(ex.ToString()));
+                return new AsyncDelegateCommand(async o => { await CreateTrainingWithdrawing(); }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-        private async Task CreateAbonementWithdrawing()
+        private async Task CreateTrainingWithdrawing()
         {
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new WithdrawingByAbonementDialog(
-                    new WithdrawingByAbonementDialogViewModel(CurrentDate, Abonement)), ABONEMENTS_IDENTIFIER);
+                new WithdrawingByTrainingDialog(
+                    new WithdrawingByTrainingDialogViewModel(CurrentDate, Training)), DAY_OPERATIONS_IDENTIFIER);
             if (result != null)
             {
-                await _balanceWithdrawingsHttpClient.CreateByAbonementAsync((BalanceWithdrawing)result, Abonement.AbonementId);
+                await _balanceWithdrawingsHttpClient.CreateByTrainingAsync((BalanceWithdrawing)result, Training.TrainingId);
                 await GetWithdrawings();
-                _mediator.UpdateAbonementFunds(Abonement.AbonementId); //Уведомление основной viewModel об изменении
+                _mediator.UpdateTrainingFunds(Training.TrainingId); //Уведомление основной viewModel об изменении
             }
         }
 
-        public AsyncDelegateCommand UpdateAbonementWithdrawingCommand
+        public AsyncDelegateCommand UpdateTrainingWithdrawingCommand
         {
             get
             {
-                return new AsyncDelegateCommand(async o => { await UpdateAbonementWithdrawing((Guid)o); }, ex => MessageBox.Show(ex.ToString()));
+                return new AsyncDelegateCommand(async o => { await UpdateTrainingWithdrawing((Guid)o); }, ex => MessageBox.Show(ex.ToString()));
             }
         }
-        private async Task UpdateAbonementWithdrawing(Guid id)
+        private async Task UpdateTrainingWithdrawing(Guid id)
         {
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new WithdrawingByAbonementDialog(
-                    new WithdrawingByAbonementDialogViewModel(await _balanceWithdrawingsHttpClient.GetAsync(id), 
-                    await _abonementsHttpClient.GetForShowAsync(Abonement.AbonementId))), ABONEMENTS_IDENTIFIER);
+                new WithdrawingByTrainingDialog(
+                    new WithdrawingByTrainingDialogViewModel(await _balanceWithdrawingsHttpClient.GetAsync(id), await _trainingsHttpClient.GetForShowAsync(Training.TrainingId))), DAY_OPERATIONS_IDENTIFIER);
             if (result != null)
             {
                 await _balanceWithdrawingsHttpClient.UpdateAsync((BalanceWithdrawing)result);
@@ -84,7 +78,7 @@ namespace StablingClientWPF.ViewModels
                 Withdrawings.Add(
                     await _balanceWithdrawingsHttpClient.GetForShowAsync(
                         ((BalanceWithdrawing)result).BalanceWithdrawingId));
-                _mediator.UpdateAbonementFunds(Abonement.AbonementId); //Уведомление основной viewModel об изменении
+                _mediator.UpdateTrainingFunds(Training.TrainingId); //Уведомление основной viewModel об изменении
             }
         }
 
@@ -92,7 +86,8 @@ namespace StablingClientWPF.ViewModels
         {
             get
             {
-                return new AsyncDelegateCommand(async o => {
+                return new AsyncDelegateCommand(async o =>
+                {
                     await DeleteWithdrawing((Guid)o);
                 }, ex => MessageBox.Show(ex.ToString()));
             }
@@ -117,14 +112,14 @@ namespace StablingClientWPF.ViewModels
         private async Task GetWithdrawings()
         {
             Withdrawings = new ObservableCollection<BalanceWithdrawingForShow>(
-                await _balanceWithdrawingsHttpClient.GetForShowByAbonementAsync(Abonement.AbonementId));
+                await _balanceWithdrawingsHttpClient.GetForShowByTrainingAsync(Training.TrainingId));
         }
 
-        private AbonementForShow _Abonement;
-        public AbonementForShow Abonement
+        private TrainingForShow _Training;
+        public TrainingForShow Training
         {
-            get => _Abonement;
-            set { _Abonement = value; OnPropertyChanged(); }
+            get => _Training;
+            set { _Training = value; OnPropertyChanged(); }
         }
     }
 }

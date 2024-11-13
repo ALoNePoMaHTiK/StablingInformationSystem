@@ -2,7 +2,7 @@
 {
     public class BalanceReplenishment
     {
-        public int BalanceReplenishmentId { get; set; }
+        public Guid BalanceReplenishmentId { get; set; }
         public int ClientId { get; set; }
         public int TrainerId { get; set; }
         public DateTime ReplenishmentDate { get; set; }
