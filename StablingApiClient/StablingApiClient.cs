@@ -8092,14 +8092,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<TrainingType> Create2Async(TrainingType type)
+        public virtual System.Threading.Tasks.Task<TrainingType> CreateTypeAsync(TrainingType type)
         {
-            return Create2Async(type, System.Threading.CancellationToken.None);
+            return CreateTypeAsync(type, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TrainingType> Create2Async(TrainingType type, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<TrainingType> CreateTypeAsync(TrainingType type, System.Threading.CancellationToken cancellationToken)
         {
             if (type == null)
                 throw new System.ArgumentNullException("type");
@@ -8175,14 +8175,14 @@ namespace StablingApiClient
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<TrainingType> Update2Async(TrainingType type)
+        public virtual System.Threading.Tasks.Task<TrainingType> UpdateTypeAsync(TrainingType type)
         {
-            return Update2Async(type, System.Threading.CancellationToken.None);
+            return UpdateTypeAsync(type, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TrainingType> Update2Async(TrainingType type, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<TrainingType> UpdateTypeAsync(TrainingType type, System.Threading.CancellationToken cancellationToken)
         {
             if (type == null)
                 throw new System.ArgumentNullException("type");

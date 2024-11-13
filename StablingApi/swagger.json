@@ -2528,7 +2528,7 @@
         "tags": [
           "Trainings"
         ],
-        "operationId": "Trainings_Create2",
+        "operationId": "Trainings_CreateType",
         "consumes": [
           "application/json",
           "text/json",
@@ -2564,7 +2564,7 @@
         "tags": [
           "Trainings"
         ],
-        "operationId": "Trainings_Update2",
+        "operationId": "Trainings_UpdateType",
         "consumes": [
           "application/json",
           "text/json",

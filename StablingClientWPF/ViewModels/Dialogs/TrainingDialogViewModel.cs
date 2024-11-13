@@ -8,12 +8,13 @@ namespace StablingClientWPF.ViewModels.Dialogs
         public TrainingDialogViewModel(IEnumerable<Trainer> trainers,
             IEnumerable<Client> clients,
             IEnumerable<TrainingType> trainingTypes,
-            IEnumerable<Horse> horses)
+            IEnumerable<Horse> horses,DateTime dateTime)
         {
             Trainers = new ObservableCollection<Trainer>(trainers);
             Clients = new ObservableCollection<Client>(clients);
             TrainingTypes = new ObservableCollection<TrainingType>(trainingTypes);
             Horses = new ObservableCollection<Horse>(horses);
+            Training = new Training() { TrainingDateTime = dateTime };
         }
 
         public TrainingDialogViewModel(IEnumerable<Trainer> trainers,

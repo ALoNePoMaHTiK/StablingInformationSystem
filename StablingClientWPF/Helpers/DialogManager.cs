@@ -73,11 +73,11 @@ namespace StablingClientWPF.Helpers
         public async Task<Training?> OpenTrainingCreateDialog(IEnumerable<Trainer> trainers,
             IEnumerable<Client> clients,
             IEnumerable<TrainingType> trainingTypes,
-            IEnumerable<Horse> horses)
+            IEnumerable<Horse> horses,DateTime dateTime)
         {
             return (Training?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                  new TrainingDialog(new TrainingDialogViewModel(
-                    trainers,clients,trainingTypes,horses)), RootIdentifier);
+                    trainers,clients,trainingTypes,horses, dateTime)), RootIdentifier);
         }
 
         public async Task<Training?> OpenTrainingUpdateDialog(IEnumerable<Trainer> trainers,

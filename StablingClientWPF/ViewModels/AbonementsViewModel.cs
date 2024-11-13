@@ -3,6 +3,7 @@ using StablingClientWPF.Helpers;
 using StablingClientWPF.Helpers.Commands;
 using StablingClientWPF.ViewModels.Dialogs;
 using StablingClientWPF.Views;
+using StablingClientWPF.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows;
 

@@ -28,8 +28,6 @@ namespace StablingClientWPF.ViewModels
             get { return _CurrentDate; }
             set { _CurrentDate = value; OnPropertyChanged();
                 GetTrainings();
-                ClearCurrentTraining();
-                CloseDialog();
             }
         }
 
@@ -187,17 +185,17 @@ namespace StablingClientWPF.ViewModels
             {
                 return new DelegateCommand(o =>
                 {
-                    CreateTraining((int)o);
+                    CreateTraining();
                 });
             }
         }
-        private async void CreateTraining(int id)
+        private async void CreateTraining()
         {
             Training? newTraining = await _dialogManager.OpenTrainingCreateDialog(
                 await _trainersHttpClient.GetAllAsync(),
                 await _clientsHttpClient.GetAllAsync(),
                 await _trainingsHttpClient.GetTypesAsync(),
-                await _horsesHttpClient.GetAllAsync());
+                await _horsesHttpClient.GetAllAsync(), CurrentDate);
             if (newTraining != null)
             {
                 newTraining = await _trainingsHttpClient.CreateAsync(newTraining);
@@ -208,118 +206,6 @@ namespace StablingClientWPF.ViewModels
         }
 
         #endregion
-
-        #region Основная форма
-
-
-        private bool _IsDialogOpen = false;
-        public bool IsDialogOpen
-        {
-            get { return _IsDialogOpen; }
-            set { _IsDialogOpen = value; OnPropertyChanged(); }
-        }
-        public DelegateCommand OpenDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    OpenDialog();
-                });
-            }
-        }
-        public virtual void OpenDialog()
-        {
-            IsDialogOpen = true;
-        }
-        public virtual void CloseDialog()
-        {
-            IsDialogOpen = false;
-        }
-        
-
-        public DelegateCommand OpenEditTrainingDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    OpenEditTrainingDialog((int)o);
-                });
-            }
-        }
-        private async void OpenEditTrainingDialog(int id)
-        {
-            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
-            OpenDialog();
-        }
-
-        public DelegateCommand OpenCopyTrainingDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    OpenCopyTrainingDialog((int)o);
-                });
-            }
-        }
-        private async void OpenCopyTrainingDialog(int id)
-        {
-            CurrentTraining = await _trainingsHttpClient.GetAsync(id);
-            CurrentTraining.TrainingId = 0;
-            OpenDialog();
-        }
-        #endregion
-
-        private Training _CurrentTraining;
-        public Training CurrentTraining
-        {
-            get { return _CurrentTraining; }
-            set { _CurrentTraining = value; OnPropertyChanged(); }
-        }
-
-        private void ClearCurrentTraining()
-        {
-            CurrentTraining = new Training() { TrainingDateTime = CurrentDate.Date };
-        }
-
-        private async Task GetTrainings()
-        {
-            Trainings = new ObservableCollection<TrainingForShow>(
-                await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
-        }
-
-
-        public AsyncDelegateCommand ProcessTrainingCommand
-        {
-            get
-            {
-                return new AsyncDelegateCommand(async o => {
-                    await ProcessTraining();
-                }, ex => MessageBox.Show(ex.ToString()));
-            }
-        }
-        private async Task ProcessTraining()
-        {
-            if (CurrentTraining.TrainingId == 0)
-            {
-                await _trainingsHttpClient.CreateAsync(CurrentTraining);
-                await GetTrainings();
-            }
-            else
-            {
-                await _trainingsHttpClient.UpdateAsync(CurrentTraining);
-                TrainingForShow oldTraining = Trainings.Where(
-                    tr => tr.TrainingId == CurrentTraining.TrainingId).First();
-                Trainings.Remove(oldTraining);
-                Trainings.Add(
-                    await _trainingsHttpClient.GetForShowAsync(
-                        CurrentTraining.TrainingId));
-            }
-            CloseDialog();
-            ClearCurrentTraining();
-        }
 
         public AsyncDelegateCommand DeleteTrainingCommand
         {
@@ -339,6 +225,13 @@ namespace StablingClientWPF.ViewModels
                 TrainingForShow oldTraining = Trainings.Where(tr => tr.TrainingId == id).First();
                 Trainings.Remove(oldTraining);
             }
+        }
+
+
+        private async Task GetTrainings()
+        {
+            Trainings = new ObservableCollection<TrainingForShow>(
+                await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
         }
 
         public AsyncDelegateCommand ChangePaidStatusCommand
@@ -454,14 +347,15 @@ namespace StablingClientWPF.ViewModels
             Client client = await _clientsHttpClient.GetAsync(training.ClientId);
             if(clientAbonements.Count() == 0)
             {
-                var result = MessageBox.Show($"У клиента {client.FullName} нет абонементов!\nХотите создать?", "Отсутсвие абонементов", MessageBoxButton.YesNo);
+                var result = MessageBox.Show($"У клиента {client.FullName} нет абонементов!\nХотите создать?", "Отсутствие абонементов", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
                     Abonement? abonement = await _dialogManager.OpenAbonementCreationFormAsync(training.ClientId);
                     if (abonement != null)
                     {
                         abonement = await _abonementsHttpClient.CreateAsync(abonement);
-                        await _abonementsHttpClient.CreateUsage2Async(abonement.AbonementId,trainingId);
+                        await _abonementsHttpClient.CreateUsageAsync(new AbonementUsage() {AbonementId = abonement.AbonementId, TrainingId = trainingId });
+                        await ChangePaidStatus(trainingId);
                         // TODO Добавить триггер в БД для автоматического закрытия абонемента
                         // TODO Добавить уведомление о создании использования абонемента
                     }
@@ -475,18 +369,16 @@ namespace StablingClientWPF.ViewModels
                 if (abonementId != null)
                 {
                     await _abonementsHttpClient.CreateUsage2Async((int)abonementId, trainingId);
+                    await ChangePaidStatus(trainingId);
                 }
                 // TODO Добавить триггер в БД для автоматического закрытия абонемента
                 // TODO Добавить уведомление о создании использования абонемента
             }
-            await ChangePaidStatus(trainingId);
             await GetTrainings();
             //TODO Добавить в медиатор уведомления о создании списаний/пополнений
         }
 
         #endregion
-
-        //TODO Добавить возможность оплаты тренировки при помощи абонемента
 
         private void OnDateUpdate(DateTime newDate)
         {
