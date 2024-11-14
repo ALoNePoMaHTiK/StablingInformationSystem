@@ -1,4 +1,5 @@
 ﻿using StablingApiClient;
+using StablingClientWPF.ViewModels;
 using StablingClientWPF.ViewModels.Dialogs;
 using StablingClientWPF.Views;
 using StablingClientWPF.Views.Dialogs;
@@ -12,7 +13,7 @@ namespace StablingClientWPF.Helpers
     /// Если модульное окно простое, то нужно воздерживаться от передачи в его ViewModel HttpClient`ов
     /// Следует передавать коллекции
     /// </summary>
-    public class DialogManager
+    public class DialogManager : BaseViewModel
     {
         private readonly AbonementsHttpClient _abonementsHttpClient;
         private readonly ClientsHttpClient _clientsHttpClient;
@@ -33,8 +34,6 @@ namespace StablingClientWPF.Helpers
             _trainingsHttpClient = trainingsHttpClient;
         }
 
-        private const string RootIdentifier = "Root";
-
         #region Абонементы
 
         public async Task<Abonement?> OpenAbonementCreationFormAsync()
@@ -49,7 +48,7 @@ namespace StablingClientWPF.Helpers
                     },
                     await _clientsHttpClient.GetByAvailabilityAsync(true),
                     await _abonementsHttpClient.GetTypesAsync(),
-                    await _trainersHttpClient.GetAllAsync())), RootIdentifier);
+                    await _trainersHttpClient.GetAllAsync())), RootLayerIdentifier);
         }
 
         public async Task<Abonement?> OpenAbonementCreationFormAsync(int clientId)
@@ -65,21 +64,29 @@ namespace StablingClientWPF.Helpers
                     },
                     await _clientsHttpClient.GetByAvailabilityAsync(true),
                     await _abonementsHttpClient.GetTypesAsync(),
-                    await _trainersHttpClient.GetAllAsync())), RootIdentifier);
+                    await _trainersHttpClient.GetAllAsync(),true)), RootLayerIdentifier);
+            //TODO Продумать режимы модульных окон
         }
 
         public async Task OpenAbonementDetailsDialogAsync(int abonementId)
         {
             await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new AbonementsDetailsDialog(new AbonementsDetailsDialogViewModel(_mediator,
-                    _abonementsHttpClient, _balanceWithdrawingsHttpClient, DateTime.Now, abonementId)), RootIdentifier);
+                new AbonementsDetailsDialog(new AbonementsDetailsDialogViewModel(_mediator,this,
+                    _abonementsHttpClient, _balanceWithdrawingsHttpClient, DateTime.Now, abonementId)), RootLayerIdentifier);
         }
 
         public async Task<int?> OpenAbonementListForCreateUsageDialog(IEnumerable<AbonementForShow> abonements)
         {
             return (int?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                  new AbonementUsageDialog(new AbonementUsageDialogViewModel(
-                    abonements)), RootIdentifier);
+                    abonements)), RootLayerIdentifier);
+        }
+
+        public async Task<BalanceWithdrawing?> OpenWithdrawingByAbonementDialog(DateTime currentDate, AbonementForShow abonement)
+        {
+            return (BalanceWithdrawing?)await MaterialDesignThemes.Wpf.DialogHost.Show(
+                new WithdrawingByAbonementDialog(
+                    new WithdrawingByAbonementDialogViewModel(currentDate, abonement)), SecondLayerIdentifier);
         }
 
         #endregion
@@ -92,7 +99,7 @@ namespace StablingClientWPF.Helpers
         {
             return (Training?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                  new TrainingDialog(new TrainingDialogViewModel(
-                    trainers,clients,trainingTypes,horses, dateTime)), RootIdentifier);
+                    trainers,clients,trainingTypes,horses, dateTime)), RootLayerIdentifier);
         }
 
         public async Task<Training?> OpenTrainingUpdateDialog(IEnumerable<Trainer> trainers,
@@ -102,7 +109,7 @@ namespace StablingClientWPF.Helpers
         {
             return (Training?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                  new TrainingDialog(new TrainingDialogViewModel(
-                    trainers, clients, trainingTypes, horses,training)), RootIdentifier);
+                    trainers, clients, trainingTypes, horses,training)), RootLayerIdentifier);
         }
 
         public async Task<Training?> OpenTrainingCopyDialog(IEnumerable<Trainer> trainers,
@@ -113,14 +120,14 @@ namespace StablingClientWPF.Helpers
             training.TrainingId = 0;
             return (Training?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                  new TrainingDialog(new TrainingDialogViewModel(
-                    trainers, clients, trainingTypes, horses, training)), RootIdentifier);
+                    trainers, clients, trainingTypes, horses, training)), RootLayerIdentifier);
         }
 
         public async Task OpenTrainingDetailsDialogAsync(DateTime CurrentDate, int trainingId)
         {
             await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new TrainingsDetailsDialog(new TrainingsDetailsDialogViewModel(_mediator,
-                    _trainingsHttpClient, _balanceWithdrawingsHttpClient, CurrentDate, trainingId)), RootIdentifier);
+                    _trainingsHttpClient, _balanceWithdrawingsHttpClient, CurrentDate, trainingId)), RootLayerIdentifier);
         }
         #endregion
 
@@ -133,7 +140,7 @@ namespace StablingClientWPF.Helpers
         {
             return (MoneyTransaction?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new MoneyTransactionDialog(new MoneyTransactionDialogViewModel(
-                moneyAccounts, trainers, CurrentDate)), RootIdentifier);
+                moneyAccounts, trainers, CurrentDate)), RootLayerIdentifier);
         }
 
         public async Task<MoneyTransaction?> OpenMoneyTransactionUpdateDialog(IEnumerable<MoneyAccount> moneyAccounts,
@@ -142,7 +149,7 @@ namespace StablingClientWPF.Helpers
         {
             return (MoneyTransaction?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new MoneyTransactionDialog(new MoneyTransactionDialogViewModel(
-                moneyAccounts, trainers, transaction)), RootIdentifier);
+                moneyAccounts, trainers, transaction)), RootLayerIdentifier);
         }
 
         #endregion

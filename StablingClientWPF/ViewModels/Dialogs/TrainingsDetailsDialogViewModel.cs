@@ -25,7 +25,8 @@ namespace StablingClientWPF.ViewModels.Dialogs
 
         public Mediator _mediator { get; }
 
-        public TrainingsDetailsDialogViewModel(Mediator mediator, TrainingsHttpClient trainingsHttpClient, BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient,
+        public TrainingsDetailsDialogViewModel(Mediator mediator, TrainingsHttpClient trainingsHttpClient,
+            BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient,
             DateTime currentDate, int trainingId)
         {
             _mediator = mediator;
@@ -48,7 +49,7 @@ namespace StablingClientWPF.ViewModels.Dialogs
         {
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new WithdrawingByTrainingDialog(
-                    new WithdrawingByTrainingDialogViewModel(CurrentDate, Training)), DAY_OPERATIONS_IDENTIFIER);
+                    new WithdrawingByTrainingDialogViewModel(CurrentDate, Training)), SecondLayerIdentifier);
             if (result != null)
             {
                 await _balanceWithdrawingsHttpClient.CreateByTrainingAsync((BalanceWithdrawing)result, Training.TrainingId);
@@ -68,7 +69,7 @@ namespace StablingClientWPF.ViewModels.Dialogs
         {
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new WithdrawingByTrainingDialog(
-                    new WithdrawingByTrainingDialogViewModel(await _balanceWithdrawingsHttpClient.GetAsync(id), await _trainingsHttpClient.GetForShowAsync(Training.TrainingId))), DAY_OPERATIONS_IDENTIFIER);
+                    new WithdrawingByTrainingDialogViewModel(await _balanceWithdrawingsHttpClient.GetAsync(id), await _trainingsHttpClient.GetForShowAsync(Training.TrainingId))), SecondLayerIdentifier);
             if (result != null)
             {
                 await _balanceWithdrawingsHttpClient.UpdateAsync((BalanceWithdrawing)result);

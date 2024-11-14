@@ -17,7 +17,7 @@ namespace StablingClientWPF.Helpers.Commands
             }
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
         public AsyncCommandBase(Action<Exception> onException) => _onException = onException;
 

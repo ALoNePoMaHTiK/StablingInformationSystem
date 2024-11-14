@@ -13,17 +13,12 @@ namespace StablingClientWPF.ViewModels
         }
 
         /// <summary>
-        ///     Идентификатор для корнеовго слоя модульных окон
+        ///     Идентификатор для корневого слоя модульных окон
         /// </summary>
-        public string ROOT_IDENTIFIER { get { return "Root"; } }
+        public string RootLayerIdentifier { get { return "RootLayer"; } }
         /// <summary>
         ///     Идентификатор для слоя дневных операций для модульных окон
         /// </summary>
-        public string DAY_OPERATIONS_IDENTIFIER { get { return "DayOperations"; } }
-
-        /// <summary>
-        ///     Идентификатор для слоя абонементов для модульных окон
-        /// </summary>
-        public string ABONEMENTS_IDENTIFIER { get { return "Abonements"; } }
+        public string SecondLayerIdentifier { get { return "SecondLayer"; } }
     }
 }

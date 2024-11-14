@@ -14,6 +14,20 @@ namespace StablingClientWPF.ViewModels.Dialogs
             Trainers = new ObservableCollection<Trainer>(trainers);
         }
 
+        public AbonementCreationDialogViewModel(Abonement abonement,
+            IEnumerable<Client> clients, IEnumerable<AbonementType> abonementTypes, IEnumerable<Trainer> trainers,
+            bool isCreationByClient) : this(abonement,clients,abonementTypes,trainers)
+        {
+            IsCreationByClient = isCreationByClient;
+        }
+
+        private bool _IsCreationByClient = false;
+        public bool IsCreationByClient
+        {
+            get { return _IsCreationByClient; }
+            set { _IsCreationByClient = value; OnPropertyChanged(); }
+        }
+
         private Abonement _Abonement;
         public Abonement Abonement
         {

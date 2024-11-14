@@ -14,8 +14,9 @@
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="800" Width="1600">
 
-    <materialDesign:DialogHost Identifier="{Binding ROOT_IDENTIFIER}">
-        <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+    <materialDesign:DialogHost Identifier="{Binding RootLayerIdentifier}">
+        <materialDesign:DialogHost Identifier="{Binding SecondLayerIdentifier}">
+            <TabControl materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
             SnapsToDevicePixels="True" SelectedIndex="{Binding SelectedTab}"
             Style="{StaticResource MaterialDesignNavigationRailTabControl}"
             TabStripPlacement="Left">
@@ -97,5 +98,6 @@
                 </StackPanel>
             </TabItem>
         </TabControl>
+        </materialDesign:DialogHost>
     </materialDesign:DialogHost>
 </Window>

@@ -12,7 +12,7 @@
         <ComboBox materialDesign:ComboBoxAssist.MaxLength="2" Margin="5"
             materialDesign:HintAssist.Hint="Клиент"
             materialDesign:HintAssist.HintOpacity=".26"
-            IsEditable="True"
+            IsEnabled="{Binding IsCreationByClient,Converter={StaticResource InvertBooleanConverter}}"
             Style="{StaticResource MaterialDesignFloatingHintComboBox}"
             ItemsSource="{Binding Clients}" 
             SelectedValue="{Binding Abonement.ClientId}" 

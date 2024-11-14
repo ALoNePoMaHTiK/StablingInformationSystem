@@ -8,10 +8,20 @@
              xmlns:vmd="clr-namespace:StablingClientWPF.ViewModels.Dialogs"
              x:Name="UserControl"
              d:DataContext="{d:DesignInstance vmd:TrainingsDetailsDialogViewModel}"
-             mc:Ignorable="d" d:Background="White">
-    <StackPanel Margin="20" Width="400" Height="400">
+             mc:Ignorable="d" d:Background="White" Height="500" Width="500">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
         <TabControl>
-            <TabItem Header="Оплаты">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Оплаты" VerticalAlignment="Center" Padding="2"/>
+                        <materialDesign:PackIcon Kind="Money" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </TabItem.Header>
                 <StackPanel>
                     <Button Command="{Binding CreateTrainingWithdrawingCommand}"
                             VerticalAlignment="Center" Margin="5">
@@ -41,11 +51,11 @@
                                                       Header="Изменить"
                                                       Icon="{materialDesign:PackIcon Kind=Edit}"/>
                                                 <MenuItem Command="{Binding ElementName=UserControl,
-                                                  Path=DataContext.DeleteWithdrawingCommand}"
-                                                  CommandParameter="{Binding BalanceWithdrawingId}"
-                                                  Header="Удалить"
-                                                  Foreground="Crimson"
-                                                  Icon="{materialDesign:PackIcon Kind=Delete}"/>
+                                                      Path=DataContext.DeleteWithdrawingCommand}"
+                                                      CommandParameter="{Binding BalanceWithdrawingId}"
+                                                      Header="Удалить"
+                                                      Foreground="Crimson"
+                                                      Icon="{materialDesign:PackIcon Kind=Delete}"/>
                                             </MenuItem>
                                         </Menu>
                                     </DataTemplate>
@@ -55,12 +65,23 @@
                     </DataGrid>
                 </StackPanel>
             </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Исп. абон." VerticalAlignment="Center" Padding="2"/>
+                        <materialDesign:PackIcon Kind="CardAccountDetails" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel>
+                    <TextBlock Text="Тут будет показана информация об использованном абонементе (с возможностью перейти к нему)" TextWrapping="Wrap" Width="200"/>
+                </StackPanel>
+            </TabItem>
         </TabControl>
-        <Button IsCancel="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+        <Button Grid.Row="1"  IsCancel="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="Close"/>
                 <TextBlock Text="Закрыть"/>
             </StackPanel>
         </Button>
-    </StackPanel>
+    </Grid>
 </UserControl>

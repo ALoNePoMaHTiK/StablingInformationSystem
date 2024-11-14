@@ -1,9 +1,6 @@
 ﻿using StablingApiClient;
 using StablingClientWPF.Helpers;
 using StablingClientWPF.Helpers.Commands;
-using StablingClientWPF.ViewModels.Dialogs;
-using StablingClientWPF.Views;
-using StablingClientWPF.Views.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -31,8 +28,6 @@ namespace StablingClientWPF.ViewModels
             _balanceWithdrawingsHttpClient = balanceWithdrawingsHttpClient;
             _balanceReplenishmentsHttpClient = balanceReplenishmentsHttpClient;
             _dialogManager = dialogManager;
-
-            _mediator.OnCreateAbonementByClient += CreateAbonementByClient;
             GetAbonements();
         }
 
@@ -87,19 +82,6 @@ namespace StablingClientWPF.ViewModels
             }
         }
 
-        #region Создание абонемента на основании тренировки
-        private async void CreateAbonementByClient(int clientId)
-        {
-            Abonement? result = await _dialogManager.OpenAbonementCreationFormAsync(clientId);
-            if (result != null)
-            {
-                Abonement createdAbonement = await _abonementsHttpClient.CreateAsync(result);
-                await GetAbonements();
-                _mediator.AbonementByClientCreated(createdAbonement);
-            }
-        }
-        #endregion
-
         #region Закрытие/открытие абонемента
         public AsyncDelegateCommand ChangeAvailabilityCommand
         {
@@ -110,7 +92,7 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task ChangeAvailability(int abonementId)
         {
-            AbonementForShow abonementForWork = ActiveAbonements.FirstOrDefault(o => o.AbonementId == abonementId);
+            AbonementForShow? abonementForWork = ActiveAbonements.FirstOrDefault(o => o.AbonementId == abonementId);
             abonementForWork ??= InactiveAbonements.First(o => o.AbonementId == abonementId);
             if (abonementForWork.IsAvailable)
             {
@@ -161,6 +143,8 @@ namespace StablingClientWPF.ViewModels
             MessageBoxResult result = MessageBox.Show("Вы уверены?", "Подтверждение удаления", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
+
+                //TODO Продумать удаление при наличии использований для данного абонемента
                 AbonementForShow? abonementForDelete = ActiveAbonements.Where(ab =>
                     ab.AbonementId == abonementId).FirstOrDefault();
                 if (abonementForDelete == null)

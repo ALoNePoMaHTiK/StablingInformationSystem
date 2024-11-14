@@ -18,6 +18,8 @@ namespace StablingClientWPF.ViewModels.Dialogs
         private readonly AbonementsHttpClient _abonementsHttpClient;
         private readonly BalanceWithdrawingsHttpClient _balanceWithdrawingsHttpClient;
 
+        private readonly DialogManager _dialogManager;
+
         private DateTime _CurrentDate;
         public DateTime CurrentDate
         {
@@ -31,11 +33,13 @@ namespace StablingClientWPF.ViewModels.Dialogs
         private readonly Mediator _mediator;
 
         public AbonementsDetailsDialogViewModel(Mediator mediator,
+            DialogManager dialogManager,
             AbonementsHttpClient abonementsHttpClient,
             BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient,
             DateTime currentDate, int abonementId)
         {
             _mediator = mediator;
+            _dialogManager = dialogManager;
             _abonementsHttpClient = abonementsHttpClient;
             _balanceWithdrawingsHttpClient = balanceWithdrawingsHttpClient;
             CurrentDate = currentDate;
@@ -52,12 +56,10 @@ namespace StablingClientWPF.ViewModels.Dialogs
         }
         private async Task CreateAbonementWithdrawing()
         {
-            var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
-                new WithdrawingByAbonementDialog(
-                    new WithdrawingByAbonementDialogViewModel(CurrentDate, Abonement)), ABONEMENTS_IDENTIFIER);
-            if (result != null)
+            BalanceWithdrawing? withdrawing = await _dialogManager.OpenWithdrawingByAbonementDialog(CurrentDate,Abonement);
+            if (withdrawing != null)
             {
-                await _balanceWithdrawingsHttpClient.CreateByAbonementAsync((BalanceWithdrawing)result, Abonement.AbonementId);
+                await _balanceWithdrawingsHttpClient.CreateByAbonementAsync(withdrawing, Abonement.AbonementId);
                 await GetWithdrawings();
                 _mediator.UpdateAbonementFunds(Abonement.AbonementId); //Уведомление основной viewModel об изменении
             }
@@ -75,7 +77,7 @@ namespace StablingClientWPF.ViewModels.Dialogs
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new WithdrawingByAbonementDialog(
                     new WithdrawingByAbonementDialogViewModel(await _balanceWithdrawingsHttpClient.GetAsync(id),
-                    await _abonementsHttpClient.GetForShowAsync(Abonement.AbonementId))), ABONEMENTS_IDENTIFIER);
+                    await _abonementsHttpClient.GetForShowAsync(Abonement.AbonementId))), SecondLayerIdentifier);
             if (result != null)
             {
                 await _balanceWithdrawingsHttpClient.UpdateAsync((BalanceWithdrawing)result);
