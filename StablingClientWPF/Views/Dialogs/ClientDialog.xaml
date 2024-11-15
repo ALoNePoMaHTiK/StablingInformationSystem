@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="StablingClientWPF.Views.Dialogs.ClientDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StablingClientWPF.Views.Dialogs"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vmd="clr-namespace:StablingClientWPF.ViewModels.Dialogs"
+             d:DataContext="{d:DesignInstance vmd:ClientDialogViewModel}"
+             mc:Ignorable="d" d:Background="White">
+    <StackPanel Margin="20" Width="300">
+        <ComboBox materialDesign:ComboBoxAssist.MaxLength="2" IsEnabled="{Binding IsEditMode}"
+        materialDesign:HintAssist.Hint="Тренер"
+        materialDesign:HintAssist.HintOpacity=".26"
+        IsEditable="True"
+        Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+        ItemsSource="{Binding Trainers}" 
+        SelectedValue="{Binding Client.TrainerId}" 
+        DisplayMemberPath="FullName" SelectedValuePath="TrainerId"/>
+        <TextBox Text="{Binding Client.FullName}"
+        materialDesign:HintAssist.Hint="ФИО" IsEnabled="{Binding IsEditMode}"
+        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        <TextBox Text="{Binding Client.PhoneNumber}"
+        materialDesign:HintAssist.Hint="Номер телефона" IsEnabled="{Binding IsEditMode}"
+        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        <TextBox Text="{Binding Client.Email}"
+        materialDesign:HintAssist.Hint="Email" IsEnabled="{Binding IsEditMode}"
+        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+            <Button IsDefault="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" 
+                CommandParameter="{Binding Client}" Margin="5" Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Check" VerticalAlignment="Center"/>
+                    <TextBlock Text="Принять" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button IsCancel="True" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" CommandParameter="{x:Null}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Close" VerticalAlignment="Center"/>
+                    <TextBlock Text="Отмена"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

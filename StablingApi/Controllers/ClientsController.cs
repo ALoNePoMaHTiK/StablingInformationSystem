@@ -27,10 +27,10 @@ namespace StablingApi.Controllers
         /// <summary>
         ///     Получение клиента по идентификатору
         /// </summary>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> Get(int id)
+        [HttpGet("{clientId}")]
+        public async Task<ActionResult<Client>> Get(int clientId)
         {
-            return await _repository.Get(id);
+            return await _repository.Get(clientId);
         }
 
         /// <summary>
@@ -45,10 +45,10 @@ namespace StablingApi.Controllers
         /// <summary>
         ///     Получение списка клиента по идентификатору тренера
         /// </summary>
-        [HttpGet("ByTrainer/{id}")]
-        public async Task<IEnumerable<Client>> GetByTrainerId(int id)
+        [HttpGet("ByTrainer/{clientId}")]
+        public async Task<IEnumerable<Client>> GetByTrainerId(int clientId)
         {
-            return await _repository.GetByTrainer(id);
+            return await _repository.GetByTrainer(clientId);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace StablingApi.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> Create([FromBody] Client client)
+        public async Task<ActionResult<Client>> Create([FromBody] Client client)
         {
             Client newClient = await _repository.Create(client);
             return CreatedAtAction(nameof(Create),newClient);
@@ -66,16 +66,16 @@ namespace StablingApi.Controllers
         ///     Изменение статуса клиента
         /// </summary>
         /// <response code="200" nullable="true"></response>
-        [HttpPut("ChangeAvailability/{id}")]
+        [HttpPut("ChangeAvailability/{clientId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> ChangeAvailability(int id)
+        public async Task<ActionResult> ChangeAvailability(int clientId)
         {
-            if (_repository.Get(id) == null)
+            if (_repository.Get(clientId) == null)
             {
                 return NotFound();
             }
-            await _repository.ChangeAvailability(id);
-            return Ok(id);
+            await _repository.ChangeAvailability(clientId);
+            return Ok(clientId);
         }
 
         /// <summary>

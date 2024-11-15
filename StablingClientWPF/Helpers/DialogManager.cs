@@ -131,6 +131,29 @@ namespace StablingClientWPF.Helpers
         }
         #endregion
 
+        #region Клиенты
+        public async Task<Client?> OpenClientCreateDialog(IEnumerable<Trainer> trainers)
+        {
+            return (Client?)await MaterialDesignThemes.Wpf.DialogHost.Show(
+                 new ClientDialog(new ClientDialogViewModel(
+                    trainers)), RootLayerIdentifier);
+        }
+
+        public async Task<Client?> OpenClientUpdateDialog(IEnumerable<Trainer> trainers, Client client)
+        {
+            return (Client?)await MaterialDesignThemes.Wpf.DialogHost.Show(
+                 new ClientDialog(new ClientDialogViewModel(
+                    trainers,client)), RootLayerIdentifier);
+        }
+
+        public async Task<Client?> OpenClientShowDialog(IEnumerable<Trainer> trainers, Client client)
+        {
+            return (Client?)await MaterialDesignThemes.Wpf.DialogHost.Show(
+                 new ClientDialog(new ClientDialogViewModel(
+                    trainers, client,false)), RootLayerIdentifier);
+        }
+
+        #endregion
 
         #region Денежные транзакции
 

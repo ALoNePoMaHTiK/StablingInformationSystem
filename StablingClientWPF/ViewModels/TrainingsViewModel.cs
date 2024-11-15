@@ -46,7 +46,8 @@ namespace StablingClientWPF.ViewModels
             HorsesHttpClient horsesHttpClient,
             AbonementsHttpClient abonementsHttpClient,
             BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient,
-            BalanceReplenishmentsHttpClient balanceReplenishmentsHttpClient, DialogManager dialogManager)
+            BalanceReplenishmentsHttpClient balanceReplenishmentsHttpClient,
+            DialogManager dialogManager)
         {
             _mediator = mediator;
             _mediator.OnDayOperationsDateUpdated += OnDateUpdate;
@@ -227,7 +228,9 @@ namespace StablingClientWPF.ViewModels
         private async Task ShowClientInfo(int trainingId)
         {
             Training training = await _trainingsHttpClient.GetAsync(trainingId);
-            _mediator.ShowClientInfo(training.ClientId);
+            await _dialogManager.OpenClientShowDialog(await _trainersHttpClient.GetAllAsync(),
+                await _clientsHttpClient.GetAsync(training.ClientId));
+            //_mediator.ShowClientInfo(training.ClientId);
         }
         #endregion
 

@@ -23,11 +23,15 @@ namespace StablingClientWPF.ViewModels
             set { _InactiveClients = value; OnPropertyChanged(); }
         }
 
-        private ClientsHttpClient _clientsHttpClient;
-        private TrainersHttpClient _trainersHttpClient;
-        public ClientsViewModel(Mediator mediator,ClientsHttpClient clientsHttpClient,
+        private readonly ClientsHttpClient _clientsHttpClient;
+        private readonly TrainersHttpClient _trainersHttpClient;
+        private readonly DialogManager _dialogManager;
+        public ClientsViewModel(Mediator mediator,
+            DialogManager dialogManager,
+            ClientsHttpClient clientsHttpClient,
             TrainersHttpClient trainersHttpClient)
         {
+            _dialogManager = dialogManager;
             _clientsHttpClient = clientsHttpClient;
             _trainersHttpClient = trainersHttpClient;
 
@@ -134,33 +138,6 @@ namespace StablingClientWPF.ViewModels
             OpenClientDialog();
         }
 
-        public AsyncDelegateCommand ChangeClientAvailabilityCommand
-        {
-            get
-            {
-                return new AsyncDelegateCommand(async o => { 
-                    await ChangeClientAvailability((int)o); },
-                    ex => MessageBox.Show(ex.ToString()));
-            }
-        }
-        private async Task ChangeClientAvailability(int id)
-        {
-            Client clientForWork = ActiveClients.FirstOrDefault(o => o.ClientId == id);
-            if (clientForWork == null)
-                clientForWork = InactiveClients.Where(o => o.ClientId == id).First();
-            await _clientsHttpClient.ChangeAvailabilityAsync(id);
-            if (clientForWork.IsAvailable)
-            {
-                ActiveClients.Remove(clientForWork);
-                InactiveClients.Add(clientForWork);
-            }
-            else
-            {
-                InactiveClients.Remove(clientForWork);
-                ActiveClients.Add(clientForWork);
-            }
-        }
-
         public AsyncDelegateCommand ProcessClientCommand
         {
             get
@@ -203,5 +180,92 @@ namespace StablingClientWPF.ViewModels
         {
             CurrentClient = new Client();
         }
+
+        #region Основные операции
+
+        public DelegateCommand CreateClientCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    CreateClient();
+                });
+            }
+        }
+        private async void CreateClient()
+        {
+            Client? newClient = await _dialogManager.OpenClientCreateDialog(
+                await _trainersHttpClient.GetAllAsync());
+            if (newClient != null)
+            {
+                newClient = await _clientsHttpClient.CreateAsync(newClient);
+                ActiveClients.Add(newClient);
+            }
+        }
+
+        public DelegateCommand UpdateClientCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    UpdateClient((int)o);
+                });
+            }
+        }
+        private async void UpdateClient(int clientId)
+        {
+            Client? updatedClient = await _dialogManager.OpenClientUpdateDialog(
+                await _trainersHttpClient.GetAllAsync(),
+                await _clientsHttpClient.GetAsync(clientId));
+            if (updatedClient != null)
+            {
+                await _clientsHttpClient.UpdateAsync(updatedClient);
+                Client? oldClient = ActiveClients.Where(c =>
+                    c.ClientId == updatedClient.ClientId).FirstOrDefault();
+                if (oldClient != null)
+                {
+                    ActiveClients.Remove(oldClient);
+                    ActiveClients.Add(updatedClient);
+                }
+                else
+                {
+                    oldClient = InactiveClients.Where(c =>
+                        c.ClientId == updatedClient.ClientId).First();
+                    InactiveClients.Remove(oldClient);
+                    InactiveClients.Add(updatedClient);
+                }
+            }
+        }
+
+        public AsyncDelegateCommand ChangeClientAvailabilityCommand
+        {
+            get
+            {
+                return new AsyncDelegateCommand(async o => {
+                    await ChangeClientAvailability((int)o);
+                },
+                    ex => MessageBox.Show(ex.ToString()));
+            }
+        }
+        private async Task ChangeClientAvailability(int id)
+        {
+            Client? clientForWork = ActiveClients.FirstOrDefault(o => o.ClientId == id);
+            if (clientForWork == null)
+                clientForWork = InactiveClients.Where(o => o.ClientId == id).First();
+            await _clientsHttpClient.ChangeAvailabilityAsync(id);
+            if (clientForWork.IsAvailable)
+            {
+                ActiveClients.Remove(clientForWork);
+                InactiveClients.Add(clientForWork);
+            }
+            else
+            {
+                InactiveClients.Remove(clientForWork);
+                ActiveClients.Add(clientForWork);
+            }
+        }
+        #endregion
     }
 }
