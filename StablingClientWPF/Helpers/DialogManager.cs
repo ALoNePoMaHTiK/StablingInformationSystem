@@ -20,11 +20,16 @@ namespace StablingClientWPF.Helpers
         private readonly TrainersHttpClient _trainersHttpClient;
         private readonly TrainingsHttpClient _trainingsHttpClient;
         private readonly BalanceWithdrawingsHttpClient _balanceWithdrawingsHttpClient;
+        private readonly BusinessOperationsHttpClient _businessOperationsHttpClient;
+        private readonly MoneyAccountsHttpClient _moneyAccountsHttpClient;
         private readonly Mediator _mediator;
 
         public DialogManager(Mediator mediator,AbonementsHttpClient abonementsHttpClient,
             ClientsHttpClient clientsHttpClient, TrainersHttpClient trainersHttpClient,
-            BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient, TrainingsHttpClient trainingsHttpClient)
+            BalanceWithdrawingsHttpClient balanceWithdrawingsHttpClient,
+            TrainingsHttpClient trainingsHttpClient,
+            MoneyAccountsHttpClient moneyAccountsHttpClient,
+            BusinessOperationsHttpClient businessOperationsHttpClient)
         {
             _mediator = mediator;
             _abonementsHttpClient = abonementsHttpClient;
@@ -32,11 +37,13 @@ namespace StablingClientWPF.Helpers
             _trainersHttpClient = trainersHttpClient;
             _balanceWithdrawingsHttpClient = balanceWithdrawingsHttpClient;
             _trainingsHttpClient = trainingsHttpClient;
+            _moneyAccountsHttpClient = moneyAccountsHttpClient;
+            _businessOperationsHttpClient = businessOperationsHttpClient;
         }
 
         #region Абонементы
 
-        public async Task<Abonement?> OpenAbonementCreationFormAsync()
+        public async Task<Abonement?> OpenAbonementCreateDialog()
         {
             return (Abonement?)await MaterialDesignThemes.Wpf.DialogHost.Show(
                 new AbonementCreationDialog(
@@ -175,6 +182,46 @@ namespace StablingClientWPF.Helpers
                 moneyAccounts, trainers, transaction)), RootLayerIdentifier);
         }
 
+        #endregion
+
+        #region Бизнес-операции
+
+        public async Task<BusinessOperation?> OpenBusinessOperationCreateDialog(DateTime dateTime)
+        {
+            return (BusinessOperation?)await MaterialDesignThemes.Wpf.DialogHost.Show(
+                new BusinessOperationDialog(
+                    new BusinessOperationDialogViewModel(
+                    await _moneyAccountsHttpClient.GetAllAsync(),
+                    await _businessOperationsHttpClient.GetIncomeTypesAsync(),
+                    await _businessOperationsHttpClient.GetConsumptionTypesAsync(),
+                    new BusinessOperation()
+                    {
+                        OperationDateTime = dateTime,
+                    })), RootLayerIdentifier);
+        }
+
+        public async Task<BusinessOperation?> OpenBusinessOperationUpdateDialog(BusinessOperation businessOperation)
+        {
+            return (BusinessOperation?)await MaterialDesignThemes.Wpf.DialogHost.Show(
+                new BusinessOperationDialog(
+                    new BusinessOperationDialogViewModel(
+                    await _moneyAccountsHttpClient.GetAllAsync(),
+                    await _businessOperationsHttpClient.GetIncomeTypesAsync(),
+                    await _businessOperationsHttpClient.GetConsumptionTypesAsync(),
+                    businessOperation)), RootLayerIdentifier);
+        }
+
+        public async Task<BusinessOperation?> OpenBusinessOperationCopyDialog(BusinessOperation businessOperation)
+        {
+            businessOperation.BusinessOperationId = 0;
+            return (BusinessOperation?)await MaterialDesignThemes.Wpf.DialogHost.Show(
+                new BusinessOperationDialog(
+                    new BusinessOperationDialogViewModel(
+                    await _moneyAccountsHttpClient.GetAllAsync(),
+                    await _businessOperationsHttpClient.GetIncomeTypesAsync(),
+                    await _businessOperationsHttpClient.GetConsumptionTypesAsync(),
+                    businessOperation)), RootLayerIdentifier);
+        }
         #endregion
     }
 }

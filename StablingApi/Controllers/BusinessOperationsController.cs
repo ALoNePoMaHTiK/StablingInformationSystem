@@ -9,9 +9,12 @@ namespace StablingApi.Controllers
     public class BusinessOperationsController : ControllerBase
     {
         private readonly IBusinessOperationRepository _repository;
-        public BusinessOperationsController(IBusinessOperationRepository repository)
+        private readonly IBusinessOperationTypeRepository _businessOperationTypesRepository;
+        public BusinessOperationsController(IBusinessOperationRepository repository,
+            IBusinessOperationTypeRepository businessOperationTypesRepository)
         {
             _repository = repository;
+            _businessOperationTypesRepository = businessOperationTypesRepository;
         }
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace StablingApi.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> Create([FromBody] BusinessOperation operation)
+        public async Task<ActionResult<BusinessOperation>> Create([FromBody] BusinessOperation operation)
         {
             BusinessOperation newOperation = await _repository.Create(operation);
             return CreatedAtAction(nameof(Create), newOperation);
@@ -98,6 +101,33 @@ namespace StablingApi.Controllers
                 return NotFound();
             await _repository.Delete(id);
             return Ok(id);
+        }
+
+        /// <summary>
+        ///     Получение списка всех  типов бизнес-операций
+        /// </summary>
+        [HttpGet("Types")]
+        public async Task<IEnumerable<BusinessOperationType>> GetTypes()
+        {
+            return await _businessOperationTypesRepository.GetAll();
+        }
+
+        /// <summary>
+        ///     Получение списка всех доходных типов бизнес-операций
+        /// </summary>
+        [HttpGet("Types/Income")]
+        public async Task<ActionResult<IEnumerable<BusinessOperationType>>> GetIncomeTypes()
+        {
+            return Ok(await _businessOperationTypesRepository.GetIncomeTypes());
+        }
+
+        /// <summary>
+        ///     Получение списка всех расходных типов бизнес-операций
+        /// </summary>
+        [HttpGet("Types/Consumption")]
+        public async Task<ActionResult<IEnumerable<BusinessOperationType>>> GetConsumptionTypes()
+        {
+            return Ok(await _businessOperationTypesRepository.GetConsumptionTypes());
         }
     }
 }

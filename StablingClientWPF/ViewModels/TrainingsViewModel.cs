@@ -215,7 +215,7 @@ namespace StablingClientWPF.ViewModels
 
         #endregion
 
-        #region Переключение на страницу клиентов
+        #region Отображение информации о клиенте
         public AsyncDelegateCommand ShowClientInfoCommand
         {
             get
@@ -230,7 +230,6 @@ namespace StablingClientWPF.ViewModels
             Training training = await _trainingsHttpClient.GetAsync(trainingId);
             await _dialogManager.OpenClientShowDialog(await _trainersHttpClient.GetAllAsync(),
                 await _clientsHttpClient.GetAsync(training.ClientId));
-            //_mediator.ShowClientInfo(training.ClientId);
         }
         #endregion
 

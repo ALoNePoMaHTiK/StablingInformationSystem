@@ -74,7 +74,7 @@ namespace StablingClientWPF.ViewModels
         }
         private async Task CreateAbonement()
         {
-            Abonement? result = await _dialogManager.OpenAbonementCreationFormAsync();
+            Abonement? result = await _dialogManager.OpenAbonementCreateDialog();
             if (result != null)
             {
                 await _abonementsHttpClient.CreateAsync(result);

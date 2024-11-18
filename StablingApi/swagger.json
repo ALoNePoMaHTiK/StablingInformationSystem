@@ -1212,6 +1212,11 @@
           "text/json",
           "application/*+json"
         ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
             "name": "operation",
@@ -1225,7 +1230,11 @@
         ],
         "responses": {
           "201": {
-            "description": ""
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/BusinessOperation"
+            }
           }
         }
       },
@@ -1412,12 +1421,12 @@
         }
       }
     },
-    "/api/BusinessOperationTypes": {
+    "/api/BusinessOperations/Types": {
       "get": {
         "tags": [
-          "BusinessOperationTypes"
+          "BusinessOperations"
         ],
-        "operationId": "BusinessOperationTypes_GetAll",
+        "operationId": "BusinessOperations_GetTypes",
         "produces": [
           "text/plain",
           "application/json",
@@ -1437,12 +1446,12 @@
         }
       }
     },
-    "/api/BusinessOperationTypes/ByIncome": {
+    "/api/BusinessOperations/Types/Income": {
       "get": {
         "tags": [
-          "BusinessOperationTypes"
+          "BusinessOperations"
         ],
-        "operationId": "BusinessOperationTypes_GetIncomeTypes",
+        "operationId": "BusinessOperations_GetIncomeTypes",
         "produces": [
           "text/plain",
           "application/json",
@@ -1462,12 +1471,12 @@
         }
       }
     },
-    "/api/BusinessOperationTypes/ByConsumption": {
+    "/api/BusinessOperations/Types/Consumption": {
       "get": {
         "tags": [
-          "BusinessOperationTypes"
+          "BusinessOperations"
         ],
-        "operationId": "BusinessOperationTypes_GetConsumptionTypes",
+        "operationId": "BusinessOperations_GetConsumptionTypes",
         "produces": [
           "text/plain",
           "application/json",

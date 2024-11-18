@@ -13,21 +13,22 @@ namespace StablingClientWPF.ViewModels
 {
     public class BusinessOperationsViewModel : BaseViewModel
     {
-        public BusinessOperationsHttpClient _businessOperationsHttpClient { get; }
-        public BusinessOperationTypesHttpClient _businessOperationTypesHttpClient { get; }
-        public MoneyAccountsHttpClient _moneyAccountsHttpClient { get; }
+        private readonly BusinessOperationsHttpClient _businessOperationsHttpClient;
+        private readonly BusinessOperationTypesHttpClient _businessOperationTypesHttpClient;
+        private readonly MoneyAccountsHttpClient _moneyAccountsHttpClient;
+        private readonly DialogManager _dialogManager;
 
-        public BusinessOperationsViewModel(Mediator mediator, BusinessOperationsHttpClient businessOperationsHttpClient,
+        public BusinessOperationsViewModel(Mediator mediator,
+            DialogManager dialogManager,
+            BusinessOperationsHttpClient businessOperationsHttpClient,
             BusinessOperationTypesHttpClient businessOperationTypesHttpClient,
             MoneyAccountsHttpClient moneyAccountsHttpClient)
         {
+            _dialogManager = dialogManager;
             mediator.OnDayOperationsDateUpdated += OnDateUpdate;
             _businessOperationsHttpClient = businessOperationsHttpClient;
             _businessOperationTypesHttpClient = businessOperationTypesHttpClient;
             _moneyAccountsHttpClient = moneyAccountsHttpClient;
-
-            GetMoneyAccounts();
-            GetBusinessOperationTypes();
         }
 
         private DateTime _CurrentDate;
@@ -38,46 +39,8 @@ namespace StablingClientWPF.ViewModels
             {
                 _CurrentDate = value; OnPropertyChanged();
                 GetBusinessOperations();
-                ClearCurrentBusinessOperation();
-                CloseBusinessOperationsDialog();
             }
         }
-
-        #region Справочники
-
-        private ObservableCollection<MoneyAccount> _MoneyAccounts;
-        public ObservableCollection<MoneyAccount> MoneyAccounts
-        {
-            get { return _MoneyAccounts; }
-            set { _MoneyAccounts = value; OnPropertyChanged(); }
-        }
-        private async void GetMoneyAccounts()
-        {
-            MoneyAccounts = new ObservableCollection<MoneyAccount>(
-                await _moneyAccountsHttpClient.GetAllAsync());
-        }
-
-        private ObservableCollection<BusinessOperationType> _IncomeBusinessOperationTypes;
-        public ObservableCollection<BusinessOperationType> IncomeBusinessOperationTypes
-        {
-            get { return _IncomeBusinessOperationTypes; }
-            set { _IncomeBusinessOperationTypes = value; OnPropertyChanged(); }
-        }
-        private ObservableCollection<BusinessOperationType> _ConsumptionBusinessOperationTypes;
-        public ObservableCollection<BusinessOperationType> ConsumptionBusinessOperationTypes
-        {
-            get { return _ConsumptionBusinessOperationTypes; }
-            set { _ConsumptionBusinessOperationTypes = value; OnPropertyChanged(); }
-        }
-        private async void GetBusinessOperationTypes()
-        {
-            IncomeBusinessOperationTypes = new ObservableCollection<BusinessOperationType>(
-                await _businessOperationTypesHttpClient.GetIncomeTypesAsync());
-            ConsumptionBusinessOperationTypes = new ObservableCollection<BusinessOperationType>(
-                await _businessOperationTypesHttpClient.GetConsumptionTypesAsync());
-        }
-
-        #endregion
 
         private void OnDateUpdate(DateTime newDate)
         {
@@ -115,104 +78,81 @@ namespace StablingClientWPF.ViewModels
                 await _businessOperationsHttpClient.GetByConsumptionAsync(CurrentDate));
         }
 
-        private BusinessOperation _CurrentBusinessOperation;
-        public BusinessOperation CurrentBusinessOperation
-        {
-            get { return _CurrentBusinessOperation; }
-            set { _CurrentBusinessOperation = value; OnPropertyChanged(); }
-        }
+        #region Основные операции
 
-        private bool _IsBusinessOperationsDialogOpen = false;
-        public bool IsBusinessOperationsDialogOpen
-        {
-            get { return _IsBusinessOperationsDialogOpen; }
-            set { _IsBusinessOperationsDialogOpen = value; OnPropertyChanged(); }
-        }
-
-        public DelegateCommand OpenBusinessOperationsDialogCommand
+        public DelegateCommand UpdateOperationCommand
         {
             get
             {
                 return new DelegateCommand(o =>
                 {
-                    OpenBusinessOperationsDialog();
+                    UpdateOperation((int)o);
                 });
             }
         }
-        private void OpenBusinessOperationsDialog()
+        private async void UpdateOperation(int id)
         {
-            IsBusinessOperationsDialogOpen = true;
-        }
-
-        public DelegateCommand OpenEditBusinessOperationDialogCommand
-        {
-            get
+            BusinessOperation? updatedOperation = await _dialogManager.OpenBusinessOperationUpdateDialog(
+                await _businessOperationsHttpClient.GetAsync(id));
+            if (updatedOperation != null)
             {
-                return new DelegateCommand(o =>
-                {
-                    OpenEditBusinessOperationDialog((int)o);
-                });
-            }
-        }
-        private async void OpenEditBusinessOperationDialog(int id)
-        {
-            CurrentBusinessOperation = await _businessOperationsHttpClient.GetAsync(id);
-            OpenBusinessOperationsDialog();
-        }
-
-        public DelegateCommand CloseBusinessOperationsDialogCommand
-        {
-            get
-            {
-                return new DelegateCommand(o =>
-                {
-                    CloseBusinessOperationsDialog();
-                });
-            }
-        }
-        private void CloseBusinessOperationsDialog()
-        {
-            IsBusinessOperationsDialogOpen = false;
-        }
-
-        public AsyncDelegateCommand ProcessBusinessOperationCommand
-        {
-            get
-            {
-                return new AsyncDelegateCommand(async o => {
-                    await ProcessBusinessOperation();
-                }, ex => MessageBox.Show(ex.ToString()));
-            }
-        }
-        private async Task ProcessBusinessOperation()
-        {
-            if (CurrentBusinessOperation.BusinessOperationId == 0)
-            {
-                await _businessOperationsHttpClient.CreateAsync(CurrentBusinessOperation);
-                await GetBusinessOperations();
-            }
-            else
-            {
-                await _businessOperationsHttpClient.UpdateAsync(CurrentBusinessOperation);
-                BusinessOperationForShow oldOperation = IncomeBusinessOperations.Where(op => op.BusinessOperationId == CurrentBusinessOperation.BusinessOperationId).FirstOrDefault();
+                await _businessOperationsHttpClient.UpdateAsync(updatedOperation);
+                BusinessOperationForShow updatedOperationForShow = await _businessOperationsHttpClient.GetForShowAsync(updatedOperation.BusinessOperationId);
+                BusinessOperationForShow? oldOperation = IncomeBusinessOperations.Where(o =>
+                    o.BusinessOperationId == updatedOperation.BusinessOperationId).FirstOrDefault();
                 if (oldOperation != null)
                 {
                     IncomeBusinessOperations.Remove(oldOperation);
+                    IncomeBusinessOperations.Add(updatedOperationForShow);
                 }
                 else
                 {
-                    oldOperation = ConsumptionBusinessOperations.Where(op => op.BusinessOperationId == CurrentBusinessOperation.BusinessOperationId).FirstOrDefault();
+                    oldOperation = ConsumptionBusinessOperations.Where(o =>
+                    o.BusinessOperationId == updatedOperation.BusinessOperationId).First();
                     ConsumptionBusinessOperations.Remove(oldOperation);
+                    ConsumptionBusinessOperations.Add(updatedOperationForShow);
                 }
-                BusinessOperationForShow newOperation = await _businessOperationsHttpClient.GetForShowAsync(CurrentBusinessOperation.BusinessOperationId);
-                if (newOperation.IsIncome)
-                    IncomeBusinessOperations.Add(newOperation);
-                else
-                    ConsumptionBusinessOperations.Add(newOperation);
+            }
+        }
+
+        public DelegateCommand CopyOperationCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    CopyOperation((int)o);
+                });
+            }
+        }
+        private async void CopyOperation(int id)
+        {
+            BusinessOperation? newOperation = await _dialogManager.OpenBusinessOperationCopyDialog(await _businessOperationsHttpClient.GetAsync(id));
+            if (newOperation != null)
+            {
+                newOperation = await _businessOperationsHttpClient.CreateAsync(newOperation);
                 await GetBusinessOperations();
             }
-            CloseBusinessOperationsDialog();
-            ClearCurrentBusinessOperation();
+        }
+
+        public DelegateCommand CreateOperationCommand
+        {
+            get
+            {
+                return new DelegateCommand(o =>
+                {
+                    CreateOperation();
+                });
+            }
+        }
+        private async void CreateOperation()
+        {
+            BusinessOperation? newOperation = await _dialogManager.OpenBusinessOperationCreateDialog(CurrentDate);
+            if (newOperation != null)
+            {
+                newOperation = await _businessOperationsHttpClient.CreateAsync(newOperation);
+                await GetBusinessOperations(); //TODO Продумать получения типа созданной операции
+            }
         }
 
         public AsyncDelegateCommand DeleteBusinessOperationCommand
@@ -230,22 +170,19 @@ namespace StablingClientWPF.ViewModels
             if (result == MessageBoxResult.Yes)
             {
                 await _businessOperationsHttpClient.DeleteAsync(id);
-                BusinessOperationForShow oldOperation = IncomeBusinessOperations.Where(op => op.BusinessOperationId == id).FirstOrDefault();
+                BusinessOperationForShow? oldOperation = IncomeBusinessOperations.Where(op => op.BusinessOperationId == id).FirstOrDefault();
                 if (oldOperation != null)
                 {
                     IncomeBusinessOperations.Remove(oldOperation);
                 }
                 else
                 {
-                    oldOperation = ConsumptionBusinessOperations.Where(op => op.BusinessOperationId == id).FirstOrDefault();
+                    oldOperation = ConsumptionBusinessOperations.Where(op => op.BusinessOperationId == id).First();
                     ConsumptionBusinessOperations.Remove(oldOperation);
                 }
             }
         }
 
-        private void ClearCurrentBusinessOperation()
-        {
-            CurrentBusinessOperation = new BusinessOperation() { OperationDateTime = CurrentDate };
-        }
+        #endregion
     }
 }
