@@ -52,7 +52,7 @@ VerticalAlignment="Center" Margin="5">
                         <materialDesign:DataGridTextColumn Header="Тип" Binding="{Binding TypeName}" Width="*"/>
                         <materialDesign:DataGridTextColumn Header="Макс. исп." Binding="{Binding MaxUses}" Width="100"/>
                         <materialDesign:DataGridTextColumn Header="Осталось исп." Binding="{Binding UsesCount}" Width="*"/>
-                        <materialDesign:DataGridTextColumn Header="Дата открытия" Binding="{Binding OpenDateTime}" Width="*"/>
+                        <materialDesign:DataGridTextColumn Header="Дата открытия" Binding="{Binding OpenDateTime,StringFormat={}{0:dd.MM.yy}}" Width="*"/>
                         <materialDesign:DataGridTextColumn Header="Полученная сумма" Binding="{Binding AbonementFunds}" Width="*"/>
                         <DataGridTemplateColumn Width="100">
                             <DataGridTemplateColumn.CellTemplate>

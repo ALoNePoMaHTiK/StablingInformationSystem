@@ -91,7 +91,11 @@ namespace StablingClientWPF.ViewModels
         }
         private void GetLastWeek() => CurrentDate = CurrentDate.Date.AddDays(-7);
         private void GetYesterday() => CurrentDate = CurrentDate.Date.AddDays(-1);
-        private void GetToday() => CurrentDate = DateTime.Now;
+        private void GetToday()
+        {
+            if (CurrentDate.Date != DateTime.Now.Date)
+                CurrentDate = DateTime.Now;
+        }
         private void GetTomorrow() => CurrentDate = CurrentDate.Date.AddDays(1);
         private void GetNextWeek() => CurrentDate = CurrentDate.Date.AddDays(7);
         #endregion

@@ -74,13 +74,6 @@ namespace StablingClientWPF
             {
                 var factory = sp.GetRequiredService<IHttpClientFactory>();
                 var client = factory.CreateClient();
-                var httpClient = new BusinessOperationTypesHttpClient(ApiUrl, client);
-                return httpClient;
-            });
-            services.AddSingleton(sp =>
-            {
-                var factory = sp.GetRequiredService<IHttpClientFactory>();
-                var client = factory.CreateClient();
                 var httpClient = new BalanceReplenishmentsHttpClient(ApiUrl, client);
                 return httpClient;
             });

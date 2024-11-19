@@ -14,20 +14,17 @@ namespace StablingClientWPF.ViewModels
     public class BusinessOperationsViewModel : BaseViewModel
     {
         private readonly BusinessOperationsHttpClient _businessOperationsHttpClient;
-        private readonly BusinessOperationTypesHttpClient _businessOperationTypesHttpClient;
         private readonly MoneyAccountsHttpClient _moneyAccountsHttpClient;
         private readonly DialogManager _dialogManager;
 
         public BusinessOperationsViewModel(Mediator mediator,
             DialogManager dialogManager,
             BusinessOperationsHttpClient businessOperationsHttpClient,
-            BusinessOperationTypesHttpClient businessOperationTypesHttpClient,
             MoneyAccountsHttpClient moneyAccountsHttpClient)
         {
             _dialogManager = dialogManager;
             mediator.OnDayOperationsDateUpdated += OnDateUpdate;
             _businessOperationsHttpClient = businessOperationsHttpClient;
-            _businessOperationTypesHttpClient = businessOperationTypesHttpClient;
             _moneyAccountsHttpClient = moneyAccountsHttpClient;
         }
 

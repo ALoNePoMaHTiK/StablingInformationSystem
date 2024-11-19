@@ -171,7 +171,7 @@ namespace StablingClientWPF.ViewModels
             }
         }
 
-        private async Task GetTrainings()
+        private async void GetTrainings()
         {
             Trainings = new ObservableCollection<TrainingForShow>(
                 await _trainingsHttpClient.GetForShowByDateAsync(CurrentDate));
@@ -265,7 +265,7 @@ namespace StablingClientWPF.ViewModels
             };
             await _balanceWithdrawingsHttpClient.CreateByTrainingAsync(newWithdrawing, trainingId);
             await ChangePaidStatus(trainingId);
-            await GetTrainings();
+            GetTrainings();
             //TODO Добавить в медиатор уведомления о создании списаний/пополнений
         }
 
@@ -310,13 +310,13 @@ namespace StablingClientWPF.ViewModels
                 int? abonementId = await _dialogManager.OpenAbonementListForCreateUsageDialog(abonements);
                 if (abonementId != null)
                 {
-                    await _abonementsHttpClient.CreateUsage2Async((int)abonementId, trainingId);
+                    await _abonementsHttpClient.CreateUsageAsync(new AbonementUsage() 
+                        {AbonementId = (int)abonementId, TrainingId = trainingId});
                     await ChangePaidStatus(trainingId);
                 }
                 // TODO Добавить триггер в БД для автоматического закрытия абонемента
                 // TODO Добавить уведомление о создании использования абонемента
             }
-            await GetTrainings();
             //TODO Добавить в медиатор уведомления о создании списаний/пополнений
         }
 

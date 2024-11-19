@@ -103,7 +103,7 @@ namespace StablingApi.Repositories
         {
             TrainingsContext context = _contextFactory.CreateDbContext();
             return await context.TrainingsForShow.Where
-                (training => training.TrainingStart.Date == dateTime).ToListAsync();
+                (training => training.TrainingStart.Date == dateTime.Date).ToListAsync();
         }
 
         public async Task Transfer(int id, DateTime dateTime)
