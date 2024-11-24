@@ -192,14 +192,14 @@ namespace StablingClientWPF.ViewModels
         {
             AbonementForShow abonement = ActiveAbonements.Where(ab => ab.AbonementId == abonementId).First();
             AbonementType abonementType = await _abonementsHttpClient.GetTypeAsync(abonement.AbonementTypeId);
-            BalanceReplenishment newReplenishment = new BalanceReplenishment()
-            {
-                TrainerId = abonement.TrainerId,
-                ClientId = abonement.ClientId,
-                ReplenishmentDate = DateTime.Now.Date,
-                Amount = abonementType.TypePrice
-            };
-            await _balanceReplenishmentsHttpClient.CreateAsync(newReplenishment);
+            //BalanceReplenishment newReplenishment = new BalanceReplenishment()
+            //{
+            //    TrainerId = abonement.TrainerId,
+            //    ClientId = abonement.ClientId,
+            //    ReplenishmentDate = DateTime.Now.Date,
+            //    Amount = abonementType.TypePrice
+            //};
+            //await _balanceReplenishmentsHttpClient.CreateAsync(newReplenishment);
             BalanceWithdrawing newWithdrawing = new BalanceWithdrawing()
             {
                 ClientId = abonement.ClientId,

@@ -4,45 +4,8 @@
     "type": "split",
     "children": [
       {
-        "id": "77100e6b93f13264",
-        "type": "tabs",
-        "dimension": 61.95848375451264,
-        "children": [
-          {
-            "id": "d3ae728a573695ba",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Stabling Information System/StablingApi/Contexts/TrainingContext.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "TrainingContext"
-            }
-          },
-          {
-            "id": "48952650bd4a4a06",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Stabling Information System/StablingClientWPF/StablingWPFClient.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "StablingWPFClient"
-            }
-          }
-        ],
-        "currentTab": 1
-      },
-      {
         "id": "20a36a6a1b8563cf",
         "type": "tabs",
-        "dimension": 38.041516245487365,
         "children": [
           {
             "id": "bef28317b056a11c",
@@ -57,8 +20,35 @@
               "icon": "lucide-file",
               "title": "StablingWPFClient"
             }
+          },
+          {
+            "id": "4c4e13b44ed98372",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.7.5"
+              },
+              "icon": "lucide-file",
+              "title": "Release Notes 1.7.5"
+            }
+          },
+          {
+            "id": "1936572b2ad95a8d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Stabling Information System/Stabling Information System.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Stabling Information System"
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -200,7 +190,7 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "bef28317b056a11c",
+  "active": "1936572b2ad95a8d",
   "lastOpenFiles": [
     "Stabling Information System/Тонкий клиент.md",
     "Stabling Information System/StablingClientWPF/StablingWPFClient.md",

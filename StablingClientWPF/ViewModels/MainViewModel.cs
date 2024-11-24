@@ -46,6 +46,5 @@ namespace StablingClientWPF.ViewModels
 
         private void ChangeTab(int tabIndex) => SelectedTab = tabIndex;
         private void OpenClientsTab(int clientId) => ChangeTab(0);      //ДАЛЕКО НЕ ЛУЧШЕЕ РЕШЕНИЕ ПРИВЯЗЫВАТЬСЯ К индексу, который может меняться
-
     }
 }

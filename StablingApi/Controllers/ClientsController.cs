@@ -9,10 +9,17 @@ namespace StablingApi.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientRepository _repository;
+        private readonly IBalanceReplenishmentRepository _balanceReplenishmentRepository;
+        private readonly IBalanceWithdrawingRepository _balanceWithdrawingRepository;
 
-        public ClientsController(IClientRepository repository)
+        public ClientsController(IClientRepository repository,
+            IBalanceReplenishmentRepository balanceReplenishmentRepository,
+            IBalanceWithdrawingRepository balanceWithdrawingRepository
+            )
         {
             _repository = repository;
+            _balanceReplenishmentRepository = balanceReplenishmentRepository;
+            _balanceWithdrawingRepository = balanceWithdrawingRepository;
         }
 
         /// <summary>

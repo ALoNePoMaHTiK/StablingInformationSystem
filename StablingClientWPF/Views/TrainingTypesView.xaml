@@ -17,8 +17,10 @@
                     <DataTemplate>
                         <materialDesign:Card Width="200" Margin="20">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" FontWeight="Bold" Text="{Binding TypeName}"/>
+                                <TextBlock Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                                           FontWeight="Bold" TextWrapping="Wrap" Text="{Binding TypeName}"/>
                                 <TextBlock Text="{Binding TypePrice}"/>
+                                <TextBlock Text="{Binding TypeDuration}"/>
                             </StackPanel>
                         </materialDesign:Card>
                     </DataTemplate>
